@@ -41,6 +41,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { checkInstanceResponsce } from "@/lib/utils";
+import { setCookie } from "./action";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({
@@ -75,8 +76,14 @@ function FormLogin() {
       },
     });
     result.match(
-      (x) => {
+      async (x) => {
         setShowDialog(true);
+        interface LoginResponse {
+          accessToken: string;
+          refreshToken: string;
+        }
+        const a = (await x.json()) as LoginResponse;
+        await setCookie(a);
         const timer = setTimeout(() => {
           router.push("/");
         }, 1500);
@@ -198,7 +205,7 @@ function FormLogin() {
           <p className="font-medium">Continue with Github</p>
         </div>
       </div>
-      <AlertDialog open={true} onOpenChange={setShowDialog}>
+      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
         <AlertDialogContent>
           <AlertDialogHeader className="p-4">
             <AlertDialogTitle className="text-primary">
