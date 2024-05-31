@@ -1,0 +1,91 @@
+{
+  "login": {
+    "title": "Chào mừng trở lại",
+    "signup": {
+      "title":"Chưa có tài khoản?",
+      "link":"Đăng ký."
+    },
+    "email": {
+      "label": "Email",
+      "err":"Email được yêu cầu",
+      "placeholder": "email",
+      "invalid":"Email của bạn không đúng."
+    },
+    "password": {
+      "label": "Password",
+      "err":"Password được yêu cầu",
+      "placeholder": "password"
+    },
+    "button": {
+      "text":"Sign in"
+    },
+    "suggestionText":"Đăng nhập bằng cách khác",
+    "policy":"Bằng việc đăng nhập bằng tài khoản mạng xã hội của mình, tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của JobSeeking",
+    "progressaction": {
+      "success": {
+        "title":"Đăng nhập thành công.",
+        "description":"Chào mừng bạn quay lại với dịch vụ của chúng tôi."
+      },
+      "failure": {
+        "title":"Error",
+        "description":"Bạn chưa xác thực email xin vui lòng xác thực email.",
+        "button":"Xác thực",
+        "buttoncancel":"Hủy"
+      }
+    }
+  },
+  "signup": {
+    "title": "Tạo tài khoản",
+    "login": {
+      "title":"Đăng ký với email",
+      "accountexitst":"Đã có tài khoản?",
+      "link":"Đăng nhập"
+    },
+    "email": {
+      "label": "Email",
+      "err":"Email được yêu cầu",
+      "placeholder": "email",
+      "invalid":"Email của bạn không đúng."
+    },
+    "password": {
+      "label": "Password",
+      "err":"Password được yêu cầu",
+      "placeholder": "password"
+    },
+    "button": {
+      "text":"Tiếp tục"
+    },
+    "progressacction": {
+      "success": {
+        "title":"Đăng ký thành công",
+        "description":"Chúc mừng bạn đã tạo thành công tài khoản"
+      },
+      "failure": {
+        "title":"Lỗi"
+      }
+    }
+  },
+  "verifycode": {
+    "title": "Xác thực tài khoản",
+    "description":"Chúng tôi đã gửi mã vào email của bạn, bạn vui lòng kiểm tra email và quay lại đây để nhập mã xác nhận tài khoản.",
+    "code": {
+      "label": "Nhập mã code",
+      "err":"Mã được yêu cầu",
+      "placeholder": "code"
+    },
+    "button": {
+      "text":"Hoàn thành"
+    },
+    "progressacction": {
+      "success": {
+        "title":"Thành công",
+        "description":"Chúc mừng bạn hoàn thành xác thực tài khoản."
+      },
+      "failure": {
+        "title":"Lỗi"
+      }
+    }
+  }
+}
+
+

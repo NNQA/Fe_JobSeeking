@@ -1,0 +1,90 @@
+{
+    "login": {
+      "title": "Welcome back",
+      "signup": {
+        "title":"New user?",
+        "link":"Signup."
+      },
+      "email": {
+        "label": "Email",
+        "err":"Email is required",
+        "placeholder": "email",
+        "invalid":"Your email input is not correct."
+      },
+      "password": {
+        "label": "Password",
+        "err":"Password is required",
+        "placeholder": "password"
+      },
+      "button": {
+        "text":"Sign in"
+      },
+      "suggestionText":"Or login other way",
+      "policy":"By logging in with my social network account, I have read and agreed to TopCV's Terms of Service and Privacy Policy",
+      "progressaction": {
+        "success": {
+          "title":"Login successfully",
+          "description":"Welcome you back with my service."
+        },
+        "failure": {
+          "title":"Error"
+        }
+      }
+    },
+    "signup": {
+      "title": "Create an account",
+      "login": {
+        "title":"Sign up with email",
+        "accountexitst":"Already have an account",
+        "link":"Sign in"
+      },
+      "email": {
+        "label": "Email",
+        "err":"Email is required",
+        "placeholder": "email",
+        "invalid":"Your email input is not correct."
+      },
+      "password": {
+        "label": "Password",
+        "err":"Password is required",
+        "placeholder": "password"
+      },
+      "button": {
+        "text":"Continue"
+      },
+      "progressacction": {
+        "success": {
+          "title":"Signup successfully",
+          "description":"Congratulations on successfully creating an account."
+        },
+        "failure": {
+          "title":"Error",
+          "description":"Did you confirm your account? Please cofirm accoutn.",
+          "button":"Verify",
+          "buttoncancel":"Cancel"
+        }
+      }
+    },
+    "verifycode": {
+      "title": "Verification Code",
+      "description":"We have sent the code to your email, please check your email and come back here to enter the account confirmation code.",
+      "code": {
+        "label": "Enter your code",
+        "err":"Code is required",
+        "placeholder": "code"
+      },
+      "button": {
+        "text":"Finish"
+      },
+      "progressacction": {
+        "success": {
+          "title":"Success",
+          "description":"Congratulations on successfully verify account."
+        },
+        "failure": {
+          "title":"Error"
+        }
+      }
+    }
+    
+}
