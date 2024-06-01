@@ -11,7 +11,7 @@ export async function setCookie(user: User) {
     cookies().set("user", JSON.stringify(user), { maxAge: Date.now() + 864000000 });
 }
 
-export const getCurrentUserLogin = async () => {
+export const getCurrentUserSignup = async () => {
     const cookieUser = cookies().get("user");
     const user = cookieUser ? (cookieUser.value as unknown as User) : null;
     return {

@@ -1,9 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -41,7 +40,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { checkInstanceResponsce } from "@/lib/utils";
-import { setCookie } from "./action";
+import { getCurrentUserLogin, setCookie } from "./action";
+import { User } from "@/lib/models/User";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({
@@ -53,8 +53,18 @@ const Schema = (t: (arg: string) => string) => {
 };
 
 function FormLogin() {
-  const t = useTranslations("login");
   const router = useRouter();
+  useEffect(() => {
+    getCurrentUserLogin()
+      .then((x) => {
+        if (x !== null) {
+          router.push("/");
+        }
+      })
+      .finally(() => {});
+  }, []);
+
+  const t = useTranslations("login");
   const formSchema = Schema(t);
   const [email, setEmail] = useState<string>();
   const [showDialog, setShowDialog] = useState<boolean>(false);
@@ -78,12 +88,8 @@ function FormLogin() {
     result.match(
       async (x) => {
         setShowDialog(true);
-        interface LoginResponse {
-          accessToken: string;
-          refreshToken: string;
-        }
-        const a = (await x.json()) as LoginResponse;
-        await setCookie(a);
+        const user = (await x.json()) as User;
+        await setCookie(user);
         const timer = setTimeout(() => {
           router.push("/");
         }, 1500);

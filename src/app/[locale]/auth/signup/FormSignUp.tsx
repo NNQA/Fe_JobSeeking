@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -32,6 +32,7 @@ import ProgressCircle from "@/components/svg/ProgressCircle";
 import { useRouter } from "next/navigation";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getCurrentUserSignup } from "./action";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({
@@ -43,8 +44,18 @@ const Schema = (t: (arg: string) => string) => {
 };
 
 function FormSignup() {
-  const t = useTranslations("signup");
   const router = useRouter();
+
+  useEffect(() => {
+    getCurrentUserSignup()
+      .then((x) => {
+        if (x !== null) {
+          router.push("/");
+        }
+      })
+      .finally(() => {});
+  }, []);
+  const t = useTranslations("signup");
   const formSchema = Schema(t);
   const locale = useLocale();
   const form = useForm<z.infer<typeof formSchema>>({
