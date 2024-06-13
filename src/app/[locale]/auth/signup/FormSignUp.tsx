@@ -30,9 +30,6 @@ import clsx from "clsx";
 import { Transition, Label, TransitionChild } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
 import { useRouter } from "next/navigation";
-import { AlertDialog } from "@/components/ui/alert-dialog";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { getCurrentUserSignup } from "./action";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({
@@ -46,15 +43,6 @@ const Schema = (t: (arg: string) => string) => {
 function FormSignup() {
   const router = useRouter();
 
-  useEffect(() => {
-    getCurrentUserSignup()
-      .then((x) => {
-        if (x !== null) {
-          router.push("/");
-        }
-      })
-      .finally(() => {});
-  }, []);
   const t = useTranslations("signup");
   const formSchema = Schema(t);
   const locale = useLocale();
@@ -90,7 +78,7 @@ function FormSignup() {
         });
         const timer = setTimeout(() => {
           router.push(
-            `verificationcode?email=" + ${encodeURIComponent(data.email)}`
+            `verificationcode?email="${encodeURIComponent(data.email)}`
           );
         }, 1500);
       },

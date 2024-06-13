@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -40,8 +40,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { checkInstanceResponsce } from "@/lib/utils";
-import { getCurrentUserLogin, setCookie } from "./action";
 import { User } from "@/lib/models/User";
+import { setCookie } from "../actions";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({
@@ -54,22 +54,18 @@ const Schema = (t: (arg: string) => string) => {
 
 function FormLogin() {
   const router = useRouter();
-  useEffect(() => {
-    getCurrentUserLogin()
-      .then((x) => {
-        if (x !== null) {
-          router.push("/");
-        }
-      })
-      .finally(() => {});
-  }, []);
-
   const t = useTranslations("login");
   const formSchema = Schema(t);
   const [email, setEmail] = useState<string>();
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [showDialogError, setShowDialogError] = useState<boolean>(false);
   const locale = useLocale();
+  const linkGGLogin =
+    process.env.NEXT_PUBLIC_API_GG +
+    "/" +
+    locale +
+    process.env.NEXT_PUBLIC_GOOGLE_CLIENT;
+  console.log(linkGGLogin);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -88,8 +84,8 @@ function FormLogin() {
     result.match(
       async (x) => {
         setShowDialog(true);
-        const user = (await x.json()) as User;
-        await setCookie(user);
+        const response = await x.json();
+        await setCookie(response);
         const timer = setTimeout(() => {
           router.push("/");
         }, 1500);
@@ -103,7 +99,7 @@ function FormLogin() {
           toast({
             variant: "destructive",
             title: t("progressaction.failure.title"),
-            description: action.form,
+            description: action.form[0],
           });
         }
       }
@@ -198,10 +194,15 @@ function FormLogin() {
         <hr className="h-[1px] bg-border-hover w-48 border-none" />
       </div>
       <div className="flex flex-col gap-2 mt-4 mb-2">
-        <div className="border-2 border-border w-full flex justify-center  gap-2 items-center px-2 py-2 rounded-full hover:ring-0 hover:ring-inset hover:ring-border-hover hover:border-border-hover hover:cursor-pointer">
-          <EnvelopeClosedIcon className="w-5 h-5 text-red-500"></EnvelopeClosedIcon>
-          <p className="font-medium">Continue with Google</p>
-        </div>
+        <Button
+          asChild
+          className="border-2 border-border w-full flex justify-center bg-accent hover:bg-accent text-foreground focus:bg-accent  gap-2 items-center px-2 py-2 rounded-full hover:ring-0 hover:ring-inset hover:ring-border-hover hover:border-border-hover hover:cursor-pointer"
+        >
+          <Link href={linkGGLogin ?? "/"} className="">
+            <EnvelopeClosedIcon className="w-5 h-5 text-red-500"></EnvelopeClosedIcon>
+            <p className="font-medium">Continue with Google</p>
+          </Link>
+        </Button>
         <div className="border-2 border-border w-full flex justify-center  gap-2 items-center px-2 py-2 rounded-full hover:ring-0 hover:ring-inset hover:ring-border-hover hover:border-border-hover hover:cursor-pointer">
           <LinkedInLogoIcon className="w-5 h-5 text-blue-500"></LinkedInLogoIcon>
           <p className="font-medium">Continue with Linkin</p>

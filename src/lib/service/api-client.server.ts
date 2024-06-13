@@ -1,7 +1,7 @@
 
 import { ResultAsync, err, errAsync, ok,fromPromise, fromSafePromise } from 'neverthrow';
 import { problemDetailsSchema } from "../schemas/problem-detail";
-export interface RequesOptions extends Omit<RequestInit, 'body'> {
+export interface RequestApiOptions extends Omit<RequestInit, 'body'> {
     body?: Record<number | string, any> | any[] | FormData | Buffer;
 }
 
@@ -33,22 +33,22 @@ export class ApiError extends Error {
   
 export class ApiClient {
     private static _instance: ApiClient | undefined = undefined;
-    protected static _baseUrl: String | undefined = process.env.NEXT_PUBLIC_API_BASE_URL;
+    protected static _baseUrl: String | undefined = process.env.NEXT_PUBLIC_API_BASE_URL_Client;
     
     protected constructor(private readonly _baseUrl: String){}
     public static get instance() {
         if (!ApiClient._instance) {
           if (!ApiClient._baseUrl) {
             throw new ReferenceError(
-              'Failed to initialize ApiClient. An option must be provided `NEXT_PUBLIC_API_BASE_URL in .env` first'
+              'Failed to initialize ApiClient. An option must be provided `NEXT_PUBLIC_API_BASE_URL_Client in .env` first'
             );
           }
           ApiClient._instance = new ApiClient(ApiClient._baseUrl);
         }
         return ApiClient._instance;
       }
-    
-    protected fetch(input: string | URL, {headers, ...options}: RequesOptions = {}):ResultAsync<ApiResponse, Error> {
+  
+    protected fetch(input: string | URL, {headers, ...options}: RequestApiOptions = {}):ResultAsync<ApiResponse, Error> {
         let url = typeof input === 'string' ? input: input.pathname;
         const record: Record<string, string> = ApiClient.makeHeaders(headers);
     if (options?.body) {
@@ -109,12 +109,18 @@ export class ApiClient {
   }
 
 
-    public post(input: string | URL, option?: RequesOptions) {
+    public post(input: string | URL, option?: RequestApiOptions) {
         return this.fetch(input, {
             ...option,
             method:"POST"
         })
     }
+    public get(input: string | URL, option?: RequestApiOptions) {
+      return this.fetch(input, {
+          ...option,
+          method:"GET"
+      })
+  }
     private static makeHeaders(headers?: HeadersInit): Record<string, string> {
       if (!headers) return {};
       return Array.isArray(headers)
