@@ -85,6 +85,48 @@
           "title":"Error"
         }
       }
+    },
+    "upgradeAccout": {
+    "title": "Welcome",
+    "subtitle": "Come to Smart Recruitment Platform",
+    "description":"Please fill in the employer information below so we can better assist you",
+    "email": {
+     "label": "Email",
+        "err":"Email is required",
+        "placeholder": "email",
+        "invalid":"Your email input is not correct."
+    },
+    "phone": {
+      "label": "Phone",
+      "err":"Phone is required",
+      "placeholder": "Phone"
+    },
+    "company": {
+      "label": "Company",
+      "err":"Company is required",
+      "placeholder": "Company"
+    },
+    "province": {
+      "label": "Address company",
+      "err":"Address company is required",
+      "placeholder": "Address company"
+    },
+    "district": {
+      "label": "District",
+      "err":"District is required",
+      "placeholder": "District"
+    },
+    "button": {
+      "text":"Lưu và tiếp tục"
+    },
+    "progressacction": {
+      "success": {
+        "title":"Đăng ký thành công",
+        "description":"Chúc mừng bạn đã tạo thành công tài khoản"
+      },
+      "failure": {
+        "title":"Lỗi"
+      }
     }
-    
+  }
 }

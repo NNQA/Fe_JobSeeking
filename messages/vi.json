@@ -85,6 +85,49 @@
         "title":"Lỗi"
       }
     }
+  },
+  "upgradeAccout": {
+    "title": "Chào mừng",
+    "subtitle": "Đến với Smart Recruitment Platform",
+    "description": "Vui lòng điền các thông tin nhà tuyển dụng bên dưới để chúng tôi hỗ trợ bạn tốt hơn",
+    "email": {
+      "label": "Email",
+      "err":"Email được yêu cầu",
+      "placeholder": "email",
+      "invalid":"Email của bạn không đúng."
+    },
+    "phone": {
+      "label": "Số điện thoại",
+      "err":"Số Điện thoại được yêu cầu",
+      "placeholder": "Số điện thoại"
+    },
+    "company": {
+      "label": "Tên công ty",
+      "err":"Tên công ty được yêu cầu",
+      "placeholder": "Tên công ty"
+    },
+    "province": {
+      "label": "Địa chỉ công công ty",
+      "err":"Địa chỉ công việc yêu cầu",
+      "placeholder": "Địa chỉ"
+    },
+    "district": {
+      "label": "Quận Huyện",
+      "err":"Quận/Huyện yêu cầu",
+      "placeholder": "Quận huyện"
+    },
+    "button": {
+      "text":"Lưu và tiếp tục"
+    },
+    "progressacction": {
+      "success": {
+        "title":"Đăng ký thành công",
+        "description":"Chúc mừng bạn đã tạo thành công tài khoản"
+      },
+      "failure": {
+        "title":"Lỗi"
+      }
+    }
   }
 }
 
