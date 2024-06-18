@@ -2,7 +2,7 @@ import React from "react";
 import { Input, InputProps } from "../ui/input";
 import { cn } from "@/lib/utils";
 
-interface InputCustomProps extends InputProps {
+export interface InputCustomProps extends InputProps {
   icon: React.ReactNode;
 }
 const InputCustomIcon = React.forwardRef<HTMLInputElement, InputCustomProps>(

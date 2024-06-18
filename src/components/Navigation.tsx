@@ -41,7 +41,7 @@ import { Popover } from "./ui/popover";
 import { usePathname } from "next/navigation";
 import { User } from "@/lib/models/User";
 import { PersonIcon } from "@radix-ui/react-icons";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import Link from "next/link";
 import { useLocale } from "next-intl";
 interface itemsProps {
@@ -241,10 +241,18 @@ function Navigation({ user }: PropsNavigation) {
             <div className="flex gap-4">
               <div className="border-r border-border pr-6">
                 <h6 className="text-xs text-border-hover">
-                  Ban la nha tuyen dung
+                  Ban la nha tuyen dung ?
                 </h6>
                 <div className="text-primary flex font-bold items-center">
-                  <p>Đăng Tuyển ngay</p>
+                  <Link
+                    href={`/${locale}/supplier`}
+                    className={cn(
+                      buttonVariants({ variant: "link" }),
+                      "bg-transparent m-0 p-0"
+                    )}
+                  >
+                    Đăng Tuyển ngay
+                  </Link>
                   <ChevronsRight className="h-4 w-4 mt-1"></ChevronsRight>
                 </div>
               </div>
