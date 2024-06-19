@@ -2,13 +2,24 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import SideBar from "@/components/SideBar";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
   Bell,
   BriefcaseBusiness,
+  CircleUser,
   CircleUserRound,
   CloudUpload,
   Home,
   LucideProps,
   Package2,
+  Search,
   Sidebar,
 } from "lucide-react";
 import Link from "next/link";
@@ -66,7 +77,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <SideBar items={dataSideBarSupplier} className="w-full h-full" />
           </div>
         </div>
-        <div>{children}</div>
+        <div className="flex-1 w-full h-16 max-h-screen flexflex-col gap-2">
+          <div className="lg:h-[60px] lg:px-6 items-center flex justify-between w-full border-b">
+            <form className="w-full">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-[0.87rem] h-4 w-4 text-muted-foreground"></Search>
+                <Input
+                  type="search"
+                  placeholder="Search feature..."
+                  className="w-full appearance-none bg-background pl-8 md:w-2/3 lg:w-1/3"
+                />
+              </div>
+            </form>
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="rounded-full"
+                  >
+                    <CircleUser className="h-5 w-5" />
+                    <span className="sr-only">Toggle user menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+          <div>{children}</div>
+        </div>
       </div>
     </section>
   );
