@@ -4,7 +4,7 @@ import { useLocale } from "next-intl";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense, use } from "react";
-import Home from "./Home";
+import Home from "./Dashboard";
 import { SkeletonCard } from "@/components/SeletonCard";
 
 const getData = async () => {

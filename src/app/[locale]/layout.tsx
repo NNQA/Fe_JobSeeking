@@ -29,10 +29,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <NextIntlClientProvider messages={message}>
-              <div className="w-screen">
-                {children}
-                <Footer></Footer>
-              </div>
+              <div className="w-screen">{children}</div>
               <Toaster />
             </NextIntlClientProvider>
           </ThemeProvider>
