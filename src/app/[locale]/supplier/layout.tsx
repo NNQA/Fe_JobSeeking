@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section>
       <div className="grid min-h-screen w-full md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr]">
-        <div className="hidden border-r bg-muted/20 md:block">
+        <div className="hidden border-r bg-muted/10 md:block">
           <div className="grid grid-rows-[4rem_1fr] h-full max-h-screen flex-col gap-2">
             <div className="flex h-16 items-center border-b px-5 lg:h-[60px] lg:px-6">
               <Link href="#" className="flex items-center gap-2 font-semibold">
@@ -77,8 +77,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <SideBar items={dataSideBarSupplier} className="w-full h-full" />
           </div>
         </div>
-        <div className="flex-1 w-full h-16 max-h-screen flexflex-col gap-2">
-          <div className="lg:h-[60px] lg:px-6 items-center flex justify-between w-full border-b">
+        <div className="flex-1 w-full grid grid-rows-[4rem_1fr] max-h-screen">
+          <div className="lg:h-[60px] lg:px-6 px-6 items-center h-16 flex justify-between w-full border-b bg-accent">
             <form className="w-full">
               <div className="relative">
                 <Search className="absolute left-2.5 top-[0.87rem] h-4 w-4 text-muted-foreground"></Search>
@@ -95,7 +95,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="rounded-full"
+                    className="rounded-full bg-card"
                   >
                     <CircleUser className="h-5 w-5" />
                     <span className="sr-only">Toggle user menu</span>
@@ -112,7 +112,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </DropdownMenu>
             </div>
           </div>
-          <div>{children}</div>
+          <div className="w-full h-full">{children}</div>
         </div>
       </div>
     </section>
