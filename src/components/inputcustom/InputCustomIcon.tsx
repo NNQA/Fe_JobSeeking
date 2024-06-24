@@ -15,5 +15,5 @@ const InputCustomIcon = React.forwardRef<HTMLInputElement, InputCustomProps>(
     );
   }
 );
-
+InputCustomIcon.displayName = "InputCustomIcon";
 export default InputCustomIcon;
