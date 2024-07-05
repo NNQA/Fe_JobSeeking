@@ -2,87 +2,87 @@
   "login": {
     "title": "Chào mừng trở lại",
     "signup": {
-      "title":"Chưa có tài khoản?",
-      "link":"Đăng ký."
+      "title": "Chưa có tài khoản?",
+      "link": "Đăng ký."
     },
     "email": {
       "label": "Email",
-      "err":"Email được yêu cầu",
+      "err": "Email được yêu cầu",
       "placeholder": "email",
-      "invalid":"Email của bạn không đúng."
+      "invalid": "Email của bạn không đúng."
     },
     "password": {
       "label": "Password",
-      "err":"Password được yêu cầu",
+      "err": "Password được yêu cầu",
       "placeholder": "password"
     },
     "button": {
-      "text":"Sign in"
+      "text": "Sign in"
     },
-    "suggestionText":"Đăng nhập bằng cách khác",
-    "policy":"Bằng việc đăng nhập bằng tài khoản mạng xã hội của mình, tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của JobSeeking",
+    "suggestionText": "Đăng nhập bằng cách khác",
+    "policy": "Bằng việc đăng nhập bằng tài khoản mạng xã hội của mình, tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của JobSeeking",
     "progressaction": {
       "success": {
-        "title":"Đăng nhập thành công.",
-        "description":"Chào mừng bạn quay lại với dịch vụ của chúng tôi."
+        "title": "Đăng nhập thành công.",
+        "description": "Chào mừng bạn quay lại với dịch vụ của chúng tôi."
       },
       "failure": {
-        "title":"Error",
-        "description":"Bạn chưa xác thực email xin vui lòng xác thực email.",
-        "button":"Xác thực",
-        "buttoncancel":"Hủy"
+        "title": "Error",
+        "description": "Bạn chưa xác thực email xin vui lòng xác thực email.",
+        "button": "Xác thực",
+        "buttoncancel": "Hủy"
       }
     }
   },
   "signup": {
     "title": "Tạo tài khoản",
     "login": {
-      "title":"Đăng ký với email",
-      "accountexitst":"Đã có tài khoản?",
-      "link":"Đăng nhập"
+      "title": "Đăng ký với email",
+      "accountexitst": "Đã có tài khoản?",
+      "link": "Đăng nhập"
     },
     "email": {
       "label": "Email",
-      "err":"Email được yêu cầu",
+      "err": "Email được yêu cầu",
       "placeholder": "email",
-      "invalid":"Email của bạn không đúng."
+      "invalid": "Email của bạn không đúng."
     },
     "password": {
       "label": "Password",
-      "err":"Password được yêu cầu",
+      "err": "Password được yêu cầu",
       "placeholder": "password"
     },
     "button": {
-      "text":"Tiếp tục"
+      "text": "Tiếp tục"
     },
     "progressacction": {
       "success": {
-        "title":"Đăng ký thành công",
-        "description":"Chúc mừng bạn đã tạo thành công tài khoản"
+        "title": "Đăng ký thành công",
+        "description": "Chúc mừng bạn đã tạo thành công tài khoản"
       },
       "failure": {
-        "title":"Lỗi"
+        "title": "Lỗi"
       }
     }
   },
   "verifycode": {
     "title": "Xác thực tài khoản",
-    "description":"Chúng tôi đã gửi mã vào email của bạn, bạn vui lòng kiểm tra email và quay lại đây để nhập mã xác nhận tài khoản.",
+    "description": "Chúng tôi đã gửi mã vào email của bạn, bạn vui lòng kiểm tra email và quay lại đây để nhập mã xác nhận tài khoản.",
     "code": {
       "label": "Nhập mã code",
-      "err":"Mã được yêu cầu",
+      "err": "Mã được yêu cầu",
       "placeholder": "code"
     },
     "button": {
-      "text":"Hoàn thành"
+      "text": "Hoàn thành"
     },
     "progressacction": {
       "success": {
-        "title":"Thành công",
-        "description":"Chúc mừng bạn hoàn thành xác thực tài khoản."
+        "title": "Thành công",
+        "description": "Chúc mừng bạn hoàn thành xác thực tài khoản."
       },
       "failure": {
-        "title":"Lỗi"
+        "title": "Lỗi"
       }
     }
   },
@@ -92,43 +92,102 @@
     "description": "Vui lòng điền các thông tin nhà tuyển dụng bên dưới để chúng tôi hỗ trợ bạn tốt hơn",
     "email": {
       "label": "Email",
-      "err":"Email được yêu cầu",
+      "err": "Email được yêu cầu",
       "placeholder": "email",
-      "invalid":"Email của bạn không đúng."
+      "invalid": "Email của bạn không đúng."
     },
     "phone": {
       "label": "Số điện thoại",
-      "err":"Số Điện thoại được yêu cầu",
+      "err": "Số Điện thoại được yêu cầu",
       "placeholder": "Số điện thoại"
     },
     "company": {
       "label": "Tên công ty",
-      "err":"Tên công ty được yêu cầu",
+      "err": "Tên công ty được yêu cầu",
       "placeholder": "Tên công ty"
     },
     "province": {
       "label": "Địa chỉ công công ty",
-      "err":"Địa chỉ công việc yêu cầu",
+      "err": "Địa chỉ công việc yêu cầu",
       "placeholder": "Địa chỉ"
     },
     "district": {
       "label": "Quận Huyện",
-      "err":"Quận/Huyện yêu cầu",
+      "err": "Quận/Huyện yêu cầu",
       "placeholder": "Quận huyện"
     },
     "button": {
-      "text":"Lưu và tiếp tục"
+      "text": "Lưu và tiếp tục"
     },
     "progressacction": {
       "success": {
-        "title":"Đăng ký thành công",
-        "description":"Chúc mừng bạn đã tạo thành công tài khoản"
+        "title": "Đăng ký thành công",
+        "description": "Chúc mừng bạn đã tạo thành công tài khoản"
       },
       "failure": {
-        "title":"Lỗi"
+        "title": "Lỗi"
+      }
+    }
+  },
+  "supplier": {
+    "createapply": {
+      "title": {
+        "label": "Tiêu đề",
+        "err": "Tiêu đề được yêu cầu",
+        "placeholder": "Nhập tiêu đề."
+      },
+      "description": {
+        "label": "Mô tả công việc",
+        "err": "Mô tả công việc được yêu cầu.",
+        "placeholder": "Nhập mô tả."
+      },
+      "date": {
+        "start": {
+          "label": "Ngày bắt đầu",
+          "err": "Thành phần bắt buộc",
+          "placeholder": "Chọn ngày bắt đầu."
+        },
+        "end": {
+          "label": "Ngày kết thúc",
+          "err": "Thành phần bắt buộc",
+          "placeholder": "Chọn ngày kết thúc."
+        }
+      },
+      "salary": {
+        "label": "Lương",
+        "err": "Thành phần bắt buộc",
+        "placeholder": "Nhập lương"
+      },
+      "level": {
+        "label": "Yêu cầu kinh nghiệm.",
+        "EXPERT": "Chuyên gia",
+        "EXPERIENCE": "Có kinh nghiệm",
+        "ENTRY": "Thực tập"
+      },
+      "skill": {
+        "label": "Kỹ năng",
+        "err": "Kỹ năng được yêu cầu",
+        "placeholder": "Nhập kỹ năng."
+      },
+      "otherskill": {
+        "label": "Kỹ năng khác",
+        "placeholder": "Nhập các kỹ năng phụ."
+      },
+      "button": {
+        "text": "Đăng tải"
+      },
+      "buttonreset": {
+        "text": "Cài lại"
+      },
+      "progressacction": {
+        "success": {
+          "title": "Thành công",
+          "description": "Chúc mừng bạn hoàn thành xác thực tài khoản."
+        },
+        "failure": {
+          "title": "Lỗi"
+        }
       }
     }
   }
 }
-
-

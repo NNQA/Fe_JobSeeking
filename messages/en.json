@@ -1,131 +1,192 @@
 {
-    "login": {
-      "title": "Welcome back",
-      "signup": {
-        "title":"New user?",
-        "link":"Signup."
-      },
-      "email": {
-        "label": "Email",
-        "err":"Email is required",
-        "placeholder": "email",
-        "invalid":"Your email input is not correct."
-      },
-      "password": {
-        "label": "Password",
-        "err":"Password is required",
-        "placeholder": "password"
-      },
-      "button": {
-        "text":"Sign in"
-      },
-      "suggestionText":"Or login other way",
-      "policy":"By logging in with my social network account, I have read and agreed to TopCV's Terms of Service and Privacy Policy",
-      "progressaction": {
-        "success": {
-          "title":"Login successfully",
-          "description":"Welcome you back with my service."
-        },
-        "failure": {
-          "title":"Error"
-        }
-      }
-    },
+  "login": {
+    "title": "Welcome back",
     "signup": {
-      "title": "Create an account",
-      "login": {
-        "title":"Sign up with email",
-        "accountexitst":"Already have an account",
-        "link":"Sign in"
-      },
-      "email": {
-        "label": "Email",
-        "err":"Email is required",
-        "placeholder": "email",
-        "invalid":"Your email input is not correct."
-      },
-      "password": {
-        "label": "Password",
-        "err":"Password is required",
-        "placeholder": "password"
-      },
-      "button": {
-        "text":"Continue"
-      },
-      "progressacction": {
-        "success": {
-          "title":"Signup successfully",
-          "description":"Congratulations on successfully creating an account."
-        },
-        "failure": {
-          "title":"Error",
-          "description":"Did you confirm your account? Please cofirm accoutn.",
-          "button":"Verify",
-          "buttoncancel":"Cancel"
-        }
-      }
+      "title": "New user?",
+      "link": "Signup."
     },
-    "verifycode": {
-      "title": "Verification Code",
-      "description":"We have sent the code to your email, please check your email and come back here to enter the account confirmation code.",
-      "code": {
-        "label": "Enter your code",
-        "err":"Code is required",
-        "placeholder": "code"
-      },
-      "button": {
-        "text":"Finish"
-      },
-      "progressacction": {
-        "success": {
-          "title":"Success",
-          "description":"Congratulations on successfully verify account."
-        },
-        "failure": {
-          "title":"Error"
-        }
-      }
+    "email": {
+      "label": "Email",
+      "err": "Email is required",
+      "placeholder": "email",
+      "invalid": "Your email input is not correct."
     },
-    "upgradeAccount": {
+    "password": {
+      "label": "Password",
+      "err": "Password is required",
+      "placeholder": "password"
+    },
+    "button": {
+      "text": "Sign in"
+    },
+    "suggestionText": "Or login other way",
+    "policy": "By logging in with my social network account, I have read and agreed to TopCV's Terms of Service and Privacy Policy",
+    "progressaction": {
+      "success": {
+        "title": "Login successfully",
+        "description": "Welcome you back with my service."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  },
+  "signup": {
+    "title": "Create an account",
+    "login": {
+      "title": "Sign up with email",
+      "accountexitst": "Already have an account",
+      "link": "Sign in"
+    },
+    "email": {
+      "label": "Email",
+      "err": "Email is required",
+      "placeholder": "email",
+      "invalid": "Your email input is not correct."
+    },
+    "password": {
+      "label": "Password",
+      "err": "Password is required",
+      "placeholder": "password"
+    },
+    "button": {
+      "text": "Continue"
+    },
+    "progressacction": {
+      "success": {
+        "title": "Signup successfully",
+        "description": "Congratulations on successfully creating an account."
+      },
+      "failure": {
+        "title": "Error",
+        "description": "Did you confirm your account? Please cofirm accoutn.",
+        "button": "Verify",
+        "buttoncancel": "Cancel"
+      }
+    }
+  },
+  "verifycode": {
+    "title": "Verification Code",
+    "description": "We have sent the code to your email, please check your email and come back here to enter the account confirmation code.",
+    "code": {
+      "label": "Enter your code",
+      "err": "Code is required",
+      "placeholder": "code"
+    },
+    "button": {
+      "text": "Finish"
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Congratulations on successfully verify account."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  },
+  "upgradeAccount": {
     "title": "Welcome",
     "subtitle": "Come to Smart Recruitment Platform",
-    "description":"Please fill in the employer information below so we can better assist you",
+    "description": "Please fill in the employer information below so we can better assist you",
     "email": {
-     "label": "Email",
-        "err":"Email is required",
-        "placeholder": "email",
-        "invalid":"Your email input is not correct."
+      "label": "Email",
+      "err": "Email is required",
+      "placeholder": "email",
+      "invalid": "Your email input is not correct."
     },
     "phone": {
       "label": "Phone",
-      "err":"Phone is required",
+      "err": "Phone is required",
       "placeholder": "Phone"
     },
     "company": {
       "label": "Company",
-      "err":"Company is required",
+      "err": "Company is required",
       "placeholder": "Company"
     },
     "province": {
       "label": "Address company",
-      "err":"Address company is required",
+      "err": "Address company is required",
       "placeholder": "Address company"
     },
     "district": {
       "label": "District",
-      "err":"District is required",
+      "err": "District is required",
       "placeholder": "District"
     },
     "button": {
-      "text":"Lưu và tiếp tục"
+      "text": "Lưu và tiếp tục"
     },
     "progressacction": {
       "success": {
-        "title":"Đăng ký thành công",
-        "description":"Chúc mừng bạn đã tạo thành công tài khoản"
+        "title": "Đăng ký thành công",
+        "description": "Chúc mừng bạn đã tạo thành công tài khoản"
       },
       "failure": {
-        "title":"Lỗi"
+        "title": "Lỗi"
+      }
+    }
+  },
+  "supplier": {
+    "createapply": {
+      "title": {
+        "label": "Title",
+        "err": "title is required",
+        "placeholder": "Enter title."
+      },
+      "description": {
+        "label": "Description",
+        "err": "Description is required",
+        "placeholder": "Enter description."
+      },
+      "date": {
+        "start": {
+          "label": "Application start date",
+          "err": "This property is required",
+          "placeholder": "Choose application start date."
+        },
+        "end": {
+          "label": "Application end date",
+          "err": "This property is required",
+          "placeholder": "Choose application end date."
+        }
+      },
+      "salary": {
+        "label": "Salary",
+        "err": "Salary is required",
+        "placeholder": "Salary"
+      },
+      "level": {
+        "label":"Level candidate.",
+        "EXPERT": "EXPERT",
+        "EXPERIENCE": "EXPERIENCE",
+        "ENTRY": "ENTRY"
+      },
+      "skill": {
+        "label": "Skill",
+        "err": "Skill is required",
+        "placeholder": "Enter skill."
+      },
+      "otherskill": {
+        "label": "Other skill",
+        "placeholder": "Enter other skill"
+      },
+      "button": {
+        "text": "Post"
+      },
+      "buttonreset": {
+        "text": "Reset"
+      },
+      "progressacction": {
+        "success": {
+          "title": "Thành công",
+          "description": "Chúc mừng bạn hoàn thành xác thực tài khoản."
+        },
+        "failure": {
+          "title": "Lỗi"
+        }
       }
     }
   }

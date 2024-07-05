@@ -1,5 +1,6 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import SideBar from "@/components/SideBar";
+import BreadCrumbsCustom from "@/components/custom/BreadCrumbsCustom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,10 +18,8 @@ import {
   CircleUserRound,
   CloudUpload,
   Home,
-  LucideProps,
   Package2,
   Search,
-  Sidebar,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -111,6 +110,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+          </div>
+          <div className="px-6 py-2">
+            <BreadCrumbsCustom />
           </div>
           <div className="w-full h-full">{children}</div>
         </div>

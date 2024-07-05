@@ -1,7 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import clsx from "clsx";
-import { Divide, LogOut, Settings } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,18 +31,13 @@ const sampleDataFooter: Readonly<Array<ItemsProps>> = [
 ];
 
 const trim = (input: string) => {
-  let pathname = "";
-  for (let i = 0; i < input.length; i++) {
-    if (input[i] == "/") break;
-    pathname += input[i];
-  }
-
-  return pathname.length < 1 ? input : pathname;
+  return input.substring(13)
+    ? input.substring(13).split("/")[0]
+    : input.split("/")[0];
 };
 function SideBar({ items, className, classNameItems }: Props) {
   const locale = useLocale();
   const pathname = usePathname();
-  console.log(trim(pathname) === "/supplier");
   const [itemsUpdate] = useState(
     items.map((r) => ({
       ...r,
@@ -68,7 +62,8 @@ function SideBar({ items, className, classNameItems }: Props) {
                   "flex items-center gap-3 w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary hover:text-accent",
                   {
                     "bg-primary text-accent":
-                      trim(pathname)?.toLowerCase() === href.toLowerCase(),
+                      trim(pathname)?.toLowerCase() ===
+                      trim(href).toLowerCase(),
                   }
                 )}
               >

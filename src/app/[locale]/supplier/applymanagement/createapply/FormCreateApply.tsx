@@ -25,7 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -61,7 +61,6 @@ const SkillSchema = (t: (arg: string) => string) => {
 const WorkSchema = (t: (arg: string) => string) => {
   return z.object({
     title: z.string().nonempty(t("title.err")),
-    address: z.string().nonempty(t("address.err")),
     description: z.string().nonempty(t("description.err")),
     salary: z.number().positive(t("salary.err")),
     level: ELevelZod,
@@ -72,21 +71,21 @@ const WorkSchema = (t: (arg: string) => string) => {
 };
 
 function FormCreateApply() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [start, setStartDate] = useState<Date | undefined>(undefined);
+  const [end, setEndDate] = useState<Date | undefined>(undefined);
   const [mainskill, setMainSkill] = useState<Tag[]>([]);
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
   const [other, setOther] = useState<Tag[]>([]);
   const [activeTagIndexOther, setActiveTagIndexOther] = useState<number | null>(
     null
   );
-  const t = useTranslations("createApply");
+  const t = useTranslations("supplier.createapply");
   const formSchema = WorkSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      address: "",
       activeDate: "",
       expiredDate: "",
       level: "ENTRY",
@@ -147,26 +146,6 @@ function FormCreateApply() {
           <div className="flex justify-between gap-6">
             <FormField
               control={form.control}
-              name={"address"}
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>
-                    Address <span className="text-red-600">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-black text- font-medium"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            ></FormField>
-          </div>
-          <div className="flex justify-between gap-6">
-            <FormField
-              control={form.control}
               name={"activeDate"}
               render={({ field }) => (
                 <FormItem className="w-full flex flex-col">
@@ -181,22 +160,22 @@ function FormCreateApply() {
                           variant={"outlineVariant"}
                           className={cn(
                             "w-fulll justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
+                            !start && "text-muted-foreground"
                           )}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? (
-                            format(date, "PPP")
+                          {start ? (
+                            format(start, "PPP")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>{t("date.start.placeholder")}</span>
                           )}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode="single"
-                          selected={date}
-                          onSelect={setDate}
+                          selected={start}
+                          onSelect={setStartDate}
                           initialFocus
                         />
                       </PopoverContent>
@@ -222,22 +201,22 @@ function FormCreateApply() {
                           variant={"outlineVariant"}
                           className={cn(
                             "w-fulll justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
+                            !end && "text-muted-foreground"
                           )}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? (
-                            format(date, "PPP")
+                          {end ? (
+                            format(end, "PPP")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>{t("date.end.placeholder")}</span>
                           )}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode="single"
-                          selected={date}
-                          onSelect={setDate}
+                          selected={end}
+                          onSelect={setEndDate}
                           initialFocus
                         />
                       </PopoverContent>
@@ -285,7 +264,7 @@ function FormCreateApply() {
                       <SelectGroup>
                         {ELevelZod._def.values.map((e, index) => (
                           <SelectItem value={e as string} key={index}>
-                            {e}
+                            {t("level." + e.toString())}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -312,7 +291,7 @@ function FormCreateApply() {
                     {...field}
                     activeTagIndex={activeTagIndex}
                     setActiveTagIndex={setActiveTagIndex}
-                    placeholder="Enter a topic"
+                    placeholder={t("skill.placeholder")}
                     tags={mainskill}
                     draggable={true}
                     direction="row"
@@ -343,13 +322,13 @@ function FormCreateApply() {
                     {...field}
                     activeTagIndex={activeTagIndexOther}
                     setActiveTagIndex={setActiveTagIndexOther}
-                    placeholder="Enter a topic"
+                    placeholder={t("otherskill.placeholder")}
                     tags={other}
                     draggable={true}
                     direction="row"
                     inputFieldPosition="bottom"
                     inlineTags={false}
-                    className="sm:min-w-[450px] flex px-4 font-medium ring-0 ring-primary"
+                    className="sm:min-w-[450px] font-medium ring-0 ring-primary"
                     setTags={(newTags) => {
                       setOther(newTags);
                       setValue("skill.other", newTags as [Tag, ...Tag[]]);
@@ -360,10 +339,29 @@ function FormCreateApply() {
               </FormItem>
             )}
           />
-          <div className="mt-2 text-end">
+          <div className="mt-2 text-end space-x-4">
+            <Button
+              type="reset"
+              className={cn(
+                buttonVariants({ variant: "outlineVariant" }),
+                "bg-background text-foreground"
+              )}
+              onClick={() => {
+                const { reset } = form;
+                setActiveTagIndex(null);
+                setActiveTagIndexOther(null);
+                setOther([]);
+                setMainSkill([]);
+                setEndDate(undefined);
+                setStartDate(undefined);
+                reset();
+              }}
+            >
+              {t("buttonreset.text")}
+            </Button>
             <Button
               type="submit"
-              className="w-fit rounded-full relative"
+              className="w-fit text-background relative"
               disabled={form.formState.isSubmitting}
             >
               <span
