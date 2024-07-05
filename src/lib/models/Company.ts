@@ -1,6 +1,11 @@
 export interface Company {
-    province: string;
-    district:string;
-    nameCompanny: string;
+    address : Address;
+    nameCompany: string;
     phone: string;
+}
+
+
+export interface Address {
+    provinceName: string;
+    districtName:string;
 }

@@ -25,6 +25,7 @@ export class ApiError extends Error {
     }
   
     public static async from(details: unknown) {
+      console.log(details);
       const data = await problemDetailsSchema.parseAsync(details);
       return new ApiError(data);
     }
@@ -48,46 +49,40 @@ export class ApiClient {
         return ApiClient._instance;
       }
   
-    protected fetch(input: string | URL, {headers, ...options}: RequestApiOptions = {}):ResultAsync<ApiResponse, Error> {
-        let url = typeof input === 'string' ? input: input.pathname;
+    
+      protected fetch(input: string | URL, { headers, ...options }: RequestApiOptions = {}): ResultAsync<ApiResponse, Error> {
+        let url = typeof input === 'string' ? input : input.pathname;
         const record: Record<string, string> = ApiClient.makeHeaders(headers);
-    if (options?.body) {
-      record['Content-Type'] ??=
-        options.body instanceof FormData || options?.body instanceof Buffer
-          ? 'multipart/form-data'
-          : 'application/json';
-    }
-    const [path, query] = url.split('?', 2);
-    url = this._baseUrl + '/' + trim(path, '/').split('/').join('/');
-    return fromPromise(
-      fetch(
-        url,
-        options
-          ? {
-              ...options,
-              headers: record,
-              body:
-                options?.body instanceof FormData || options?.body instanceof Buffer
-                  ? options.body
-                  : JSON.stringify(options?.body),
-            }
-          : undefined
-      ),
-      (e) => (e instanceof Error ? e : new Error('Unexpected error', { cause: e }))
-    ).andThen((x) =>
-      x.ok
-        ? ok(x)
-        : fromPromise(x.json(), () =>
-            fromSafePromise(
-              ApiError.from({
-                status: x.status,
-                title: x.statusText,
-                type: 'https://tools.ietf.org/html/rfc7231#section-6.5.5',
-              })
-            ).andThen((x) => err(x))
-          )
-            .andThen((x) =>
-              fromPromise(ApiError.from(x), () =>
+        if (options?.body) {
+          record['Content-Type'] ??=
+            options.body instanceof FormData || options?.body instanceof Buffer
+              ? 'multipart/form-data'
+              : 'application/json';
+        }
+        const [path, query] = url.split('?', 2);
+        url = this._baseUrl + '/' + trim(path, '/').split('/').join('/');
+        if (query) {
+          url += '?' + query;
+        }
+        return fromPromise(
+          fetch(
+            url,
+            options
+              ? {
+                  ...options,
+                  headers: record,
+                  body:
+                    options?.body instanceof FormData || options?.body instanceof Buffer
+                      ? options.body
+                      : JSON.stringify(options?.body),
+                }
+              : undefined
+          ),
+          (e) => (e instanceof Error ? e : new Error('Unexpected error', { cause: e }))
+        ).andThen((x) =>
+          x.ok
+            ? ok(x)
+            : fromPromise(x.json(), () =>
                 fromSafePromise(
                   ApiError.from({
                     status: x.status,
@@ -95,18 +90,29 @@ export class ApiClient {
                     type: 'https://tools.ietf.org/html/rfc7231#section-6.5.5',
                   })
                 ).andThen((x) => err(x))
-              ).andThen((x) => err(x))
-            )
-            .mapErr(async (x) =>
-              x instanceof ResultAsync
-                ? x.match(
-                    (x) => x,
-                    (x) => x
-                  )
-                : x
-            )
-    )
-  }
+              )
+                .andThen((x) =>
+                  fromPromise(ApiError.from(x), () =>
+                    fromSafePromise(
+                      ApiError.from({
+                        status: x.status,
+                        title: x.statusText,
+                        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.5',
+                      })
+                    ).andThen((x) => err(x))
+                  ).andThen((x) => err(x))
+                )
+                .mapErr(async (x) =>
+                  x instanceof ResultAsync
+                    ? x.match(
+                        (x) => x,
+                        (x) => x
+                      )
+                    : x
+                )
+        );
+      }
+
 
 
     public post(input: string | URL, option?: RequestApiOptions) {

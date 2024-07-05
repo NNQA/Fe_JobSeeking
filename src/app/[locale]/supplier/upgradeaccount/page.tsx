@@ -43,7 +43,9 @@ const Schema = (t: (arg: string) => string) => {
   return z.object({
     email: z.string({}).optional(),
     phone: z.string({ required_error: t("phone.err") }).min(4),
-    company: z.string({ required_error: t("company.err") }),
+    company: z
+      .string({ required_error: t("company.err") })
+      .min(1, { message: t("phone.err") }),
     province: z.string({ required_error: t("province.err") }),
     district: z.string({ required_error: t("district.err") }),
   });
@@ -228,13 +230,15 @@ export default function Page() {
       return;
     }
     const company: Company = {
-      province: inputProvince.name,
-      district: inputDistrict.name,
+      address: {
+        provinceName: inputProvince.name,
+        districtName: inputDistrict.name,
+      },
       phone: data.phone,
-      nameCompanny: data.company,
+      nameCompany: data.company,
     };
     const result = await actionUpgradeUser(company);
-    if (result === "ok") {
+    if (result?.status === "ok") {
       toast({
         variant: "success",
         title: "Success",
@@ -247,7 +251,7 @@ export default function Page() {
       toast({
         variant: "destructive",
         title: "Failure",
-        description: "You update your failure",
+        description: result?.message,
       });
     }
   }
