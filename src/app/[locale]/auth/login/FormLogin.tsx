@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -21,7 +21,6 @@ import {
 import Link from "next/link";
 import PasswordInput from "@/components/inputcustom/PasswordInput";
 import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
-import { CheckCircle, Mail } from "lucide-react";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
 import { toast } from "@/components/ui/use-toast";
@@ -40,8 +39,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { checkInstanceResponsce } from "@/lib/utils";
-import { User } from "@/lib/models/User";
 import { setCookie } from "../actions";
+import { Mail } from "lucide-react";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({

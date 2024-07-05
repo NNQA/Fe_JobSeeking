@@ -1,11 +1,22 @@
 import Image from "next/image";
-import FormLoggin from "./FormLogin";
+import dynamic from "next/dynamic";
+
+const LoginDynamic = dynamic(() => import("./FormLogin"), {
+  loading: () => (
+    <div className="h-[600px] w-[510px] bg-background px-12 py-8 rounded-md shadow-xl flex flex-col gap-4">
+      <div className="grid place-content-center">
+        <Skeleton className="w-2/3 h-2/3" />
+      </div>
+    </div>
+  ),
+});
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   return (
     <div className="h-[calc(100vh-3rem)] w-screen flex justify-center items-center gap-[30rem]">
       <div className="text-accent">JOB SEEKING</div>
-      <FormLoggin />
+      <LoginDynamic />
       <div
         className="bg-img-wrapper"
         style={{
