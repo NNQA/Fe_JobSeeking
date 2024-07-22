@@ -47,7 +47,7 @@ const Schema = (t: (arg: string) => string) => {
   });
 };
 export default function Page() {
-  const t = useTranslations("upgradeAccout");
+  const t = useTranslations("upgradeAccount");
   const [user, setUser] = useState<User>();
   const [inputProvince, setInputProvince] = useState<ListProvince>({
     name: "",

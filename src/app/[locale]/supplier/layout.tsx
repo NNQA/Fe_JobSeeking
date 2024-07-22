@@ -70,8 +70,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     queryKey: ["user"],
     queryFn: fetchUserData,
   });
+  console.log(
+    user?.authorities.some(
+      (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
+    )
+  );
   if (
-    !user ||
+    user &&
     !user?.authorities.some(
       (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
     )
