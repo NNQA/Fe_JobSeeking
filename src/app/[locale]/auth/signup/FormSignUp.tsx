@@ -78,7 +78,7 @@ function FormSignup() {
         });
         const timer = setTimeout(() => {
           router.push(
-            `verificationcode?email="${encodeURIComponent(data.email)}`
+            `verificationcode?email=${encodeURIComponent(data.email)}`
           );
         }, 1500);
       },
