@@ -5,6 +5,7 @@ import Footer from "@/components/custom/footer";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Toaster } from "@/components/ui/toaster";
+import QueryClientProviders from "@/lib/context/QueryClientProviders";
 
 export const metadata: Metadata = {
   title: "Job seeking",
@@ -29,7 +30,9 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <NextIntlClientProvider messages={message}>
-              <div className="w-screen">{children}</div>
+              <QueryClientProviders>
+                <div className="w-screen">{children}</div>
+              </QueryClientProviders>
               <Toaster />
             </NextIntlClientProvider>
           </ThemeProvider>

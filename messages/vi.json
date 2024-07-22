@@ -130,6 +130,7 @@
     }
   },
   "supplier": {
+    "h4":"Tạo đơn làm việc mới",
     "createapply": {
       "title": {
         "label": "Tiêu đề",

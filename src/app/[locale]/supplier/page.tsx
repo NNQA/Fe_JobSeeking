@@ -1,35 +1,22 @@
-import { ERole, User } from "@/lib/models/User";
-import { SessionApi } from "@/lib/service/session-api.server";
-import { useLocale } from "next-intl";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { Suspense, use } from "react";
-import Home from "./Dashboard";
+import { Suspense } from "react";
 import { SkeletonCard } from "@/components/SeletonCard";
 
-const getData = async () => {
-  if (cookies().get("accessToken")) {
-    const api = SessionApi.from(cookies());
-
-    const response = await api.get("/api/user/getCurrentUser");
-
-    if (response.isOk()) {
-      const user = (await response.value.json()) as User;
-      console.log(user);
-      return user;
-    }
-  }
-  return null;
-};
-
 export default async function Page() {
-  const user = getData();
-  const locale = useLocale();
+  // const queryClient = getQueryClient();
+  // const { data: user, isLoading } = queryClient.qure({
+  //   queryKey: ["loadingUserSupplier"],
+  //   queryFn: getData,
+  // });
+  // const locale = useLocale();
+  // if (
+  //   !user ||
+  //   !user?.authorities.some((e) => e.authority === ERole.ROLE_SUPPLIER)
+  // ) {
+  //   redirect(`/${locale}/upgradeaccount`);
+  // }
   return (
     <div>
-      <Suspense fallback={<SkeletonCard />}>
-        <Home userPromise={user}></Home>
-      </Suspense>
+      <Suspense fallback={<SkeletonCard />}></Suspense>
     </div>
   );
 }

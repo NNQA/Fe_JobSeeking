@@ -15,3 +15,12 @@ export function checkInstanceResponsce(input: String) {
 }
 
 
+export enum JobType {
+  Art,
+  Bussiness,
+  Communications,
+  Education,
+  Hospitality,
+  "Information technology",
+  "Sales and Marketing",
+}

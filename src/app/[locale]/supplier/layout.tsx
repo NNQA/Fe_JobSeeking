@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+"use client";
 import SideBar from "@/components/SideBar";
 import BreadCrumbsCustom from "@/components/custom/BreadCrumbsCustom";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useLocale } from "next-intl";
+import { Authorities, ERole, User } from "@/lib/models/User";
+import { useQuery } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const dataSideBarSupplier: Readonly<
   Array<{
@@ -52,8 +57,39 @@ export const dataSideBarSupplier: Readonly<
     icon: <CircleUserRound className="h-4 w-4"></CircleUserRound>,
   },
 ];
-
+const fetchUserData = async () => {
+  const response = await fetch("/api/user/getCurrentUser");
+  if (!response.ok) {
+    throw new Error("Failed to fetch user data");
+  }
+  return response.json();
+};
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const locale = useLocale();
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUserData,
+  });
+  if (
+    !user ||
+    !user?.authorities.some(
+      (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
+    )
+  ) {
+    redirect(`/${locale}/upgradeaccount`);
+  }
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen bg-background">
+        <div className="h-fit w-fit space-y-2">
+          <Skeleton className="h-[20px] w-[20rem]" />
+          <Skeleton className="h-[20px] w-[25rem]" />
+          <Skeleton className="h-[20rem] w-[30rem]" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section>
       <div className="grid min-h-screen w-full md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr]">

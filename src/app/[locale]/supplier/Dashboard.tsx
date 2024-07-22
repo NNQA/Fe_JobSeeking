@@ -17,20 +17,20 @@ export default function Home({ userPromise }: UserPageProps) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // userPromise.then((userData) => {
-    //   setUser(userData);
-    //   if (
-    //     userData &&
-    //     !userData.authorities.some((e) => e.authority === ERole.ROLE_SUPPLIER)
-    //   ) {
-    //     router.replace(`/${locale}/supplier/upgradeaccount`);
-    //   }
-    // });
+    userPromise.then((userData) => {
+      setUser(userData);
+      if (
+        userData &&
+        !userData.authorities.some((e) => e.authority === ERole.ROLE_SUPPLIER)
+      ) {
+        router.replace(`/${locale}/upgradeaccount`);
+      }
+    });
   }, [userPromise, locale, router]);
 
-  // if (!user) {
-  //   return <SkeletonCard />;
-  // }
+  if (!user) {
+    return <SkeletonCard />;
+  }
 
   return <div>asdsad</div>;
 }
