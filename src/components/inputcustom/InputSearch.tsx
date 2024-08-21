@@ -5,18 +5,22 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "../svg/ProgressCircle";
+import { cn } from "@/lib/utils";
 
 interface PropsValue {
   id: number;
   name: string;
 }
-interface InputSearchProps extends InputCustomProps {
+export interface InputSearchProps extends InputCustomProps {
   isOpen?: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   valueInput?: PropsValue;
   setValueInput: Dispatch<SetStateAction<PropsValue>>;
   handleOnChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
   items: PropsValue[];
+  align?: "center" | "end" | "start";
+  side?: "top" | "right" | "bottom" | "left" | undefined;
+  classNameSroll?: string;
 }
 
 export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
@@ -29,6 +33,9 @@ export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
       setValueInput,
       handleOnChange,
       items,
+      align,
+      side,
+      classNameSroll,
       ...props
     },
     ref
@@ -45,8 +52,8 @@ export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
               onChange={handleOnChange}
             />
           </PopoverTrigger>
-          <PopoverContent>
-            <ScrollArea className="h-[200px] w-full">
+          <PopoverContent align={align} side={side}>
+            <ScrollArea className={cn("h-[200px]", classNameSroll)}>
               {items.length > 0 ? (
                 items.map((item, index: number) => (
                   <div
