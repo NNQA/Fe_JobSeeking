@@ -5,12 +5,8 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import "../../app/[locale]/style.css";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "../svg/ProgressCircle";
-import { Address, AddressComponent } from "@/lib/models/Address";
-import { useFormContext, UseFormSetValue } from "react-hook-form";
-interface ListApi {
-  id: number;
-  name: string;
-}
+import { AddressComponent } from "@/lib/models/Address";
+import { UseFormSetValue } from "react-hook-form";
 const DELAY = 1000;
 export interface InputSearchProps extends InputCustomProps {
   isOpen?: boolean;
@@ -18,8 +14,8 @@ export interface InputSearchProps extends InputCustomProps {
   align?: "center" | "end" | "start";
   side?: "top" | "right" | "bottom" | "left" | undefined;
   setValue: UseFormSetValue<any>;
-  addressComponent: Address | undefined;
-  setAddressComponent: Dispatch<SetStateAction<Address | undefined>>;
+  addressComponent: AddressComponent | undefined;
+  setAddressComponent: Dispatch<SetStateAction<AddressComponent | undefined>>;
 }
 export const InputSearchAddress = React.forwardRef<
   HTMLInputElement,
@@ -30,7 +26,7 @@ export const InputSearchAddress = React.forwardRef<
     ref
   ) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [listApi, setApi] = useState<Address[]>([]);
+    const [listApi, setApi] = useState<AddressComponent[]>([]);
     const [valueInput, setValueInput] = useState<string>("");
     const debounceRef = useRef<any>(null);
 
@@ -54,22 +50,24 @@ export const InputSearchAddress = React.forwardRef<
           `/api/geocode?address=${encodeURIComponent(term)}`
         );
         const data = await response.json();
-        const mappedAddress: Address[] = data.results.map((result: any) => {
-          const address: Address = {
-            commune: result.compound.commune,
-            district: result.compound.district,
-            province: result.compound.province,
-            name: result.name,
-            address: result.address,
-            formatted_address: result.formatted_address,
-            location: {
-              lat: result.geometry.location.lat,
-              lng: result.geometry.location.lng,
-            },
-          };
+        const mappedAddress: AddressComponent[] = data.results.map(
+          (result: any) => {
+            const address: AddressComponent = {
+              commune: result.compound.commune,
+              district: result.compound.district,
+              province: result.compound.province,
+              name: result.name,
+              address: result.address,
+              formatted_address: result.formatted_address,
+              location: {
+                lat: result.geometry.location.lat,
+                lng: result.geometry.location.lng,
+              },
+            };
 
-          return address;
-        });
+            return address;
+          }
+        );
         setApi(mappedAddress);
       } catch (error) {
         console.error(error);
@@ -113,16 +111,14 @@ export const InputSearchAddress = React.forwardRef<
           >
             <ScrollArea className="h-[200px]">
               {!debounceRef.current && listApi.length > 0
-                ? listApi.map((item: Address, index: number) => (
+                ? listApi.map((item: AddressComponent, index: number) => (
                     <div
                       key={index}
                       className="p-2 hover:bg-primary hover:text-accent outline-none rounded-md"
                       onClick={() => {
                         setAddressComponent(item);
                         setValueInput(item.formatted_address);
-                        setValue("address", item.formatted_address, {
-                          shouldValidate: true,
-                        });
+                        setValue("address", item.formatted_address);
                       }}
                     >
                       {item.formatted_address}
