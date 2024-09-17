@@ -1,7 +1,6 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { Authorities, ERole } from "./lib/models/User";
-import { redirect } from "next/dist/server/api-utils";
 
 const fetchUserData = async (request: NextRequest) => {
   console.log(
@@ -36,21 +35,25 @@ export async function middleware(request: NextRequest) {
 
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
   if (request.nextUrl.pathname.startsWith(`/${locale}/supplier`)) {
-    console.log("first");
-    try {
-      const user = await fetchUserData(request);
-      console.log("Fetched User:", user);
+    if(!request.cookies.get("accessToken")) {
+      request.nextUrl.pathname = `/${locale}/auth/login`;
+    } else {
 
-      if (
-        user &&
-        !user.authorities.some(
-          (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
-        )
-      ) {
-        request.nextUrl.pathname = `/${locale}/upgradeaccount`;
+      try {
+        const user = await fetchUserData(request);
+        console.log("Fetched User:", user);
+  
+        if (
+          user &&
+          !user.authorities.some(
+            (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
+          )
+        ) {
+          request.nextUrl.pathname = `/${locale}/upgradeaccount`;
+        }
+      } catch (error) {
+        console.error("Error in middleware user fetch:", error);
       }
-    } catch (error) {
-      console.error("Error in middleware user fetch:", error);
     }
   }
   const response = handleI18nRouting(request);

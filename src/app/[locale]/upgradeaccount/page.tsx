@@ -1,6 +1,4 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import {
   Form,
@@ -14,79 +12,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
-import { Building, Building2, Mail, Phone, Warehouse } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { Building, Building2, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
 import { actionUpgradeUser, getCurrentUser } from "./actions";
 import { User } from "@/lib/models/User";
-import { InputSearch } from "@/components/inputcustom/InputSearch";
-import Fuse from "fuse.js";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { Company } from "@/lib/models/Company";
-interface ListProvince {
-  id: number;
-  name: string;
-}
-interface ListDistrict {
-  id: number;
-  name: string;
-}
-const Schema = (t: (arg: string) => string) => {
-  return z.object({
-    email: z.string({}).optional(),
-    phone: z.string({ required_error: t("phone.err") }).min(4),
-    company: z
-      .string({ required_error: t("company.err") })
-      .min(1, { message: t("phone.err") }),
-    province: z.string({ required_error: t("province.err") }),
-    district: z.string({ required_error: t("district.err") }),
-  });
-};
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { upgradeAccountSchema } from "./upgrade-zod";
+import { Address, AddressComponent } from "@/lib/models/Address";
+import InputSearchAddress from "@/components/inputcustom/InputSearchAddress";
+
 export default function Page() {
   const t = useTranslations("upgradeAccount");
   const [user, setUser] = useState<User>();
-  const [inputProvince, setInputProvince] = useState<ListProvince>({
-    name: "",
-    id: -1,
-  });
-  const [listProvinceApi, setListProvinceApi] = useState<ListProvince[]>([]);
-  const [listProvince, setListProvince] = useState<ListProvince[]>([]);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [fuseProvince, setFuseProvince] = useState<Fuse<ListProvince> | null>(
-    null
-  );
-  const [fuseDisTrict, setFuseDistrict] = useState<Fuse<ListDistrict> | null>(
-    null
-  );
-  const [inputDistrict, setInputDistrict] = useState<ListProvince>({
-    name: "",
-    id: -1,
-  });
-  const [listDistrictApi, setListDistrictApi] = useState<ListDistrict[]>([]);
-  const [listDistrict, setListDistrict] = useState<ListDistrict[]>([]);
-  const [isOpenDistrict, setIsOpenDistrict] = useState<boolean>(false);
-  const [disableDistrict, setDisableDistrict] = useState<boolean>(true);
   const router = useRouter();
   const locale = useLocale();
-  const formSchema = Schema(t);
-  const fuseOptions = {
-    keys: ["name"],
-    threshold: 0.3,
-  };
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: user?.email,
-      phone: "",
-      company: "",
-      district: "",
-      province: "",
-    },
-  });
+  const formSchema = upgradeAccountSchema(t);
+  const [addressComponent, setAddressComponent] = useState<AddressComponent>();
 
   useEffect(() => {
     getCurrentUser().then((r) => {
@@ -99,156 +47,42 @@ export default function Page() {
       }
     });
   }, []);
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const response = await fetch(
-          "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province",
-          {
-            headers: {
-              Token: "c54bbac7-2a22-11ef-8e53-0a00184fe694",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch provinces");
-        }
-
-        const data = await response.json();
-        if (data.data && Array.isArray(data.data)) {
-          const transformedProvinces = data.data.map((province: any) => ({
-            id: province.ProvinceID,
-            name: province.ProvinceName,
-          }));
-          setListProvinceApi(transformedProvinces);
-          setListProvince(transformedProvinces);
-          setFuseProvince(new Fuse(transformedProvinces, fuseOptions));
-        }
-      } catch (error) {
-        console.error("Error fetching provinces:", error);
-      }
-    };
-
-    fetchProvinces();
-  }, []);
-
-  useEffect(() => {
-    if (inputProvince.id === -1) return;
-    if (inputProvince.id === -1 && inputProvince.name === "") {
-      setListDistrict([]);
-      setListDistrictApi([]);
-      setDisableDistrict(true);
-      return;
-    }
-    const fetchDistrict = async () => {
-      setDisableDistrict(false);
-      try {
-        const response = await fetch(
-          `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${inputProvince.id}`,
-          {
-            method: "GET",
-            headers: {
-              Token: "c54bbac7-2a22-11ef-8e53-0a00184fe694",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch District");
-        }
-
-        const data = await response.json();
-        console.log(data);
-        if (data.data && Array.isArray(data.data)) {
-          const transformedDistrict = data.data.map((district: any) => ({
-            id: district.DistrictID,
-            name: district.DistrictName,
-          }));
-          setListDistrictApi(transformedDistrict);
-          setListDistrict(transformedDistrict);
-          setFuseDistrict(new Fuse(transformedDistrict, fuseOptions));
-        }
-      } catch (error) {
-        console.error("Error fetching District:", error);
-      }
-    };
-
-    fetchDistrict();
-  }, [inputProvince]);
-
-  const handleOnchangeProvince = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e) return;
-    const value = e.currentTarget.value;
-    setInputProvince((pre) => ({
-      ...pre,
-      name: value,
-    }));
-    if (value.trim() === "") {
-      setListProvince(listProvinceApi);
-      setInputProvince((pre) => ({
-        ...pre,
-        id: -1,
-      }));
-    } else {
-      if (fuseProvince) {
-        const filtered = fuseProvince
-          .search(value)
-          .map((result) => result.item);
-        setListProvince(filtered);
-      }
-    }
-  };
-  const handleOnchangeDistrict = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    setInputDistrict((pre) => ({
-      ...pre,
-      name: value,
-    }));
-    if (value.trim() !== "") {
-      setListDistrict(listDistrictApi);
-    } else {
-      if (fuseDisTrict) {
-        const filtered = fuseDisTrict
-          .search(value)
-          .map((result) => result.item);
-        setListDistrict(filtered);
-      }
-    }
-  };
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: user?.email,
+      phone: "",
+      company: "",
+      address: "",
+    },
+  });
+  const {
+    setValue,
+    formState: { errors },
+  } = form;
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    if (
-      listDistrictApi.some(
-        (r) => r.id === inputDistrict.id && r.name === inputDistrict.name
-      ) === false
-    ) {
-      toast({
-        variant: "destructive",
-        title: "Address invalid",
-        description: "Please check and choose correct address!!!",
-      });
-      return;
-    }
-    const company: Company = {
+    if (!addressComponent) return;
+    console.log(addressComponent);
+    const result = await actionUpgradeUser({
       address: {
-        provinceName: inputProvince.name,
-        districtName: inputDistrict.name,
-      },
-      phone: data.phone,
+        addressName: addressComponent.address,
+        communeName: addressComponent.commune,
+        provinceName: addressComponent.province,
+        districtName: addressComponent.district,
+        formattedAddressName: addressComponent.formatted_address,
+        lat: addressComponent.location.lat,
+        lng: addressComponent.location.lng,
+      } as Address,
       nameCompany: data.company,
-    };
-    const result = await actionUpgradeUser(company);
+      phone: data.phone,
+    } as Company);
     if (result?.status === "ok") {
       toast({
         variant: "success",
         title: "Success",
         description: "You update your successfully",
       });
-      const timer = setTimeout(() => {
-        router.push(`/${locale}/supplier`);
-      }, 1000);
+      router.push(`/${locale}/supplier`);
     } else {
       toast({
         variant: "destructive",
@@ -342,65 +176,32 @@ export default function Page() {
                   </FormItem>
                 )}
               />
-              <div className="flex gap-10 justify-between w-full">
-                <FormField
-                  control={form.control}
-                  name="province"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>
-                        {t("province.label")}{" "}
-                        <span className="text-red-600">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <InputSearch
-                          placeholder={t("province.placeholder")}
-                          isOpen={isOpen}
-                          setIsOpen={setIsOpen}
-                          valueInput={inputProvince}
-                          handleOnChange={handleOnchangeProvince}
-                          setValueInput={setInputProvince}
-                          items={listProvince}
-                          {...field}
-                          icon={
-                            <Building2 className="h-4 w-4 mt-1 text-primary" />
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="district"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>
-                        {t("district.label")}{" "}
-                        <span className="text-red-600">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <InputSearch
-                          placeholder={t("district.placeholder")}
-                          disabled={disableDistrict}
-                          isOpen={isOpenDistrict}
-                          setIsOpen={setIsOpenDistrict}
-                          valueInput={inputDistrict}
-                          handleOnChange={handleOnchangeDistrict}
-                          setValueInput={setInputDistrict}
-                          items={listDistrict}
-                          {...field}
-                          icon={
-                            <Warehouse className="h-4 w-4 mt-1 text-primary" />
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>
+                      Address <span className="text-red-600">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <InputSearchAddress
+                        placeholder="Enter your address"
+                        icon={
+                          <Building2 className="h-4 w-4 mt-1 text-primary" />
+                        }
+                        setValue={setValue}
+                        addressComponent={addressComponent}
+                        setAddressComponent={setAddressComponent}
+                        className="w-full"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="mt-2 text-end">
                 <Button
                   type="submit"

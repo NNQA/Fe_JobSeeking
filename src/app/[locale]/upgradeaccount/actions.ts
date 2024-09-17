@@ -58,9 +58,11 @@ export const actionUpgradeUser = async (company: Company) => {
       return response;
     } else {
       const errPro = await toActionErrorsAsync(result.error); 
+      console.log("Aaa");
+      console.log( errPro.form[0].split("+")[0]);
       response = {
         status : "failure",
-        message :  errPro.form[0] ?? errPro.from[1],
+        message :  errPro.form[0] ? errPro.form[0].split('+')[0] : errPro.from[1],
       }
     }
     return response;
