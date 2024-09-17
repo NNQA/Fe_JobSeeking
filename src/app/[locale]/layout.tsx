@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./prose-mirror.css";
 import { ThemeProvider } from "@/lib/context/ThemeProviders";
-import Footer from "@/components/custom/footer";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Toaster } from "@/components/ui/toaster";
