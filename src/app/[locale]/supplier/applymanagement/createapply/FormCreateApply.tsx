@@ -8,6 +8,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -16,69 +19,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
+import { Tag, TagInput } from "emblor";
+import { useTranslations } from "next-intl";
+import Tiptap from "@/components/tiptab/Tiptap";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { EJobTypeZod, WorkSchema } from "./apply-zod";
+import z, { date } from "zod";
+import { Address, AddressComponent } from "@/lib/models/Address";
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button";
+import clsx from "clsx";
+import { Transition } from "@headlessui/react";
+import ProgressCircle from "@/components/svg/ProgressCircle";
+import { CalendarIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
-import { Tag, TagInput } from "emblor";
-import { Textarea } from "@/components/ui/textarea";
-import { useTranslations } from "next-intl";
-import { Transition } from "@headlessui/react";
-import ProgressCircle from "@/components/svg/ProgressCircle";
-import clsx from "clsx";
-
-const ELevelZod = z.enum(["EXPERT", "EXPERIENCE", "ENTRY"]);
-const SkillSchema = (t: (arg: string) => string) => {
-  return z.object({
-    mainskill: z
-      .array(
-        z.object({
-          id: z.string(),
-          text: z.string(),
-        })
-      )
-      .nonempty(t("skill.err")),
-    other: z.array(
-      z.object({
-        id: z.string(),
-        text: z.string(),
-      })
-    ),
-  });
-};
-
-const WorkSchema = (t: (arg: string) => string) => {
-  return z.object({
-    title: z.string().nonempty(t("title.err")),
-    description: z.string().nonempty(t("description.err")),
-    salary: z.number().positive(t("salary.err")),
-    level: ELevelZod,
-    skill: SkillSchema(t),
-    activeDate: z.string().nonempty(t("date.start.err")),
-    expiredDate: z.string().nonempty(t("date.end.err")),
-  });
-};
+import InputSearchAddress from "@/components/inputcustom/InputSearchAddress";
+import { actionCreateNewJob } from "./action";
+import { toast } from "@/components/ui/use-toast";
 
 function FormCreateApply() {
-  const [start, setStartDate] = useState<Date | undefined>(undefined);
-  const [end, setEndDate] = useState<Date | undefined>(undefined);
-  const [mainskill, setMainSkill] = useState<Tag[]>([]);
-  const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
-  const [other, setOther] = useState<Tag[]>([]);
-  const [activeTagIndexOther, setActiveTagIndexOther] = useState<number | null>(
+  const [skill, setSkill] = useState<Tag[]>([]);
+  const [skillActiveTagIndex, setSkillActiveTagIndex] = useState<number | null>(
     null
   );
+  const [categories, setCategories] = useState<Tag[]>([]);
+  const [activeTagIndexCategories, setActiveTagIndexCategories] = useState<
+    number | null
+  >(null);
+
+  const [addressComponent, setAddressComponent] = useState<AddressComponent>();
   const t = useTranslations("supplier.createapply");
   const formSchema = WorkSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -86,24 +61,68 @@ function FormCreateApply() {
     defaultValues: {
       title: "",
       description: "",
-      activeDate: "",
-      expiredDate: "",
-      level: "ENTRY",
-      skill: {
-        mainskill: [],
-        other: [],
-      },
-      salary: 0,
+      address: "",
+      experience: "",
+      position: "",
+      skill: [],
+      jobtype: "Part-Time",
+      salary: "",
+      category: [],
+      expireDate: new Date(),
     },
   });
-  const { setValue } = form;
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+  const {
+    setValue,
+    formState: { errors },
+  } = form;
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (!addressComponent) return;
+    const result = await actionCreateNewJob({
+      address: {
+        addressName: addressComponent.address,
+        communeName: addressComponent.commune,
+        provinceName: addressComponent.province,
+        districtName: addressComponent.district,
+        formattedAddressName: addressComponent.formatted_address,
+        lat: addressComponent.location.lat,
+        lng: addressComponent.location.lng,
+      } as Address,
+      jobCategories: data.category.map((e) => ({
+        jobNameCategory: e.text,
+      })),
+      skills: data.skill.map((e) => ({
+        nameSkill: e.text,
+      })),
+      title: data.title,
+      description: data.description,
+      salary: data.salary,
+      experience: data.experience,
+      expiredDate: data.expireDate,
+      position: {
+        jobPositionName: data.position,
+      },
+      jobType: data.jobtype,
+    });
+    console.log(result);
+    if (result?.status === "ok") {
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "You update your successfully",
+      });
+    } else {
+      console.log("asd");
+      toast({
+        variant: "destructive",
+        title: "Failure",
+        description: result?.message,
+      });
+    }
   };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-6">
-        <div className="flex flex-col gap-3 w-[40%]">
+        <div className="flex flex-col gap-3 w-[50%]">
           <FormField
             control={form.control}
             name="title"
@@ -125,7 +144,7 @@ function FormCreateApply() {
           ></FormField>
           <FormField
             control={form.control}
-            name={"description"}
+            name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -133,9 +152,54 @@ function FormCreateApply() {
                   <span className="text-red-600">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder={t("description.placeholder")}
+                  <Controller
+                    render={({ field }) => (
+                      <Tiptap content={field.value} onChange={field.onChange} />
+                    )}
+                    name="description"
+                    defaultValue=""
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          ></FormField>
+
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  {t("address.label")} <span className="text-red-600">*</span>
+                </FormLabel>
+                <FormControl>
+                  <InputSearchAddress
+                    icon={null}
+                    setValue={setValue}
+                    addressComponent={addressComponent}
+                    setAddressComponent={setAddressComponent}
+                    className="w-full"
+                    placeholder={t("address.placeholder")}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="salary"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {t("salary.label")} <span className="text-red-600">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
                     className="text-black text- font-medium"
+                    placeholder={t("salary.placeholder")}
                     {...field}
                   />
                 </FormControl>
@@ -143,102 +207,20 @@ function FormCreateApply() {
               </FormItem>
             )}
           ></FormField>
-          <div className="flex justify-between gap-6">
-            <FormField
-              control={form.control}
-              name={"activeDate"}
-              render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
-                  <FormLabel>
-                    {t("date.start.label")}{" "}
-                    <span className="text-red-600">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outlineVariant"}
-                          className={cn(
-                            "w-fulll justify-start text-left font-normal",
-                            !start && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {start ? (
-                            format(start, "PPP")
-                          ) : (
-                            <span>{t("date.start.placeholder")}</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={start}
-                          onSelect={setStartDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={"expiredDate"}
-              render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
-                  <FormLabel>
-                    {t("date.end.label")}
-                    <span className="text-red-600">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outlineVariant"}
-                          className={cn(
-                            "w-fulll justify-start text-left font-normal",
-                            !end && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {end ? (
-                            format(end, "PPP")
-                          ) : (
-                            <span>{t("date.end.placeholder")}</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={end}
-                          onSelect={setEndDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
           <div className="flex gap-6">
             <FormField
               control={form.control}
-              name={"salary"}
+              name="position"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>
-                    {t("salary.label")} <span className="text-red-600">*</span>
+                    {t("position.label")}{" "}
+                    <span className="text-red-600">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="text-black text- font-medium"
+                      placeholder={t("position.placeholder")}
                       {...field}
                     />
                   </FormControl>
@@ -248,39 +230,60 @@ function FormCreateApply() {
             ></FormField>
             <FormField
               control={form.control}
-              name="level"
+              name="experience"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>
-                    {t("level.label")} <span className="text-red-600">*</span>
+                    {t("experience.label")}
+                    <span className="text-red-600">*</span>
                   </FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose your calendly link" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        {ELevelZod._def.values.map((e, index) => (
-                          <SelectItem value={e as string} key={index}>
-                            {t("level." + e.toString())}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input
+                      className="text-black text- font-medium"
+                      placeholder={t("experience.placeholder")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
-            />
+            ></FormField>
           </div>
         </div>
 
         <div className="flex flex-col space-y-6 border-l pl-6">
-          <h4>Skill *</h4>
           <FormField
             control={form.control}
-            name="skill.mainskill"
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {t("category.label")} <span className="text-red-600">*</span>
+                </FormLabel>
+                <FormControl className="w-full">
+                  <TagInput
+                    {...field}
+                    activeTagIndex={activeTagIndexCategories}
+                    setActiveTagIndex={setActiveTagIndexCategories}
+                    placeholder={t("category.placeholder")}
+                    tags={categories}
+                    draggable={true}
+                    direction="row"
+                    inputFieldPosition="bottom"
+                    inlineTags={false}
+                    className="sm:min-w-[450px] flex px-4 font-medium ring-0 ring-primary"
+                    setTags={(newTags) => {
+                      setCategories(newTags);
+                      setValue("category", newTags as [Tag, ...Tag[]]);
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="skill"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -289,18 +292,18 @@ function FormCreateApply() {
                 <FormControl className="w-full">
                   <TagInput
                     {...field}
-                    activeTagIndex={activeTagIndex}
-                    setActiveTagIndex={setActiveTagIndex}
+                    activeTagIndex={skillActiveTagIndex}
+                    setActiveTagIndex={setSkillActiveTagIndex}
                     placeholder={t("skill.placeholder")}
-                    tags={mainskill}
+                    tags={skill}
                     draggable={true}
                     direction="row"
                     inputFieldPosition="bottom"
                     inlineTags={false}
                     className="sm:min-w-[450px] flex px-4 font-medium ring-0 ring-primary"
                     setTags={(newTags) => {
-                      setMainSkill(newTags);
-                      setValue("skill.mainskill", newTags as [Tag, ...Tag[]]);
+                      setSkill(newTags);
+                      setValue("skill", newTags as [Tag, ...Tag[]]);
                     }}
                   />
                 </FormControl>
@@ -310,35 +313,75 @@ function FormCreateApply() {
           />
           <FormField
             control={form.control}
-            name="skill.other"
+            name="jobtype"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>
-                  {t("otherskill.label")}{" "}
+                  {t("type.label")}
                   <span className="text-red-600">*</span>
                 </FormLabel>
-                <FormControl className="w-full">
-                  <TagInput
-                    {...field}
-                    activeTagIndex={activeTagIndexOther}
-                    setActiveTagIndex={setActiveTagIndexOther}
-                    placeholder={t("otherskill.placeholder")}
-                    tags={other}
-                    draggable={true}
-                    direction="row"
-                    inputFieldPosition="bottom"
-                    inlineTags={false}
-                    className="sm:min-w-[450px] font-medium ring-0 ring-primary"
-                    setTags={(newTags) => {
-                      setOther(newTags);
-                      setValue("skill.other", newTags as [Tag, ...Tag[]]);
-                    }}
-                  />
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose your JobType link" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      {EJobTypeZod._def.values.map((e, index) => (
+                        <SelectItem value={e as string} key={index}>
+                          {e.toString()}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"expireDate"}
+            render={({ field }) => (
+              <FormItem className="w-full flex flex-col">
+                <FormLabel>
+                  {t("expired.label")} <span className="text-red-600">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outlineVariant"}
+                        className={cn(
+                          "w-fulll justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>{t("expired.placeholder")}</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(date) => {
+                          field.onChange(date);
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <div className="mt-2 text-end space-x-4">
             <Button
               type="reset"
@@ -348,13 +391,14 @@ function FormCreateApply() {
               )}
               onClick={() => {
                 const { reset } = form;
-                setActiveTagIndex(null);
-                setActiveTagIndexOther(null);
-                setOther([]);
-                setMainSkill([]);
-                setEndDate(undefined);
-                setStartDate(undefined);
+                setSkillActiveTagIndex(null);
+                setActiveTagIndexCategories(null);
+                setCategories([]);
+                setSkill([]);
                 reset();
+                setAddressComponent(undefined);
+                setValue("description", "");
+                setValue("address", "");
               }}
             >
               {t("buttonreset.text")}
