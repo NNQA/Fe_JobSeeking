@@ -18,7 +18,7 @@ interface EditorProps {
   classNameContent?: string;
 }
 
-const extensions = [StarterKit, Blockquote, ListItem];
+const extensions = [StarterKit];
 const Tiptap = ({
   content,
   placeholder,
@@ -33,6 +33,7 @@ const Tiptap = ({
       const cleanedHtml = html.replace(/<p><\/p>/g, "").trim();
       onChange(cleanedHtml);
     },
+    immediatelyRender: false,
   });
   if (!editor) return <></>;
   return (
