@@ -1,23 +1,24 @@
-import { Address } from "cluster";
+import { Address } from "./Address";
 
 export interface Work {
     title: string;
     description: string;
-    salary: Salary;
-    skill: Skill;
-    catergory: Category;
-
+    salary: string;
     address: Address;
-    activeDate: string;
-    expiredDate: string;
+    jobCategories: Array<Category>;
+    skills: Array<Skill>;
+    experience:string;
+    expiredDate: Date;
+    position: JobPostion;
+    jobType: string;
 }
 export interface  Category{
-    nameCate: Array<string>;
+    jobNameCategory: string;
 }
 export interface Skill {
-    nameSkill: Array<string>;
+    nameSkill: string;
 }
 
-export interface Salary {
-    text: string;
+export interface JobPostion {
+    jobPositionName: string;
 }
