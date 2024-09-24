@@ -130,7 +130,7 @@
     }
   },
   "supplier": {
-    "h4":"Tạo đơn làm việc mới",
+    "h4": "Tạo đơn làm việc mới",
     "createapply": {
       "title": {
         "label": "Tiêu đề",
@@ -142,37 +142,42 @@
         "err": "Mô tả công việc được yêu cầu.",
         "placeholder": "Nhập mô tả."
       },
-      "date": {
-        "start": {
-          "label": "Ngày bắt đầu",
-          "err": "Thành phần bắt buộc",
-          "placeholder": "Chọn ngày bắt đầu."
-        },
-        "end": {
-          "label": "Ngày kết thúc",
-          "err": "Thành phần bắt buộc",
-          "placeholder": "Chọn ngày kết thúc."
-        }
+      "address": {
+        "label": "Địa chỉ",
+        "err": "Địa chỉ công ty được yêu cầu.",
+        "placeholder": "Nhập địa chỉ."
+      },
+      "expired": {
+        "label": "Ngày kết thúc",
+        "err": "Thành phần bắt buộc",
+        "placeholder": "Chọn ngày kết thúc."
       },
       "salary": {
         "label": "Lương",
         "err": "Thành phần bắt buộc",
         "placeholder": "Nhập lương"
       },
-      "level": {
+      "position": {
+        "label": "Vị trí tuyển dụng",
+        "err": "Vị trí tuyển dụng được yêu cầu.",
+        "placeholder": "Nhập vị trí tuyển dụng."
+      },
+      "experience": {
         "label": "Yêu cầu kinh nghiệm.",
-        "EXPERT": "Chuyên gia",
-        "EXPERIENCE": "Có kinh nghiệm",
-        "ENTRY": "Thực tập"
+        "err": "Kinh nghiệm làm việc yêu cầu.",
+        "placeholder": "Nhập kinh nghiệm làm việc."
+      },
+      "type": {
+        "label": "Hình thức làm việc."
       },
       "skill": {
         "label": "Kỹ năng",
-        "err": "Kỹ năng được yêu cầu",
         "placeholder": "Nhập kỹ năng."
       },
-      "otherskill": {
-        "label": "Kỹ năng khác",
-        "placeholder": "Nhập các kỹ năng phụ."
+      "category": {
+        "label": "Thể loại công việc",
+        "err": "Loại công việc được yêu cầu",
+        "placeholder": "Nhập thể loại công việc."
       },
       "button": {
         "text": "Đăng tải"

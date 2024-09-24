@@ -8,8 +8,6 @@ import {
   JSONContent,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Blockquote from "@tiptap/extension-blockquote";
-import ListItem from "@tiptap/extension-list-item";
 import EditToolBar from "./tool/edit-toolbar";
 interface EditorProps {
   content: HTMLContent | JSONContent | JSONContent[] | null;

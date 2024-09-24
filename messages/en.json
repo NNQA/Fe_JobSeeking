@@ -130,49 +130,54 @@
     }
   },
   "supplier": {
-    "h4":"Create New Application",
+    "h4": "Create New Application",
     "createapply": {
       "title": {
-        "label": "Title",
+        "label": "Title.",
         "err": "title is required",
         "placeholder": "Enter title."
       },
       "description": {
-        "label": "Description",
+        "label": "Description.",
         "err": "Description is required",
         "placeholder": "Enter description."
       },
-      "date": {
-        "start": {
-          "label": "Application start date",
-          "err": "This property is required",
-          "placeholder": "Choose application start date."
-        },
-        "end": {
-          "label": "Application end date",
-          "err": "This property is required",
-          "placeholder": "Choose application end date."
-        }
+      "address": {
+        "label": "Address.",
+        "err": "Address must be provided.",
+        "placeholder": "Enter address."
+      },
+      "expired": {
+        "label": "Application end date.",
+        "err": "This property is required",
+        "placeholder": "Choose application end date."
       },
       "salary": {
-        "label": "Salary",
+        "label": "Salary.",
         "err": "Salary is required",
         "placeholder": "Salary"
       },
-      "level": {
-        "label":"Level candidate.",
-        "EXPERT": "EXPERT",
-        "EXPERIENCE": "EXPERIENCE",
-        "ENTRY": "ENTRY"
+      "position": {
+        "label": "Position.",
+        "err": "Position must be provided.",
+        "placeholder": "Enter position."
+      },
+      "experience": {
+        "label": "Experience.",
+        "err": "Experience must be provided.",
+        "placeholder": "Enter the experience."
+      },
+      "type": {
+        "label": "Type of Jobs."
       },
       "skill": {
-        "label": "Skill",
-        "err": "Skill is required",
+        "label": "Skill.",
         "placeholder": "Enter skill."
       },
-      "otherskill": {
-        "label": "Other skill",
-        "placeholder": "Enter other skill"
+      "category": {
+        "label": "Category.",
+        "err": "Category is required",
+        "placeholder": "Enter category"
       },
       "button": {
         "text": "Post"
