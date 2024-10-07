@@ -1,6 +1,7 @@
 import { Address } from "./Address";
 
 export interface Work {
+    id:string;
     title: string;
     description: string;
     salary: string;
@@ -10,7 +11,7 @@ export interface Work {
     experience:string;
     expiredDate: Date;
     position: JobPostion;
-    jobType: string;
+    jobType: JobType;
 }
 export interface  Category{
     jobNameCategory: string;
@@ -21,4 +22,8 @@ export interface Skill {
 
 export interface JobPostion {
     jobPositionName: string;
+}
+
+export interface JobType {
+    jobTypeName: string;
 }
