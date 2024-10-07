@@ -1,28 +1,39 @@
-import SkeletonTable from "@/components/SkeletonCustom/SkeletonTable";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import ActionButton from "./_component/ActionButton";
+import { getJobPagination } from "./action";
+import TableManagementJob from "./TableManagementJob";
+import PaginationBar from "@/components/custom/PaginationBar";
 
-export default function Page() {
-  const a = [];
+export interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
+interface PageProp {
+  searchParams: { [key: string]: string };
+}
 
+export default async function Page({ searchParams }: PageProp) {
+  let searchStr = Object.keys(searchParams)
+    .map(
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`
+    )
+    .join("&");
+
+  const a = await getJobPagination({ text: searchStr });
   return (
     <>
-      {a.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center w-full h-[24rem] rounded-lg">
-          <div className="flex flex-col items-center gap-1 text-center">
-            <h3 className="text-2xl font-bold tracking-tight">
-              You have no job
-            </h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              You can start create job as soon as you add a job.
-            </p>
-            <Button className="mt-4 text-background" asChild>
-              <Link href={"applymanagement/createapply"}>Create Job</Link>
-            </Button>
+      <div className="px-6 py-4 space-y-8 flex flex-col justify-between w-full">
+        <div className="flex justify-between items-center">
+          <h4>Job Management</h4>
+          <ActionButton />
+        </div>
+        <TableManagementJob data={a?.data?.jobResponseList ?? []} />
+        <div className="w-full flex justify-between items-center px-2">
+          <div>Showing: {a?.data?.totalElements ?? 0}</div>
+          <div className="text-end">
+            <PaginationBar totalCount={a?.data?.totalElements ?? 5} />
           </div>
         </div>
-      ) : null}
+      </div>
     </>
   );
 }

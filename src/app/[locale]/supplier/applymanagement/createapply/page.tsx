@@ -6,7 +6,7 @@ const FormCreateApplyComp = dynamic(() => import("./FormCreateApply"), {
 export default function Page() {
   const t = useTranslations();
   return (
-    <div className="px-6 py-4 space-y-12">
+    <div className="px-6 py-4 space-y-12 mt-2">
       <h4>{t("supplier.h4")}</h4>
       <FormCreateApplyComp />
     </div>

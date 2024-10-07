@@ -78,6 +78,7 @@ function FormCreateApply() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!addressComponent) return;
     const result = await actionCreateNewJob({
+      id: "",
       address: {
         addressName: addressComponent.address,
         communeName: addressComponent.commune,
@@ -101,7 +102,9 @@ function FormCreateApply() {
       position: {
         jobPositionName: data.position,
       },
-      jobType: data.jobtype,
+      jobType: {
+        jobTypeName: data.jobtype,
+      },
     });
     console.log(result);
     if (result?.status === "ok") {
