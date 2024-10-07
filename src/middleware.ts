@@ -3,12 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { Authorities, ERole } from "./lib/models/User";
 
 const fetchUserData = async (request: NextRequest) => {
-  console.log(
-    new URL(
-      "http://localhost:3000/api/user/getCurrentUser",
-      request.url
-    ).toString()
-  );
   const response = await fetch(
     new URL(
       "http://localhost:3000/api/user/getCurrentUser",
