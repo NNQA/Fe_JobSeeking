@@ -29,6 +29,7 @@
     "@radix-ui/react-toolbar": "^1.1.0",
     "@stitches/react": "^1.2.8",
     "@tanstack/react-query": "^5.51.11",
+    "@tanstack/react-table": "^8.20.5",
     "@tiptap/pm": "^2.5.8",
     "@tiptap/react": "^2.5.8",
     "@tiptap/starter-kit": "^2.5.8",
