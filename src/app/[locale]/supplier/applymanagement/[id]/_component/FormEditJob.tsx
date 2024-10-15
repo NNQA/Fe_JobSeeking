@@ -24,7 +24,7 @@ import { Tag, TagInput } from "emblor";
 import { useTranslations } from "next-intl";
 import Tiptap from "@/components/tiptab/Tiptap";
 import { Input } from "@/components/ui/input";
-import { EJobTypeZod, WorkSchema } from "./apply-zod";
+import { EJobTypeZod, WorkSchemaEdit } from "../edit-zod";
 import z, { date } from "zod";
 import { Address, AddressComponent } from "@/lib/models/Address";
 import { cn } from "@/lib/utils";
@@ -40,45 +40,79 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import InputSearchAddress from "@/components/inputcustom/InputSearchAddress";
-import { actionCreateNewJob } from "./action";
+import { actionCreateNewJob } from "../action";
 import { toast } from "@/components/ui/use-toast";
+import { Work } from "@/lib/models/Work";
 
-function FormCreateApply() {
-  const [skill, setSkill] = useState<Tag[]>([]);
-  const [skillActiveTagIndex, setSkillActiveTagIndex] = useState<number | null>(
-    null
+function FormEditJob({ job }: { job: Work }) {
+  if (!job) return;
+  const [skill, setSkill] = useState<Tag[]>(
+    job.skills.map((skill) => ({
+      id: String(skill.id!),
+      text: skill.nameSkill,
+    }))
   );
-  const [categories, setCategories] = useState<Tag[]>([]);
+  const [skillActiveTagIndex, setSkillActiveTagIndex] = useState<number | null>(
+    job.skills.length
+  );
+  const [categories, setCategories] = useState<Tag[]>(
+    job.categories.map((category) => ({
+      id: String(category.id!),
+      text: category.jobCategoryName,
+    }))
+  );
   const [activeTagIndexCategories, setActiveTagIndexCategories] = useState<
     number | null
-  >(null);
+  >(job.categories.length);
 
-  const [addressComponent, setAddressComponent] = useState<AddressComponent>();
-  const t = useTranslations("supplier.createapply");
-  const formSchema = WorkSchema(t);
+  const [addressComponent, setAddressComponent] = useState<
+    AddressComponent | undefined
+  >({
+    address: job.address?.addressName || "",
+    commune: job.address?.communeName || "",
+    province: job.address?.provinceName || "",
+    district: job.address?.districtName || "",
+    formatted_address: job.address?.formattedAddressName || "",
+    location: {
+      lat: job.address?.lat || 0,
+      lng: job.address?.lng || 0,
+    },
+    name: job.address?.addressName || "",
+  });
+
+  const t = useTranslations("supplier.updateapply");
+  const formSchema = WorkSchemaEdit(t);
+  const validatedJobType = EJobTypeZod.safeParse(job.type.jobTypeName);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      address: "",
-      experience: "",
-      position: "",
-      skill: [],
-      jobtype: "Part-Time",
-      salary: "",
-      category: [],
-      expireDate: new Date(),
+      title: job.title,
+      description: job.description,
+      address: job.address.formattedAddressName,
+      experience: job.experience,
+      position: job.position.jobPositionName,
+      skill: job.skills.map((r, index) => ({
+        id: String(r.id),
+        text: r.nameSkill,
+      })),
+      jobtype: validatedJobType.data,
+      salary: job.salary,
+      category: job.categories.map((r, index) => ({
+        id: String(r.id),
+        text: r.jobCategoryName,
+      })),
+      expireDate: new Date(job.expiredDate),
     },
   });
   const {
     setValue,
+    getValues,
     formState: { errors },
   } = form;
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!addressComponent) return;
     const result = await actionCreateNewJob({
-      id: "",
+      id: job.id,
       address: {
         addressName: addressComponent.address,
         communeName: addressComponent.commune,
@@ -106,7 +140,6 @@ function FormCreateApply() {
         jobTypeName: data.jobtype,
       },
     });
-    console.log(result);
     if (result?.status === "ok") {
       toast({
         variant: "success",
@@ -305,6 +338,7 @@ function FormCreateApply() {
                     inlineTags={false}
                     className="sm:min-w-[450px] flex px-4 font-medium ring-0 ring-primary"
                     setTags={(newTags) => {
+                      console.log(newTags);
                       setSkill(newTags);
                       setValue("skill", newTags as [Tag, ...Tag[]]);
                     }}
@@ -379,7 +413,7 @@ function FormCreateApply() {
                       />
                     </PopoverContent>
                   </Popover>
-                </FormControl>
+                </FormControl>{" "}
                 <FormMessage />
               </FormItem>
             )}
@@ -442,4 +476,4 @@ function FormCreateApply() {
   );
 }
 
-export default FormCreateApply;
+export default FormEditJob;

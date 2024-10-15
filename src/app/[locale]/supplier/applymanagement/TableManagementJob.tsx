@@ -73,7 +73,7 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
         enableSorting: true,
         enableColumnFilter: true,
       }),
-      columnHelper.accessor("jobType.jobTypeName", {
+      columnHelper.accessor("type.jobTypeName", {
         header: "Job's Type",
         enableSorting: true,
         enableColumnFilter: true,
@@ -83,15 +83,9 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
         enableSorting: true,
         enableColumnFilter: true,
         cell: ({ row }) => {
-          const expiredDateArray: any = row.original.expiredDate; // Assuming it's stored as an array like [2024, 10, 9, 17, 0]
+          const expiredDateArray: any = row.original.expiredDate;
 
-          const expiredDate = new Date(
-            expiredDateArray[0],
-            expiredDateArray[1] - 1,
-            expiredDateArray[2],
-            expiredDateArray[3],
-            expiredDateArray[4]
-          );
+          const expiredDate = new Date(expiredDateArray);
 
           const formatted = formatRelativeTimeFromNow(expiredDate);
 

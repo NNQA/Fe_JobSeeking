@@ -48,3 +48,29 @@ export const getJobPagination = async (paginationAction: PaginationAction) => {
     console.error("Error upgrading user:", error);
   }
 };
+
+export const deleteJobWithId = async (id: string) => {
+  const api = SessionApi.from(cookies());
+  let response: ResponseAction;
+  try {
+    const result = await api.delete(`api/job/deleteDetailJobForCompany/${id}`);
+    if (result.isOk()) {
+      response = {
+        status: "ok",
+        message: "",
+        data: undefined,
+      };
+      return response;
+    } else {
+      const errPro = await toActionErrorsAsync(result.error);
+      response = {
+        status: "failure",
+        message: errPro.form[0] ? errPro.form[0].split("+")[0] : errPro.from[1],
+        data: undefined,
+      };
+    }
+    return response;
+  } catch (error) {
+    console.error("Error upgrading user:", error);
+  }
+};

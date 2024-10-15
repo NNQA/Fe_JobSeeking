@@ -194,6 +194,71 @@
           "title": "Lỗi"
         }
       }
+    },
+    "updateapply": {
+      "h4": "Update job.",
+      "title": {
+        "label": "Title.",
+        "err": "title is required",
+        "placeholder": "Enter title."
+      },
+      "description": {
+        "label": "Description.",
+        "err": "Description is required",
+        "placeholder": "Enter description."
+      },
+      "address": {
+        "label": "Address.",
+        "err": "Address must be provided.",
+        "placeholder": "Enter address."
+      },
+      "expired": {
+        "label": "Application end date.",
+        "err": "This property is required",
+        "placeholder": "Choose application end date."
+      },
+      "salary": {
+        "label": "Salary.",
+        "err": "Salary is required",
+        "placeholder": "Salary"
+      },
+      "position": {
+        "label": "Position.",
+        "err": "Position must be provided.",
+        "placeholder": "Enter position."
+      },
+      "experience": {
+        "label": "Experience.",
+        "err": "Experience must be provided.",
+        "placeholder": "Enter the experience."
+      },
+      "type": {
+        "label": "Type of Jobs."
+      },
+      "skill": {
+        "label": "Skill.",
+        "placeholder": "Enter skill."
+      },
+      "category": {
+        "label": "Category.",
+        "err": "Category is required",
+        "placeholder": "Enter category"
+      },
+      "button": {
+        "text": "Post"
+      },
+      "buttonreset": {
+        "text": "Reset"
+      },
+      "progressacction": {
+        "success": {
+          "title": "Thành công",
+          "description": "Chúc mừng bạn hoàn thành xác thực tài khoản."
+        },
+        "failure": {
+          "title": "Lỗi"
+        }
+      }
     }
   }
 }
