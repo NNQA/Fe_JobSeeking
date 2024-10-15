@@ -6,21 +6,24 @@ export interface Work {
     description: string;
     salary: string;
     address: Address;
-    jobCategories: Array<Category>;
+    categories: Array<Category>;
     skills: Array<Skill>;
     experience:string;
     expiredDate: Date;
     position: JobPostion;
-    jobType: JobType;
+    type: JobType;
 }
 export interface  Category{
-    jobNameCategory: string;
+    id?:string;
+    jobCategoryName: string;
 }
 export interface Skill {
+    id?:string;
     nameSkill: string;
 }
 
 export interface JobPostion {
+    id?:string;
     jobPositionName: string;
 }
 
