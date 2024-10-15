@@ -16,18 +16,26 @@ export interface InputSearchProps extends InputCustomProps {
   setValue: UseFormSetValue<any>;
   addressComponent: AddressComponent | undefined;
   setAddressComponent: Dispatch<SetStateAction<AddressComponent | undefined>>;
+  value?: string;
 }
 export const InputSearchAddress = React.forwardRef<
   HTMLInputElement,
   InputSearchProps
 >(
   (
-    { className, setAddressComponent, addressComponent, setValue, ...props },
+    {
+      className,
+      setAddressComponent,
+      addressComponent,
+      setValue,
+      value,
+      ...props
+    },
     ref
   ) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [listApi, setApi] = useState<AddressComponent[]>([]);
-    const [valueInput, setValueInput] = useState<string>("");
+    const [valueInput, setValueInput] = useState<string>(value ?? "");
     const debounceRef = useRef<any>(null);
 
     function debounce<T extends (...arg: any[]) => void>(
