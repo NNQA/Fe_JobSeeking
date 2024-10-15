@@ -21,6 +21,14 @@ export function formatRelativeTimeFromNow(date: Date, locale?: Locale) {
   return formatRelativeTime(date, new Date(), locale);
 }
 
+export const parseDateFromArray = (dateArray: number[]) => {
+  if (dateArray && dateArray.length >= 3) {
+    const [year, month, day, hour = 0, minute = 0] = dateArray;
+    return new Date(year, month - 1, day, hour, minute); // month - 1 vì tháng trong JS bắt đầu từ 0
+  }
+  return null;
+};
+
 // export function parseDateFromAbsolute(input: string) {
 //   return toCalendarDate(parseAbsoluteToLocal(input));
 // }
