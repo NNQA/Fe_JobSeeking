@@ -8,14 +8,13 @@ import ProgressCircle from "../svg/ProgressCircle";
 import { cn } from "@/lib/utils";
 
 interface PropsValue {
-  id: number;
-  name: string;
+  text: string;
 }
 export interface InputSearchProps extends InputCustomProps {
   isOpen?: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  valueInput?: PropsValue;
-  setValueInput: Dispatch<SetStateAction<PropsValue>>;
+  // setIsOpen: Dispatch<SetStateAction<boolean>>;
+  valueInput?: string;
+  setValueInput: Dispatch<SetStateAction<string>>;
   handleOnChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
   items: PropsValue[];
   align?: "center" | "end" | "start";
@@ -28,7 +27,7 @@ export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
     {
       className,
       isOpen,
-      setIsOpen,
+      // setIsOpen,
       valueInput,
       setValueInput,
       handleOnChange,
@@ -42,19 +41,20 @@ export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
   ) => {
     return (
       <div>
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger className="w-full">
-            <InputCustomIcon
-              ref={ref}
-              {...props}
-              className={className}
-              value={valueInput?.name!}
-              onChange={handleOnChange}
-            />
-          </PopoverTrigger>
-          <PopoverContent align={align} side={side}>
-            <ScrollArea className={cn("h-[200px]", classNameSroll)}>
-              {items.length > 0 ? (
+        {/* <Popover open={isOpen} onOpenChange={setIsOpen}> */}
+        {/* <PopoverTrigger className="w-full"> */}
+        <InputCustomIcon
+          ref={ref}
+          {...props}
+          className={className}
+          value={valueInput}
+          onChange={handleOnChange}
+        />
+        {/* </PopoverTrigger> */}
+        {/* <PopoverContent align={align} side={side}> */}
+        {/* <ScrollArea className={cn("h-[200px]", classNameSroll)}> */}
+        {/* ( */}
+        {/* {items.length > 0 ? (
                 items.map((item, index: number) => (
                   <div
                     key={index}
@@ -66,10 +66,12 @@ export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
                     {item.name}
                   </div>
                 ))
+                <div>
+                </div>
               ) : (
                 <div>
                   <Transition
-                    show={true}
+                    show={false}
                     enter="transition ease-in-out"
                     enterFrom="opacity-0 scale-0"
                     leave="transition ease-in-out duration-300"
@@ -87,9 +89,9 @@ export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
                   </Transition>
                 </div>
               )}
-            </ScrollArea>
-          </PopoverContent>
-        </Popover>
+            </ScrollArea> */}
+        {/* </PopoverContent> */}
+        {/* </Popover> */}
       </div>
     );
   }

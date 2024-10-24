@@ -2,9 +2,9 @@ import Navigation from "@/components/Navigation";
 import { User } from "@/lib/models/User";
 import { SessionApi } from "@/lib/service/session-api.server";
 import { cookies } from "next/headers";
-import SectionSearch from "./_component/SectionSearch";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { date } from "zod";
+import SectionSearch from "./_component/SectionSearch";
 
 const getData = async () => {
   if (cookies().get("accessToken")) {

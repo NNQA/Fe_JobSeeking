@@ -200,7 +200,7 @@ function Navigation({ user }: PropsNavigation) {
   const comparePath = trim(pathname);
 
   return (
-    <MaxWidthWrapper className="sticky z-[100] m-0 max-w-screen-2xl items-center flex justify-between h-[5rem] inset-x-0 w-full top-0 border-b border-slate-50 backdrop-blur-lg transition-all">
+    <MaxWidthWrapper className="sticky z-[100] m-0 max-w-screen-2xl items-center flex justify-between h-[5rem] inset-x-0 w-full top-0 border-b bg-card backdrop-blur-lg transition-all">
       <NavigationMenu className="h-full flex justify-between space-x-20 w-full">
         <NavigationMenuList>
           {items.map(({ text, trigger }, index) => (
