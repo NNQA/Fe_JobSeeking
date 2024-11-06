@@ -1,4 +1,5 @@
 import { Address } from "./Address";
+import { Company } from "./Company";
 
 export interface Work {
     id:string;
@@ -12,6 +13,9 @@ export interface Work {
     expiredDate: Date;
     position: JobPostion;
     type: JobType;
+    company?:Company;
+    createdDateTime?: Date;
+    updatedDateTime?: Date;
 }
 export interface  Category{
     id?:string;
