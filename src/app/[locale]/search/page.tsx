@@ -5,7 +5,9 @@ import { cookies } from "next/headers";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { date } from "zod";
 import SectionSearch from "./_component/SectionSearch";
-
+interface PageProp {
+  searchParams: { [key: string]: string };
+}
 const getData = async () => {
   if (cookies().get("accessToken")) {
     console.log(cookies().get("accessToken"));
@@ -15,7 +17,6 @@ const getData = async () => {
 
     if (response.isOk()) {
       const user = (await response.value.json()) as User;
-      console.log(user);
       return user;
     }
   }
@@ -49,9 +50,10 @@ const getCateAndAddress = async () => {
   }
 };
 
-async function Home() {
+async function Home({ searchParams }: PageProp) {
   const user = await getData();
   const data = await getCateAndAddress();
+
   return (
     <div>
       <Navigation user={user ?? undefined}></Navigation>
