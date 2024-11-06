@@ -1,12 +1,12 @@
-import { format as dateFnsFormat, formatRelative } from 'date-fns';
-import { enUS } from 'date-fns/locale';
+import { format as dateFnsFormat, formatDistanceToNow, formatRelative } from 'date-fns';
+import { enUS, vi } from 'date-fns/locale';
 
-type Locale = 'en';
+type Locale = 'en' | 'vi';
 
-export function getLocale(locale?: Locale) {
+export function getLocale(locale?: Locale | string) {
   switch (locale) {
-    case 'en':
-      return enUS;
+    case 'vi':
+      return vi;
     default:
       return enUS;
   }
@@ -19,6 +19,10 @@ export function formatRelativeTime(date: Date, baseDate: Date, locale?: Locale) 
 
 export function formatRelativeTimeFromNow(date: Date, locale?: Locale) {
   return formatRelativeTime(date, new Date(), locale);
+}
+
+export function formatRelativeDateFromNowAndDistanceDate(date: Date, locale?: Locale | string) {
+  return formatDistanceToNow(date, {addSuffix: true, locale: getLocale(locale)})
 }
 
 export const parseDateFromArray = (dateArray: number[]) => {
