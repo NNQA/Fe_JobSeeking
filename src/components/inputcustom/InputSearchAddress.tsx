@@ -113,11 +113,11 @@ export const InputSearchAddress = React.forwardRef<
               onChange={handleSearchAddress}
             />
           </PopoverTrigger>
-          <PopoverContent
-            className="PopoverContent"
-            onOpenAutoFocus={(e) => e.preventDefault()}
-          >
-            <ScrollArea className="h-[200px]">
+          <ScrollArea className="">
+            <PopoverContent
+              className="PopoverContent"
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
               {!debounceRef.current && listApi.length > 0
                 ? listApi.map((item: AddressComponent, index: number) => (
                     <div
@@ -154,8 +154,8 @@ export const InputSearchAddress = React.forwardRef<
                   </Transition>
                 </div>
               )}
-            </ScrollArea>
-          </PopoverContent>
+            </PopoverContent>
+          </ScrollArea>
         </Popover>
       </div>
     );
