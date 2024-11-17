@@ -59,7 +59,7 @@ const items: itemsProps[] = [
     trigger: [
       {
         text: "Find work",
-        herf: "/",
+        herf: "/search",
         icon: <Search className="h-5 w-5" />,
       },
       {
@@ -192,15 +192,20 @@ function trim(input: string) {
 }
 interface PropsNavigation {
   user?: User;
+  className?: string;
 }
-function Navigation({ user }: PropsNavigation) {
-  console.log(user);
+function Navigation({ user, className }: PropsNavigation) {
   const pathname = usePathname();
   const locale = useLocale();
   const comparePath = trim(pathname);
 
   return (
-    <MaxWidthWrapper className="sticky z-[100] m-0 max-w-screen-2xl items-center flex justify-between h-[5rem] inset-x-0 w-full top-0 border-b bg-card backdrop-blur-lg transition-all">
+    <MaxWidthWrapper
+      className={cn(
+        "sticky z-[100] m-0 max-w-screen-2xl items-center flex justify-between h-[5rem] inset-x-0 w-full top-0 border-b bg-card backdrop-blur-lg transition-all",
+        className
+      )}
+    >
       <NavigationMenu className="h-full flex justify-between space-x-20 w-full">
         <NavigationMenuList>
           {items.map(({ text, trigger }, index) => (
@@ -225,7 +230,12 @@ function Navigation({ user }: PropsNavigation) {
               <NavigationMenuContent className="border border-border rounded-xl shadow-lg p-2">
                 <ul className="grid grid-cols-3  md:w-[350px] lg:w-[500px] lg:grid-cols-[1fr_1fr] gap-2">
                   {trigger.map(({ text, herf, icon }) => (
-                    <ListItem href={herf} title={text} key={text}>
+                    <ListItem
+                      link={herf}
+                      title={text}
+                      key={text}
+                      locale={locale}
+                    >
                       {icon}
                     </ListItem>
                   ))}
@@ -309,28 +319,36 @@ function Navigation({ user }: PropsNavigation) {
 
 export default Navigation;
 
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "select-none flex items-center space-x-2 w-full rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent hover:text-primary text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-          <div className="text-sm font-medium leading-none">{title}</div>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
+interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
+  locale: string;
+  title?: string;
+  link?: string;
+}
+
+const ListItem = React.forwardRef<React.ElementRef<"a">, ListItemProps>(
+  ({ className, title, children, locale, link, ...props }, ref) => {
+    const href = `${locale}${link?.startsWith("/") ? "" : "/"}${link}`;
+
+    return (
+      <li>
+        <NavigationMenuLink asChild>
+          <Link
+            ref={ref}
+            className={cn(
+              "select-none flex items-center space-x-2 w-full rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent hover:text-primary text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+              className
+            )}
+            href={href}
+            {...props}
+          >
+            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {children}
+            </p>
+            <div className="text-sm font-medium leading-none">{title}</div>
+          </Link>
+        </NavigationMenuLink>
+      </li>
+    );
+  }
+);
 ListItem.displayName = "ListItem";
