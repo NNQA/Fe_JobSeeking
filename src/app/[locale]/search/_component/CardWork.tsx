@@ -40,7 +40,7 @@ function CardWork({ work }: Props) {
             <div className="flex mb-10 gap-1 items-center">
               <BadgeDollarSign className="text-primary w-4 h-4" />
               <p className="font-bold whitespace-pre-line text-primary text-sm">
-                {work.salary}
+                {work.salary.value}
               </p>
             </div>
           </div>

@@ -18,6 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Transition } from "@headlessui/react";
 import ShowDataSearch from "./ShowDataSearch";
 import Comboboxfilter from "./Comboboxfilter";
+import SalaryFilter from "./SalaryFilter";
 
 interface Props {
   cate: string[];
@@ -73,7 +74,7 @@ function SectionSearch({ cate, provinceName }: Props) {
   const [valueExp, setValueExp] = React.useState("");
 
   const [openSal, setOpenSal] = React.useState(false);
-  const [valueSal, setValueSal] = React.useState("");
+  const [valueSal, setValueSal] = React.useState<number | null>(null);
 
   const [openLevel, setOpenLevel] = React.useState(false);
   const [valueLevel, setValueLevel] = React.useState("");
@@ -106,6 +107,7 @@ function SectionSearch({ cate, provinceName }: Props) {
       position: valueLevel,
       type: valueTypeJob,
       cate: valueCate,
+      salary: valueSal ?? "",
     };
 
     const filteredValues = Object.fromEntries(
@@ -192,11 +194,10 @@ function SectionSearch({ cate, provinceName }: Props) {
                 className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
                 classNameButton="border-secondary/30"
               />
-              <Comboboxfilter
+              <SalaryFilter
                 open={openSal}
                 setOpen={setOpenSal}
                 icon={<CoinsIcon className="h-4 w-4"></CoinsIcon>}
-                arrayValue={formattedCate}
                 valueStr={valueSal}
                 setValueStr={setValueSal}
                 title={"Mức Lương"}
