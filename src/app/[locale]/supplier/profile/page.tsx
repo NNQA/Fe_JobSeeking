@@ -1,32 +1,44 @@
-import Link from "next/link";
-import AvatarProfile from "./_component/AvatarProfile";
-import { Button } from "@/components/ui/button";
+import HeadProFileComp from "./_component/HeadProFileComp";
+import { SessionApi } from "@/lib/service/session-api.server";
+import { cookies } from "next/headers";
+import { Company } from "@/lib/models/Company";
+import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
+import ShowDetailsComp from "./_component/ShowDetailsComp";
+import { Suspense } from "react";
+export const getCurrentCompany = async () => {
+  const locale = await getLocale();
+  const api = SessionApi.from(cookies());
 
-export default function Page() {
+  try {
+    const result = await api.get("api/supplier/getCurrentCompany", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (result.isOk()) {
+      const user = (await result.value.json()) as Company;
+      console.log(user);
+      return user;
+    }
+
+    redirect(`/${locale}/auth/login`);
+  } catch (error) {
+    console.error("Error upgrading user:", error);
+    redirect(`/${locale}/auth/login`);
+  }
+};
+export default async function Page() {
+  const company = await getCurrentCompany();
   return (
     <>
       <div className="px-6 py-4 space-y-12 mt-2">
-        <h5 className="font-bold text-card-foreground/70">My Profile</h5>
-        <div className="flex justify-between">
-          <div className="flex gap-2">
-            <AvatarProfile />
-            <div className="justify-end flex flex-col pt-4">
-              <p className="text-2xl font-medium text-foreground/60">
-                Công ty phân phối thực phẩm
-              </p>
-              <p className="text-sm font-medium text-card-foreground/40">
-                <Button asChild variant={"link"} className="p-0 m-0 h-fit pl-1">
-                  <Link href={"/asdasd"}>trachnhiemhuuhan.vn/sisplus</Link>
-                </Button>
-              </p>
-            </div>
-          </div>
-          <div className=" flex pt-4 items-end text-end justify-end">
-            <Button variant={"default"} className="">
-              Edit profile
-            </Button>
-          </div>
-        </div>
+        <h4>Profile</h4>
+        <HeadProFileComp />
+        <Suspense fallback={<>Loading company...</>}>
+          <ShowDetailsComp company={company} />
+        </Suspense>
       </div>
     </>
   );
