@@ -5,7 +5,7 @@ export interface Work {
     id:string;
     title: string;
     description: string;
-    salary: string;
+    salary: Salary;
     address: Address;
     categories: Array<Category>;
     skills: Array<Skill>;
@@ -33,4 +33,8 @@ export interface JobPostion {
 
 export interface JobType {
     jobTypeName: string;
+}
+export interface  Salary{
+      numberSort: number;
+      value: string;
 }

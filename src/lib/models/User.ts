@@ -4,6 +4,8 @@ export interface User {
     name?: string;
     email: string;
     authorities: Array<Authorities>;
+    newUser?: boolean;
+    phone?: string;
 }
 
 export interface Authorities {
