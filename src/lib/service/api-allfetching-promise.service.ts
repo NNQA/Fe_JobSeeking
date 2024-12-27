@@ -31,4 +31,33 @@ export class ApiServicePromiseFetching {
       return { cate: [], provinceName: [], jobList: [] };
     }
   }
+
+  static async fetchingSearchingPage(): Promise<SearchPage> {
+    try {
+      const endPoints = [
+        "api/clientController/getCategoryName",
+        "api/clientController/getAddressClient",
+        "api/clientController/getPositionName",
+      ].map((endPoint) => `${API_BASE_URL}/${endPoint}`);
+      const [cateRes, provinceRes, positionRes] = await Promise.all(
+        endPoints.map((url) =>
+          fetch(url, {
+            method: "GET",
+            next: { tags: ["job"], revalidate: 3600 },
+          }).then((res) => {
+            if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+            return res;
+          })
+        )
+      );
+      return {
+        cate: (await cateRes.json()) as string[],
+        provinceName: (await provinceRes.json()) as string[],
+        position: (await positionRes.json()) as string[],
+      };
+    } catch (error) {
+      console.error("Error fetching searching page data:", error);
+      return { cate: [], provinceName: [], position: [] };
+    }
+  }
 }

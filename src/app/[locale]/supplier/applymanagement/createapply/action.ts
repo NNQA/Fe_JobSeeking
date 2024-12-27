@@ -2,13 +2,12 @@
 import { toActionErrorsAsync } from "@/lib/error.server";
 import { Work } from "@/lib/models/Work";
 import { SessionApi } from "@/lib/service/session-api.server";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 
 
 export const actionCreateNewJob = async (work: Work) => {
-  console.log("asd");
-  console.log(work)
     const api = SessionApi.from(cookies());
     let response : {
       status: string;
@@ -28,6 +27,7 @@ export const actionCreateNewJob = async (work: Work) => {
           status: "ok",
           message: "",
         }
+        revalidateTag("job");
         return response;
       } else {
         const errPro = await toActionErrorsAsync(result.error); 
