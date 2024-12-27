@@ -1,26 +1,9 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
-import { Authorities, ERole } from "./lib/models/User";
 
-const fetchUserData = async (request: NextRequest) => {
-  const response = await fetch(
-    new URL(
-      "http://localhost:3000/api/user/getCurrentUser",
-      request.url
-    ).toString(),
-    {
-      headers: {
-        Cookie: request.headers.get("cookie") || "",
-      },
-    }
-  );
+let protectRoutes = ["supplier", "updateuser", "upgradeaccount", "newUser"];
+let publicRoutes = ["login", "signup", "", "search"];
 
-  if (response.ok) {
-    return response.json();
-  }
-  console.error("Failed to fetch user data:", response.statusText);
-  return null;
-};
 export async function middleware(request: NextRequest) {
   const handleI18nRouting = createMiddleware({
     locales: ["en", "vi"],
@@ -28,28 +11,32 @@ export async function middleware(request: NextRequest) {
   });
 
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
-  if (request.nextUrl.pathname.startsWith(`/${locale}/supplier`)) {
-    if(!request.cookies.get("accessToken")) {
-      request.nextUrl.pathname = `/${locale}/auth/login`;
-    } else {
+  const restructedPathname = `/${locale}/${segments.join("/")}`;
+  protectRoutes = protectRoutes.map((protectRoute) =>
+    protectRoute.startsWith(`/${locale}`)
+      ? protectRoute
+      : `/${locale}/${protectRoute}`.replace(/\/\/+/g, "/")
+  );
 
-      try {
-        const user = await fetchUserData(request);
-        console.log("Fetched User:", user);
-  
-        if (
-          user &&
-          !user.authorities.some(
-            (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
-          )
-        ) {
-          request.nextUrl.pathname = `/${locale}/upgradeaccount`;
-        }
-      } catch (error) {
-        console.error("Error in middleware user fetch:", error);
-      }
+  publicRoutes = publicRoutes.map((publicRoute) =>
+    publicRoute.startsWith(`/${locale}`)
+      ? publicRoute
+      : `/${locale}/${publicRoute}`.replace(/\/\/+/g, "/")
+  );
+  const nextUrl = request.nextUrl.clone();
+
+  const accessToken = request.cookies.get("accessToken");
+  const isProtectRoutes = protectRoutes.includes(restructedPathname);
+
+  console.log(protectRoutes);
+  console.log(isProtectRoutes);
+  if (isProtectRoutes) {
+    if (!accessToken) {
+      nextUrl.pathname = `/${locale}/login`;
+      return NextResponse.redirect(nextUrl);
     }
   }
+
   const response = handleI18nRouting(request);
   return response;
 }

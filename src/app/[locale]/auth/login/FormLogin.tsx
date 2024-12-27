@@ -27,7 +27,7 @@ import { toast } from "@/components/ui/use-toast";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,7 +41,14 @@ import {
 import { checkInstanceResponsce } from "@/lib/utils";
 import { setCookie } from "../actions";
 import { Mail } from "lucide-react";
+import { Authorities, ERole } from "@/lib/models/User";
 
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  newUser: boolean;
+  authorities: Array<Authorities>;
+}
 const Schema = (t: (arg: string) => string) => {
   return z.object({
     email: z
@@ -59,12 +66,8 @@ function FormLogin() {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [showDialogError, setShowDialogError] = useState<boolean>(false);
   const locale = useLocale();
-  const linkGGLogin =
-    process.env.NEXT_PUBLIC_API_GG +
-    "/" +
-    locale +
-    process.env.NEXT_PUBLIC_GOOGLE_CLIENT;
-  console.log(linkGGLogin);
+  const linkGGLogin = `${process.env.NEXT_PUBLIC_API_GG}/${locale}${process.env.NEXT_PUBLIC_GOOGLE_CLIENT}`;
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,11 +86,24 @@ function FormLogin() {
     result.match(
       async (x) => {
         setShowDialog(true);
-        const response = await x.json();
-        await setCookie(response);
-        const timer = setTimeout(() => {
-          router.push("/");
-        }, 1500);
+        const response = (await x.json()) as LoginResponse;
+        await setCookie({
+          refreshToken: response.refreshToken,
+          accessToken: response.accessToken,
+        });
+        if (response.newUser) {
+          router.push(`/${locale}/newUser`);
+        } else {
+          if (
+            response.authorities.some(
+              (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
+            )
+          ) {
+            redirect(`/${locale}/supplier`);
+          } else {
+            redirect("/");
+          }
+        }
       },
       async (err) => {
         const action = await toActionErrorsAsync(err);

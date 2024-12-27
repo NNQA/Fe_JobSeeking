@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Toaster } from "@/components/ui/toaster";
 import QueryClientProviders from "@/lib/context/QueryClientProviders";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const metadata: Metadata = {
   title: "Job seeking",
@@ -31,7 +32,7 @@ export default async function RootLayout({
           >
             <NextIntlClientProvider messages={message}>
               <QueryClientProviders>
-                <div className="w-screen">{children}</div>
+                <ScrollArea className="w-full h-screen">{children}</ScrollArea>
               </QueryClientProviders>
               <Toaster />
             </NextIntlClientProvider>
