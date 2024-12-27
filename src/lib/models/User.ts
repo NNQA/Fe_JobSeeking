@@ -6,6 +6,8 @@ export interface User {
     authorities: Array<Authorities>;
     newUser?: boolean;
     phone?: string;
+    experiencelevel:string;
+    university: string;
 }
 
 export interface Authorities {

@@ -7,5 +7,6 @@ export interface Applicant {
     job: Work;
 
     resumeUrl: string;
-
+    createdDateTime?: Date;
+    updatedDateTime?: Date;
 }
