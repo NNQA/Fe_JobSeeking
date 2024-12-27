@@ -42,7 +42,7 @@ function FormUpdate() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const result = await updateNewUser({
       experiencelevel: data.experiencelevel,
-      name: data.name,
+      name: data.name.trim(),
       phone: data.phone,
       university: data.university,
     });
