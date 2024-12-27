@@ -2,6 +2,7 @@
 
 import { toActionErrorsAsync } from "@/lib/error.server";
 import { SessionApi } from "@/lib/service/session-api.server";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 interface ResponseAction {
@@ -30,6 +31,7 @@ export const updateNewUser = async (data: DataPropsUpdateUsers) => {
           status: "ok",
           message: "",
         }
+        revalidateTag("user");
       } else {
         const errPro = await toActionErrorsAsync(result.error); 
         response = {

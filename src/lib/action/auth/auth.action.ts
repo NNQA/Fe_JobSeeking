@@ -8,7 +8,12 @@ export class AuthActionFetching {
       console.log(cookies().get("accessToken"));
       const api = SessionApi.from(cookies());
 
-      const response = await api.get("/api/user/getCurrentUser");
+      const response = await api.get("/api/user/getCurrentUser", {
+        next: {
+          tags: ["user"],
+          revalidate: 3600
+        },
+      });
 
       if (response.isOk()) {
         const user = (await response.value.json()) as User;
