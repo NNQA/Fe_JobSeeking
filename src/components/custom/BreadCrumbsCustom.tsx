@@ -32,7 +32,9 @@ function BreadCrumbsCustom() {
       const crumlist = asPathNestedRoutes.map((subpath, idx) => {
         const href =
           "/vi" + "/" + asPathNestedRoutes.slice(0, idx + 1).join("/");
-        const text = subpath.charAt(0).toUpperCase() + subpath.slice(1);
+        const text =
+          decodeURIComponent(subpath).charAt(0).toUpperCase() +
+          decodeURIComponent(subpath).slice(1);
         return {
           href,
           text,
