@@ -12,6 +12,35 @@ export function getLocale(locale?: Locale | string) {
   }
 }
 
+
+export const getExpiryStatus = (expiryDate: string): string => {
+  const currentDate = new Date();
+  const expiry = new Date(expiryDate);
+
+  if (expiry > currentDate) {
+    const difference = expiry.getTime() - currentDate.getTime();
+    const daysLeft = Math.ceil(difference / (1000 * 60 * 60 * 24));
+
+    return daysLeft <= 7 ? "Active":  "Upcoming";
+  } else {
+    return "Expired";
+  }
+};
+
+
+export const compareExpiryDate = (dateApplicant: string, dateOfJob: string): string => {
+  const compareDate = new Date(dateOfJob);
+  const expiry = new Date(dateApplicant);
+
+  if (compareDate > expiry) {
+    const difference = expiry.getTime() - compareDate.getTime();
+    const daysLeft = Math.ceil(difference / (1000 * 60 * 60 * 24));
+
+    return daysLeft <= 7 ? "Active":  "Upcoming";
+  } else {
+    return "Expired";
+  }
+};
 export function formatRelativeTime(date: Date, baseDate: Date, locale?: Locale) {
   const format = formatRelative(date, baseDate, { locale: getLocale(locale) });
   return format[0].toLocaleUpperCase(locale) + format.substring(1);
