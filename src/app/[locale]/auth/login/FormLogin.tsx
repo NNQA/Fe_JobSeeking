@@ -99,9 +99,9 @@ function FormLogin() {
               (e: Authorities) => e.authority === ERole.ROLE_SUPPLIER
             )
           ) {
-            redirect(`/${locale}/supplier`);
+            router.push(`/${locale}/supplier`);
           } else {
-            redirect("/");
+            router.push("/");
           }
         }
       },
