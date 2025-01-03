@@ -12,15 +12,16 @@ interface ResponseAction {
 };
 
 
-export async function getJobDetailsWithTitle(str: string) {
+export async function getJobDetailsWithTitle(title: string, id: string) {
   try {
     const result = await fetch(
-      `http://172.23.192.1:8080/api/clientController/getDetailsJob?title=${str}`,
+      `http://172.23.192.1:8080/api/clientController/getDetailsJob?id=${id}&title=${encodeURIComponent(title)}`,
       {
         method:"GET"
       }
     );
     const data = await result.json();
+    console.log(data);
     return {
         status: "ok",
         message: "",

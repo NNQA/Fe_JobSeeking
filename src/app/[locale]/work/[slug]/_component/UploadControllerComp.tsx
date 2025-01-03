@@ -19,14 +19,18 @@ interface Props {
 function UploadControllerComp({ control }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const ref = useRef<HTMLInputElement>(null);
-  const handleFileChange = (e, onChange) => {
-    const file = e.target.files[0];
-    console.log(file);
-    setSelectedFile(file);
-    onChange(file);
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (file: File) => void
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      onChange(file);
+    }
   };
 
-  const handleRemoveFile = (onChange) => {
+  const handleRemoveFile = (onChange: (file: null) => void) => {
     setSelectedFile(null);
     onChange(null);
   };
@@ -67,7 +71,6 @@ function UploadControllerComp({ control }: Props) {
                 type="file"
                 accept="application/pdf"
                 onChange={(e) => handleFileChange(e, field.onChange)}
-                value={undefined}
                 ref={ref}
               />
             </FormLabel>

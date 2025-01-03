@@ -70,12 +70,18 @@ function ModalApply({ title, user, idJob, isApplied }: Props) {
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (!data.resume) {
+    console.log(data.resume);
+    if (
+      !data.resume ||
+      !(data.resume instanceof File) ||
+      data.resume.size === 0
+    ) {
       toast({
         variant: "destructive",
         title: "CV",
         description: "Vui lòng chọn CV trước khi nộp hồ sơ ứng tuyển!",
       });
+      return;
     }
     const formData = new FormData();
     formData.append("resume", data.resume);

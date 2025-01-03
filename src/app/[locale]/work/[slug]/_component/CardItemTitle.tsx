@@ -79,12 +79,14 @@ function CardItemTitle({
           <p>Hạn nộp hồ sơ: {formatDate(expired)}</p>
         </div>
         <div className="flex justify-between gap-6">
-          <ModalApply
-            title={title}
-            user={user}
-            idJob={idJob!}
-            isApplied={isApplied}
-          ></ModalApply>
+          {user ? (
+            <ModalApply
+              title={title}
+              user={user}
+              idJob={idJob!}
+              isApplied={isApplied}
+            ></ModalApply>
+          ) : null}
           <Button
             className="basis-[18%] space-x-3 w-full border-primary text-primary hover:border-2 hover:text-primary hover:bg-none"
             variant={"outlineVariant"}
