@@ -1,4 +1,12 @@
 {
+  "home": {
+    "title": "Find jobs fast 24 hours, latest jobs nationwide.",
+    "subtitle": "Access 40,000+ job postings every day from thousands of reputable businesses in Vietnam",
+    "button": "Search",
+    "province":"All provinces/cities",
+    "category": "All categories",
+    "input": "Job position, company name"
+  },
   "login": {
     "title": "Welcome back",
     "signup": {

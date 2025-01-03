@@ -1,14 +1,12 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
+import { routing } from "./i18n/routing";
 
 let protectRoutes = ["supplier", "updateuser", "upgradeaccount", "newUser"];
 let publicRoutes = ["login", "signup", "", "search"];
 
 export async function middleware(request: NextRequest) {
-  const handleI18nRouting = createMiddleware({
-    locales: ["en", "vi"],
-    defaultLocale: "en",
-  });
+  const handleI18nRouting = createMiddleware(routing);
 
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
   const restructedPathname = `/${locale}/${segments.join("/")}`;
@@ -41,5 +39,5 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 export const config = {
-  matcher: ["/", "/(vi|en)/:path*"],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)", "/", "/(vi|en)/:path*"],
 };
