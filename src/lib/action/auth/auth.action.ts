@@ -11,7 +11,7 @@ export class AuthActionFetching {
       const response = await api.get("/api/user/getCurrentUser", {
         next: {
           tags: ["user"],
-          revalidate: 3600
+          revalidate: 10
         },
       });
 
