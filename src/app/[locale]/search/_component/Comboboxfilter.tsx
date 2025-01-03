@@ -17,20 +17,21 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import clsx from "clsx";
 
-interface Props {
+interface ComboboxFilterProps {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  icon: React.ReactNode;
+  setOpen: (open: boolean) => void;
+  icon?: React.ReactNode;
   valueStr: string;
-  setValueStr: (value: React.SetStateAction<string>) => void;
+  setValueStr: (value: string) => void;
   arrayValue: {
     value: string;
     label: string;
   }[];
   title: string;
-  placeHolder: string;
+  placeholder?: string;
   className?: string;
-  classNameButton?: string;
+  buttonClassName?: string;
+  emptyMessage?: string;
 }
 function Comboboxfilter({
   open,
@@ -40,10 +41,24 @@ function Comboboxfilter({
   setValueStr,
   arrayValue,
   title,
-  placeHolder,
+  placeholder = "Search...",
   className,
-  classNameButton,
-}: Props) {
+  buttonClassName,
+  emptyMessage = "No items found.",
+}: ComboboxFilterProps) {
+  const selectedItem = React.useMemo(
+    () => arrayValue.find((item) => item.value === valueStr),
+    [valueStr, arrayValue]
+  );
+
+  const handleSelect = React.useCallback(
+    (currentValue: string) => {
+      setValueStr(currentValue === valueStr ? "" : currentValue);
+      setOpen(false);
+    },
+    [valueStr, setValueStr, setOpen]
+  );
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className={className}>
@@ -51,49 +66,36 @@ function Comboboxfilter({
           variant="outlineVariant"
           role="combobox"
           aria-expanded={open}
-          className={clsx("w-[220px] justify-between border", classNameButton)}
+          className={clsx("w-[220px] justify-between border", buttonClassName)}
         >
           <div className="flex items-center gap-2">
             {icon}
-            {valueStr ? (
-              (() => {
-                const selectedFramework = arrayValue.find(
-                  (framework) => framework.value === valueStr
-                );
-
-                return selectedFramework ? selectedFramework.label : null;
-              })()
-            ) : (
-              <div className="flex items-center gap-1">
-                <p>{title}</p>
-              </div>
-            )}
+            <span className="truncate">
+              {selectedItem ? selectedItem.label : title}
+            </span>
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-0">
         <Command>
-          <CommandInput placeholder={placeHolder} />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
-              {arrayValue.map((framework) => (
+              {arrayValue.map((item) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValueStr(currentValue === valueStr ? "" : currentValue);
-                    setOpen(false);
-                  }}
+                  key={item.value}
+                  value={item.value}
+                  onSelect={handleSelect}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      valueStr === framework.value ? "opacity-100" : "opacity-0"
+                      valueStr === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {item.label}
                 </CommandItem>
               ))}
             </CommandGroup>

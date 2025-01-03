@@ -68,7 +68,9 @@ function CardWork({ work }: Props) {
                 className="group-hover:block hidden rounded-full text-xs h-fit text-secondary"
                 asChild
               >
-                <Link href={`work/${encodeURIComponent(work.title)}`}>
+                <Link
+                  href={`work/${encodeURIComponent(work.title)}?id=${work.id}`}
+                >
                   Ứng Tuyển
                 </Link>
               </Button>

@@ -21,23 +21,24 @@ interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   icon: React.ReactNode;
-  valueStr: number | null;
-  setValueStr: (value: React.SetStateAction<number | null>) => void;
+  valueStr: string;
+  setValueStr: (value: string) => void;
   title: string;
-  placeHolder: string;
+  buttonClassName?: string;
+  placeholder?: string;
   className?: string;
-  classNameButton?: string;
+  emptyMessage?: string;
 }
 
 export const salaryOptions = [
-  { label: "Dưới 10 triệu", value: 1 },
-  { label: "10 - 15 triệu", value: 2 },
-  { label: "15 - 20 triệu", value: 3 },
-  { label: "20 - 25 triệu", value: 4 },
-  { label: "25 - 30 triệu", value: 5 },
-  { label: "30 - 50 triệu", value: 6 },
-  { label: "Trên 50 triệu", value: 8 },
-  { label: "Thỏa thuận", value: 127 },
+  { label: "Dưới 10 triệu", value: "1" },
+  { label: "10 - 15 triệu", value: "2" },
+  { label: "15 - 20 triệu", value: "3" },
+  { label: "20 - 25 triệu", value: "4" },
+  { label: "25 - 30 triệu", value: "5" },
+  { label: "30 - 50 triệu", value: "6" },
+  { label: "Trên 50 triệu", value: "8" },
+  { label: "Thỏa thuận", value: "127" },
 ];
 function SalaryFilter({
   open,
@@ -46,10 +47,23 @@ function SalaryFilter({
   valueStr,
   setValueStr,
   title,
-  placeHolder,
+  placeholder = "Search...",
   className,
-  classNameButton,
+  buttonClassName,
+  emptyMessage = "No items found.",
 }: Props) {
+  const selectedItem = React.useMemo(
+    () => salaryOptions.find((item) => item.value === valueStr),
+    [valueStr, salaryOptions]
+  );
+
+  const handleSelect = React.useCallback(
+    (currentValue: string) => {
+      setValueStr(currentValue === valueStr ? "" : currentValue);
+      setOpen(false);
+    },
+    [valueStr, setValueStr, setOpen]
+  );
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild className={className}>
@@ -57,53 +71,36 @@ function SalaryFilter({
           variant="outlineVariant"
           role="combobox"
           aria-expanded={open}
-          className={clsx("w-[220px] justify-between border", classNameButton)}
+          className={clsx("w-[220px] justify-between border", buttonClassName)}
         >
           <div className="flex items-center gap-2">
             {icon}
-            {valueStr ? (
-              (() => {
-                const selectedFramework = salaryOptions.find(
-                  (framework) => framework.value === valueStr
-                );
-
-                return selectedFramework ? selectedFramework.label : null;
-              })()
-            ) : (
-              <div className="flex items-center gap-1">
-                <p>{title}</p>
-              </div>
-            )}
+            <span className="truncate">
+              {selectedItem ? selectedItem.label : title}
+            </span>
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-0">
         <Command>
-          <CommandInput placeholder={placeHolder} />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
-              {salaryOptions.map((framework) => (
+              {salaryOptions.map((item) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value.toString()}
-                  onSelect={(currentValue) => {
-                    setValueStr(
-                      valueStr && currentValue === valueStr.toString()
-                        ? 1
-                        : parseInt(currentValue)
-                    );
-                    setOpen(false);
-                  }}
+                  key={item.value}
+                  value={item.value.toString()}
+                  onSelect={handleSelect}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      valueStr === framework.value ? "opacity-100" : "opacity-0"
+                      valueStr === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {item.label}
                 </CommandItem>
               ))}
             </CommandGroup>

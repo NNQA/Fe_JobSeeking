@@ -11,10 +11,9 @@ import {
   MapPin,
   StarIcon,
 } from "lucide-react";
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Transition } from "@headlessui/react";
 import ShowDataSearch from "./ShowDataSearch";
 import Comboboxfilter from "./Comboboxfilter";
@@ -23,7 +22,19 @@ import SalaryFilter from "./SalaryFilter";
 interface Props {
   cate: string[];
   provinceName: string[];
+  level: string[];
 }
+
+interface SearchFilters {
+  title?: string;
+  provinceName?: string;
+  experience?: string;
+  position?: string;
+  type?: string;
+  cate?: string;
+  salary?: string;
+}
+
 const dateTypeJob = [
   {
     value: "Part-Time",
@@ -47,126 +58,190 @@ const dateTypeJob = [
     label: "Remote",
   },
 ];
-const dataPostion = [
+const dataExper = [
   {
-    value: "Thuc tap sinh",
-    label: "Thuc tap sinh",
-  },
-  { value: "Fresher", label: "Fresher" },
-  {
-    value: "Senior",
-    label: "Senior",
+    value: "Không yêu cầu",
+    label: "Không yêu cầu kinh nghiệm",
   },
   {
-    value: "Freelance",
-    label: "Freelance",
+    value: "1 năm",
+    label: "1 năm",
+  },
+  {
+    value: "2 năm",
+    label: "2 năm",
+  },
+  {
+    value: "3 năm",
+    label: "3 năm",
+  },
+  {
+    value: "4 năm",
+    label: "4 năm",
+  },
+  {
+    value: "5 năm",
+    label: "5 năm",
   },
 ];
-function SectionSearch({ cate, provinceName }: Props) {
-  const [value, setValue] = useState<string>("");
-  const [openAddress, setOpenAddress] = React.useState(false);
-  const [valueAddress, setValueAddress] = React.useState("");
-
-  const [openComp, setOpenComp] = React.useState(false);
-  const [valueComp, setValueComp] = React.useState("");
-
-  const [openExp, setOpenExp] = React.useState(false);
-  const [valueExp, setValueExp] = React.useState("");
-
-  const [openSal, setOpenSal] = React.useState(false);
-  const [valueSal, setValueSal] = React.useState<number | null>(null);
-
-  const [openLevel, setOpenLevel] = React.useState(false);
-  const [valueLevel, setValueLevel] = React.useState("");
-
-  const [openTypeJob, setOpenTypeJob] = React.useState(false);
-  const [valueTypeJob, setValueTypeJob] = React.useState("");
-
-  const [openCate, setOpenCate] = React.useState(false);
-  const [valueCate, setValueCate] = React.useState("");
-
-  const [openFilter, setOpenFilter] = useState<boolean>(false);
-  const [isPending, startTransition] = useTransition();
-
+function SectionSearch({ cate, provinceName, level }: Props) {
   const router = useRouter();
   const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const initialTitle = searchParams.get("title") || "";
 
-  const formattedCate = cate.map((item) => ({
-    value: item.toLowerCase().replace(/\s/g, "-"),
-    label: item,
-  }));
-  const formattedprovinceName = provinceName.map((item) => ({
-    value: item.toLowerCase(),
-    label: item,
-  }));
-  const handleSearch = async () => {
-    const formValues = {
-      title: value,
-      provinceName: valueAddress,
-      experience: valueExp,
-      position: valueLevel,
-      type: valueTypeJob,
-      cate: valueCate,
-      salary: valueSal ?? "",
+  const [filters, setFilters] = useState<SearchFilters>({});
+  const [openFilters, setOpenFilters] = useState({
+    address: false,
+    category: false,
+    company: false,
+    experience: false,
+    salary: false,
+    level: false,
+    typeJob: false,
+  });
+  const [advancedFilterOpen, setAdvancedFilterOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const parsedFilters: SearchFilters = {};
+
+    const paramMap = {
+      title: "title",
+      provinceName: "provinceName",
+      experience: "experience",
+      position: "position",
+      type: "type",
+      cate: "cate",
+      salary: "salary",
     };
 
-    const filteredValues = Object.fromEntries(
-      Object.entries(formValues).filter(([key, value]) => value !== "")
+    (Object.entries(paramMap) as Array<[string, keyof SearchFilters]>).forEach(
+      ([urlKey, filterKey]) => {
+        const value = searchParams.get(urlKey);
+
+        if (value !== null) {
+          switch (filterKey) {
+            case "salary":
+              if (value === "") break;
+              parsedFilters[filterKey] = value;
+              break;
+            case "title":
+            case "provinceName":
+            case "experience":
+            case "position":
+            case "type":
+            case "cate":
+              parsedFilters[filterKey] = value;
+              break;
+          }
+        }
+      }
     );
 
-    const query = Object.keys(filteredValues)
-      .map((key) => `${key}=${encodeURIComponent(filteredValues[key])}`)
-      .join("&");
+    setFilters(parsedFilters);
+  }, [searchParams]);
+
+  const updateFilter = (
+    key: keyof SearchFilters,
+    value: string | number | null
+  ) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const toggleFilterOpen = (filterKey: keyof typeof openFilters) => {
+    setOpenFilters((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey],
+    }));
+  };
+  const formattedCate = React.useMemo(
+    () =>
+      cate.map((item) => ({
+        value: item.toLowerCase().replace(/\s/g, "-"),
+        label: item,
+      })),
+    [cate]
+  );
+
+  const formattedProvinceName = React.useMemo(
+    () =>
+      provinceName.map((item) => ({
+        value: item.toLowerCase(),
+        label: item,
+      })),
+    [provinceName]
+  );
+
+  const formattedPositionName = React.useMemo(
+    () =>
+      level.map((item) => ({
+        value: item.toLowerCase(),
+        label: item,
+      })),
+    [level]
+  );
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        params.append(key, value.toString());
+      }
+    });
 
     startTransition(() => {
-      router.push(`${pathName}?${query}`);
+      router.push(`${pathName}?${params.toString()}`, { scroll: false });
     });
   };
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="w-full flex flex-col">
       <section className="bg-green-800">
-        <form action={handleSearch} className="mx-auto">
+        <form onSubmit={handleSearch} className="mx-auto">
           <div className="w-[75%] mx-auto px-4 py-4 flex gap-1 justify-between text-center items-center">
             <div className="border-r-2 pr-2 flex gap-2">
               <InputSearch
                 type="search"
                 placeholder="Vị trí tuyển dụng, tên công ty"
-                className="w-[370px] p-2 font-semibold rounded-md border-none hover:border-none focus-visible:ring-white ring-0 focus:border-none focus:ring-0"
-                setValueInput={setValue}
-                handleOnChange={(e) => {
-                  setValue(e.target.value);
-                }}
-                items={[]}
-                icon={null}
+                defaultValue={initialTitle}
+                onChange={(e) => updateFilter("title", e.target.value)}
+                className="w-[370px] p-2 font-semibold rounded-md border-none hover:border-none focus-visible:ring-offset-0 ring-0 focus:border-none focus:ring-0"
+                icon={undefined}
               />
+
               <Comboboxfilter
-                open={openAddress}
-                setOpen={setOpenAddress}
-                icon={<MapPin className="h-4 w-4"></MapPin>}
-                arrayValue={formattedprovinceName}
-                valueStr={valueAddress}
-                setValueStr={setValueAddress}
-                title={"Tất cả tỉnh/Thành Phố"}
-                placeHolder={"Tất cả tỉnh/Thành Phố"}
+                open={openFilters.address}
+                setOpen={() => toggleFilterOpen("address")}
+                icon={<MapPin className="h-4 w-4" />}
+                arrayValue={formattedProvinceName}
+                valueStr={filters.provinceName || ""}
+                setValueStr={(value) => updateFilter("provinceName", value)}
+                title="Tất cả tỉnh/Thành Phố"
+                placeholder="Tất cả tỉnh/Thành Phố"
+                emptyMessage="Không có tỉnh thành phố"
               />
             </div>
             <div className="pr-1">
               <Comboboxfilter
-                open={openCate}
-                setOpen={setOpenCate}
+                open={openFilters.category}
+                setOpen={() => toggleFilterOpen("category")}
                 icon={<BackpackIcon className="h-4 w-4"></BackpackIcon>}
                 arrayValue={formattedCate}
-                valueStr={valueCate}
-                setValueStr={setValueCate}
+                valueStr={filters.cate || ""}
+                setValueStr={(value) => updateFilter("cate", value)}
                 title={"Tất cả các ngành nghề"}
-                placeHolder={"Tất cả các ngành nghề"}
+                placeholder={"Tất cả các ngành nghề"}
+                emptyMessage="Không có ngành nghề"
               />
             </div>
             <Button
               type="submit"
               className="px-8 py-3 text-card bg-primary"
-              onClick={handleSearch}
               disabled={isPending}
             >
               {isPending ? "Đang tải..." : "Tìm kiếm"}
@@ -174,77 +249,78 @@ function SectionSearch({ cate, provinceName }: Props) {
             <Button
               variant="secondary"
               className="bg-secondary/40 text-secondary flex gap-3 items-center"
-              onClick={() => setOpenFilter((prev) => !prev)}
+              onClick={() => setAdvancedFilterOpen(!advancedFilterOpen)}
             >
               <FilterIcon className="w-4 h-4" />
               Lọc nâng cao
             </Button>
           </div>
-          <Transition show={openFilter}>
+          <Transition show={advancedFilterOpen}>
             <div className="w-[75%] mx-auto px-4 py-2 flex gap-1 justify-between text-center items-center">
               <Comboboxfilter
-                open={openExp}
-                setOpen={setOpenExp}
-                icon={<StarIcon className="h-4 w-4"></StarIcon>}
-                arrayValue={formattedCate}
-                valueStr={valueExp}
-                setValueStr={setValueExp}
-                title={"Kinh nghiệm"}
-                placeHolder={"Kinh nghiệm"}
+                open={openFilters.experience}
+                setOpen={() => toggleFilterOpen("experience")}
+                icon={<StarIcon className="h-4 w-4" />}
+                arrayValue={dataExper}
+                valueStr={filters.experience || ""}
+                setValueStr={(value) => updateFilter("experience", value)}
                 className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
-                classNameButton="border-secondary/30"
+                title="Kinh nghiệm"
+                placeholder="Kinh nghiệm"
+                emptyMessage="Không có giá trị"
               />
               <SalaryFilter
-                open={openSal}
-                setOpen={setOpenSal}
+                open={openFilters.salary}
+                setOpen={() => toggleFilterOpen("salary")}
                 icon={<CoinsIcon className="h-4 w-4"></CoinsIcon>}
-                valueStr={valueSal}
-                setValueStr={setValueSal}
+                valueStr={filters.salary || ""}
+                setValueStr={(value) => updateFilter("salary", value)}
+                className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
+                buttonClassName="border-secondary/30"
                 title={"Mức Lương"}
-                placeHolder={"Mức Lương"}
-                className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
-                classNameButton="border-secondary/30"
+                placeholder={"Mức Lương"}
+                emptyMessage="Không có giá trị"
               />
               <Comboboxfilter
-                open={openLevel}
-                setOpen={setOpenLevel}
-                icon={
-                  <BetweenHorizonalStart className="h-4 w-4"></BetweenHorizonalStart>
-                }
-                arrayValue={dataPostion}
-                valueStr={valueLevel}
-                setValueStr={setValueLevel}
+                open={openFilters.level}
+                setOpen={() => toggleFilterOpen("level")}
+                icon={<CoinsIcon className="h-4 w-4"></CoinsIcon>}
+                arrayValue={formattedPositionName}
+                valueStr={filters.experience || ""}
+                setValueStr={(value) => updateFilter("position", value)}
+                className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
+                buttonClassName="border-secondary/30"
                 title={"Cấp bậc"}
-                placeHolder={"Cấp bậc"}
-                className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
-                classNameButton="border-secondary/30"
+                placeholder={"Cấp bậc"}
+                emptyMessage="Không có giá trị"
               />
-
               <Comboboxfilter
-                open={openTypeJob}
-                setOpen={setOpenTypeJob}
+                open={openFilters.typeJob}
+                setOpen={() => toggleFilterOpen("typeJob")}
                 icon={
                   <BriefcaseBusiness className="h-4 w-4"></BriefcaseBusiness>
                 }
                 arrayValue={dateTypeJob}
-                valueStr={valueTypeJob}
-                setValueStr={setValueTypeJob}
-                title={"Hình thức"}
-                placeHolder={"Hình thức"}
+                valueStr={filters.type || ""}
+                setValueStr={(value) => updateFilter("type", value)}
                 className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
-                classNameButton="border-secondary/30"
+                buttonClassName="border-secondary/30"
+                title={"Hình thức"}
+                placeholder={"Hình thức"}
+                emptyMessage="Không có giá trị"
               />
               <Comboboxfilter
-                open={openComp}
-                setOpen={setOpenComp}
+                open={openFilters.company}
+                setOpen={() => toggleFilterOpen("company")}
                 icon={<BackpackIcon className="h-4 w-4"></BackpackIcon>}
-                arrayValue={formattedCate}
-                valueStr={valueComp}
-                setValueStr={setValueComp}
-                title={"Tất cả các Công ty"}
-                placeHolder={"Tất cả các Công ty"}
+                arrayValue={[]}
+                valueStr={""}
+                setValueStr={() => {}}
                 className="bg-secondary/10 hover:bg-secondary/20 hover:text-secondary hover:border-primary text-secondary"
-                classNameButton="border-secondary/30"
+                buttonClassName="border-secondary/30"
+                title={"Tất cả các Công ty"}
+                placeholder={"Tất cả các Công ty"}
+                emptyMessage="Không có giá trị"
               />
             </div>
           </Transition>
@@ -291,8 +367,6 @@ function SectionSearch({ cate, provinceName }: Props) {
             </RadioGroup>
           </div>
         </div>
-
-        <ShowDataSearch />
       </section>
     </div>
   );

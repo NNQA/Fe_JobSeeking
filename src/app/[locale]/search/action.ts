@@ -29,3 +29,13 @@ export async function searchResult(str: string) {
     } as ResponseAction;
   }
 }
+
+
+export async function fetchSearchResults(searchStr: string): Promise<Work[]> {
+  if (!searchStr) return [];
+  const result = await searchResult(searchStr);
+  if (result.status === "ok") {
+    return result.data;
+  }
+  throw new Error("Failed to fetch search results");
+}
