@@ -206,8 +206,12 @@ function Navigation({ user, className }: PropsNavigation) {
         className
       )}
     >
-      <NavigationMenu className="h-full flex justify-between space-x-20 w-full">
+      <NavigationMenu className="h-full flex justify-between space-x-18 w-full">
         <NavigationMenuList>
+          <div className="flex gap-1 px-8 font-bold text-foreground/75">
+            <Package2 className="h-6 w-6"></Package2>
+            <span>Job Seeking</span>
+          </div>
           {items.map(({ text, trigger }, index) => (
             <NavigationMenuItem
               className="hover:text-primary relative"
