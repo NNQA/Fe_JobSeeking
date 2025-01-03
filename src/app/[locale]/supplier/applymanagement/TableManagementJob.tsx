@@ -18,10 +18,21 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
-import { formatRelativeTimeFromNow } from "@/lib/utils/dates";
+import { getExpiryStatus } from "@/lib/utils/dates";
 import dynamic from "next/dynamic";
-
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { isBefore, parseISO } from "date-fns";
 const RowManagementJobNoSsr = dynamic(() => import("./RowManagementJob"), {
   ssr: false,
 });
@@ -32,6 +43,25 @@ const columnHelper = createColumnHelper<Work>();
 
 function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
   const t = useTranslations();
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
+  const filterFns = {
+    expiryStatus: (row, columnId, filterValue) => {
+      const currentDate = new Date();
+      const expiryDate = parseISO(row.getValue(columnId));
+
+      if (filterValue === "Active") {
+        return isBefore(currentDate, expiryDate);
+      }
+      if (filterValue === "Expired") {
+        return isBefore(expiryDate, currentDate);
+      }
+      return true;
+    },
+  };
+
   const columns = useMemo(
     () => [
       columnHelper.display({
@@ -63,7 +93,7 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
         enableSorting: true,
         enableColumnFilter: true,
       }),
-      columnHelper.accessor("salary", {
+      columnHelper.accessor("salary.value", {
         header: "Salary",
         enableSorting: true,
         enableColumnFilter: true,
@@ -74,22 +104,33 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
         enableColumnFilter: true,
       }),
       columnHelper.accessor("type.jobTypeName", {
-        header: "Job's Type",
+        header: "Type",
         enableSorting: true,
         enableColumnFilter: true,
       }),
       columnHelper.accessor("expiredDate", {
-        header: "Expired Date",
+        header: "Expiry Date",
         enableSorting: true,
         enableColumnFilter: true,
+        filterFn: filterFns.expiryStatus,
         cell: ({ row }) => {
           const expiredDateArray: any = row.original.expiredDate;
 
-          const expiredDate = new Date(expiredDateArray);
+          const status = getExpiryStatus(expiredDateArray);
 
-          const formatted = formatRelativeTimeFromNow(expiredDate);
-
-          return formatted;
+          return (
+            <Badge
+              variant={
+                status === "Active"
+                  ? "default"
+                  : status === "Upcoming"
+                  ? "secondary"
+                  : "destructive"
+              }
+            >
+              {status}
+            </Badge>
+          );
         },
       }),
       columnHelper.display({
@@ -102,10 +143,34 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
   });
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Select
+          defaultValue="All"
+          onValueChange={(value) =>
+            table.getColumn("expiredDate")?.setFilterValue(value)
+          }
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="All">All</SelectItem>
+            <SelectItem value="Active">Active</SelectItem>
+            <SelectItem value="Expired">Expired</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="rounded-md border">
         <Table className="w-full table-auto">
           <TableHeader className="text-left bg-muted/50 w-full">

@@ -20,7 +20,12 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import ProgressCircle from "@/components/svg/ProgressCircle";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 interface Props {
   row: TRow<Work>;
 }
@@ -66,7 +71,35 @@ function RowManagementJob({ row }: Props) {
         if (cellValue === null || cellValue === undefined || cellValue === "") {
           return null;
         }
-
+        if (cell.column.id === "title") {
+          return (
+            <TableCell
+              key={cell.id}
+              className="px-4 py-2 text-card-foreground/70 font-medium max-w-[200px] truncate"
+            >
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </TableCell>
+          );
+        }
         return (
           <TableCell
             key={cell.id}
@@ -85,7 +118,7 @@ function RowManagementJob({ row }: Props) {
             </Link>
           </Button>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
               <Button
                 variant={"destructive"}
                 className="bg-transparent text-destructive hover:bg-transparent focus:bg-transparent"

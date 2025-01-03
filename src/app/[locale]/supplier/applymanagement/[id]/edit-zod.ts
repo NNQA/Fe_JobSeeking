@@ -26,7 +26,7 @@ export const WorkSchemaEdit = (t: (arg: string) => string) => {
     address: z.string().min(1, t("address.err")),
     experience: z.string().min(1),
     position: z.string().min(1),
-    salary: z.string().min(1),
+    salary: z.number().int(),
     expireDate: z.coerce.date().refine(
       (date) => {
         return date >= new Date();

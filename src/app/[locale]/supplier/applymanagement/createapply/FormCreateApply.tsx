@@ -42,7 +42,18 @@ import { Calendar } from "@/components/ui/calendar";
 import InputSearchAddress from "@/components/inputcustom/InputSearchAddress";
 import { actionCreateNewJob } from "./action";
 import { toast } from "@/components/ui/use-toast";
+import SelectCustom from "@/components/custom/SelectCustom";
 
+export const salaryOptions = [
+  { label: "Dưới 10 triệu", value: 1 },
+  { label: "10 - 15 triệu", value: 2 },
+  { label: "15 - 20 triệu", value: 3 },
+  { label: "20 - 25 triệu", value: 4 },
+  { label: "25 - 30 triệu", value: 5 },
+  { label: "30 - 50 triệu", value: 6 },
+  { label: "Trên 50 triệu", value: 8 },
+  { label: "Thỏa thuận", value: 127 },
+];
 function FormCreateApply() {
   const [skill, setSkill] = useState<Tag[]>([]);
   const [skillActiveTagIndex, setSkillActiveTagIndex] = useState<number | null>(
@@ -66,7 +77,7 @@ function FormCreateApply() {
       position: "",
       skill: [],
       jobtype: "Part-Time",
-      salary: "",
+      salary: 1,
       category: [],
       expireDate: new Date(),
     },
@@ -96,7 +107,10 @@ function FormCreateApply() {
       })),
       title: data.title,
       description: data.description,
-      salary: data.salary,
+      salary: {
+        numberSort: data.salary,
+        value: salaryOptions.find((opt) => opt.value === data.salary)?.label!,
+      },
       experience: data.experience,
       expiredDate: data.expireDate,
       position: {
@@ -114,7 +128,6 @@ function FormCreateApply() {
         description: "You update your successfully",
       });
     } else {
-      console.log("asd");
       toast({
         variant: "destructive",
         title: "Failure",
@@ -200,10 +213,11 @@ function FormCreateApply() {
                   {t("salary.label")} <span className="text-red-600">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    className="text-black text- font-medium"
-                    placeholder={t("salary.placeholder")}
-                    {...field}
+                  <SelectCustom
+                    selectValue={salaryOptions}
+                    onChange={field.onChange}
+                    value={field.value}
+                    key={"salary"}
                   />
                 </FormControl>
                 <FormMessage />

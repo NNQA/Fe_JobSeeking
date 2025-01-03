@@ -7,6 +7,7 @@ export const EJobTypeZod = z.enum([
   "Seasonal",
   "Remote",
 ]);
+
 export const AddressSchema = z.object({
   street: z.string(),
   ward: z.string(),
@@ -26,7 +27,9 @@ export const WorkSchema = (t: (arg: string) => string) => {
     address: z.string().min(1, t("address.err")),
     experience: z.string().min(1),
     position: z.string().min(1),
-    salary: z.string().min(1),
+    salary: z.number().int(),
+      // minSal: z.number().int().positive().optional(),
+      // maxSal: z.number().int().positive().optional(),z.number().int(),
     expireDate: z.coerce.date().refine(
       (date) => {
         return date >= new Date();
@@ -42,13 +45,22 @@ export const WorkSchema = (t: (arg: string) => string) => {
       })
     ),
     category: z
-      .array(
-        z.object({
-          id: z.string(),
-          text: z.string(),
-        })
-      )
+    .array(
+      z.object({
+        id: z.string(),
+        text: z.string(),
+      })
+    )
       .nonempty(t("category.err")),
     jobtype: EJobTypeZod,
   });
 };
+
+  // }).refine(data => {
+  //   // Check trường hợp `numberSort = 5` là "Thỏa thuận", không cần `minSal` và `maxSal`
+  //   if (data.numberSort === 5) return true;
+  //   // Các trường hợp khác thì cần có `minSal` và `maxSal`
+  //   return data.minSal !== undefined && data.maxSal !== undefined && data.minSal <= data.maxSal;
+  // }, {
+  //   message: "Salary range is invalid or missing for the selected salary type",
+  // }),
