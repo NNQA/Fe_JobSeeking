@@ -4,6 +4,7 @@ import React from "react";
 import AvataUser from "./AvataUser";
 import { Button } from "@/components/ui/button";
 import { MailIcon, MailsIcon, PhoneCallIcon, SchoolIcon } from "lucide-react";
+import Link from "next/link";
 
 interface Props {
   applicant: Applicant;
@@ -50,12 +51,30 @@ function Information({ applicant }: Props) {
             <h6 className="font-bold text-sm tracking-wide pb-1">
               More details
             </h6>
-            <div className="flex gap-4">
-              <div className="text-accent-foreground/40 flex items-center gap-2">
-                <SchoolIcon className="w-4 h-4" />
-                <p className="font-bold text-sm">University: </p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-accent-foreground/40">
+                  <SchoolIcon className="w-4 h-4" />
+                  <p className="font-bold text-sm">University:</p>
+                </div>
+                <p className="font-medium break-words">
+                  {applicant.user.university}
+                </p>
               </div>
-              <p className="font-medium">{applicant.user.university}</p>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-accent-foreground/40">
+                  <SchoolIcon className="w-4 h-4" />
+                  <p className="font-bold text-sm">Résumé link:</p>
+                </div>
+                <Button asChild variant={"link"}>
+                  <Link
+                    href={applicant.resumeUrl}
+                    className="font-medium break-words"
+                  >
+                    Hồ sơ của ứng viên.
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

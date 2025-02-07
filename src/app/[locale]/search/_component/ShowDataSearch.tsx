@@ -1,30 +1,29 @@
-"use client";
 import React, { Suspense } from "react";
 import { Work } from "@/lib/models/Work";
-import { useSearchParams } from "next/navigation";
 import Promote from "./Promote";
 import { SearchHeader } from "./SearchHeader";
 import { SearchResults } from "./SearchResults";
 interface PropsShowDataSearch {
   initialData: Work[];
   initialSearch: string;
+  searchParams: { [key: string]: string };
 }
 
-function ShowDataSearch({ initialData, initialSearch }: PropsShowDataSearch) {
-  const searchParams = useSearchParams();
+function ShowDataSearch({
+  initialData,
+  initialSearch,
+  searchParams,
+}: PropsShowDataSearch) {
   return (
     <section className="bg-foreground/5 h-fit flex flex-col gap-3 flex-1">
       <Suspense
         fallback={
-          <SearchHeader
-            workCount={0}
-            location={searchParams.get("provinceName")}
-          />
+          <SearchHeader workCount={0} location={searchParams.provinceName} />
         }
       >
         <SearchHeader
           workCount={initialData?.length}
-          location={searchParams.get("provinceName")}
+          location={searchParams.provinceName}
         />
       </Suspense>
 

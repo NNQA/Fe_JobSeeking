@@ -40,7 +40,11 @@ async function Home({
       </Suspense>
 
       <Suspense fallback={<div>Loading search section......</div>}>
-        <ShowDataSearch initialData={initialData} initialSearch={searchStr} />{" "}
+        <ShowDataSearch
+          initialData={initialData}
+          initialSearch={searchStr}
+          searchParams={searchParams}
+        />{" "}
       </Suspense>
     </div>
   );
