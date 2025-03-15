@@ -14,6 +14,12 @@ export function checkInstanceResponsce(input: String) {
   return 0;
 }
 
+export function getErrorMessage(errors: Record<string, string[]>): string {
+  if (!errors || typeof errors !== "object") return "Something is error.";
+
+  return errors.form?.[0] || Object.values(errors)[0]?.[0] || "Something is error.";
+}
+
 
 export enum JobType {
   Art,

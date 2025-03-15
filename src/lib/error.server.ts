@@ -8,13 +8,12 @@ export async function toActionErrorsAsync(body: Error): Promise<Record<string, s
 export async function toActionErrorsAsync(body: unknown): Promise<Record<string, string[]>>;
 export async function toActionErrorsAsync(body: unknown): Promise<Record<string, string[]>> {
   if (body instanceof ApiError) {
-    console.log(body.details.instance);
     return body.details.errors
       ? body.details.errors.reduce((acc, cur) => {
           if (Array.isArray(acc[cur.name])) {
-            acc[cur.name].push(cur.code ?? cur.reason);
+            acc[cur.name].push(cur.code ?? cur.message);
           } else {
-            acc[cur.name] = [cur.code ?? cur.reason];
+            acc[cur.name] = [cur.code ?? cur.message];
           }
           return acc;
         }, {} as Record<string, string[]> )
@@ -35,9 +34,9 @@ export async function toActionErrorsAsync(body: unknown): Promise<Record<string,
       ? { form: [parse.data.detail ?? parse.data.title] }
       : parse.data.errors.reduce((acc, cur) => {
           if (Array.isArray(acc[cur.name])) {
-            acc[cur.name].push(cur.code ?? cur.reason);
+            acc[cur.name].push(cur.code ?? cur.message);
           } else {
-            acc[cur.name] = [cur.code ?? cur.reason];
+            acc[cur.name] = [cur.code ?? cur.message];
           }
           return acc;
         }, {} as Record<string, string[]>);
