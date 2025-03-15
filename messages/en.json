@@ -55,7 +55,8 @@
     "password": {
       "label": "Password",
       "err": "Password is required",
-      "placeholder": "password"
+      "placeholder": "password",
+      "invalid": "8 or more characters"
     },
     "button": {
       "text": "Continue"
@@ -73,16 +74,16 @@
       }
     }
   },
-  "verifycode": {
-    "title": "Verification Code",
-    "description": "We have sent the code to your email, please check your email and come back here to enter the account confirmation code.",
-    "code": {
-      "label": "Enter your code",
-      "err": "Code is required",
-      "placeholder": "code"
-    },
+  "verify-email": {
+    "title": "Email Verification",
+    "description": "We have sent to your email, please check your email.",
     "button": {
-      "text": "Finish"
+      "primary": {
+        "text": "Gủi lại"
+      },
+      "second": {
+        "text":"Đăng nhập"
+      }
     },
     "progressacction": {
       "success": {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -27,16 +27,19 @@ import { ApiClient } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
 import { toast } from "@/components/ui/use-toast";
 import clsx from "clsx";
-import { Transition, Label, TransitionChild } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
 import { useRouter } from "next/navigation";
+import { getErrorMessage } from "@/lib/utils";
 
 const Schema = (t: (arg: string) => string) => {
   return z.object({
     email: z
       .string({ required_error: t("email.err") })
       .email(t("email.invalid")),
-    password: z.string({ required_error: t("password.err") }).min(4),
+    password: z
+      .string({ required_error: t("password.err") })
+      .min(8, t("password.invalid")),
   });
 };
 
@@ -65,8 +68,6 @@ function FormSignup() {
       (x) => {
         toast({
           variant: "success",
-          // title: "Signup success",
-          // description: "Aasdasdd",
           action: (
             <div className="w-full flex items-center text-primary gap-2">
               <CheckCircle className="h-5 w-5" />
@@ -77,23 +78,22 @@ function FormSignup() {
           ),
         });
         const timer = setTimeout(() => {
-          router.push(
-            `verificationcode?email=${encodeURIComponent(data.email)}`
-          );
+          router.push(`verify-email?email=${encodeURIComponent(data.email)}`);
         }, 1500);
+        console.log(x);
       },
       async (err) => {
-        const a = await toActionErrorsAsync(err);
+        const resultErr = await toActionErrorsAsync(err);
         toast({
           variant: "destructive",
           title: t("progressacction.failure.title"),
-          description: a.form[0],
+          description: getErrorMessage(resultErr),
         });
       }
     );
   }
   return (
-    <div className="h-[600px] w-[510px] bg-background px-12 py-8 rounded-md shadow-xl flex flex-col gap-4">
+    <div className="bg-background px-12 py-8 rounded-md shadow-xl flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <p className="font-medium text-border-hover">Step 1 of 2</p>
         <h1 className="font-semibold ">{t("title")}</h1>
@@ -120,10 +120,7 @@ function FormSignup() {
         <div className="flex">
           <p className="text-xs">
             {t("login.accountexitst")}
-            <Link
-              href={`${locale}/auth/signup`}
-              className="text-blue-500 font-medium"
-            >
+            <Link href={`/auth/login`} className="text-blue-500 font-medium">
               {" "}
               {t("login.link")}
             </Link>{" "}
@@ -170,6 +167,7 @@ function FormSignup() {
               type="submit"
               className="w-fit rounded-full relative"
               disabled={form.formState.isSubmitting}
+              aria-label="Sign up with Email"
             >
               <span
                 className={clsx("block transition ease-in-out", {

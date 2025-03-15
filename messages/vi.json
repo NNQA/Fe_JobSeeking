@@ -58,7 +58,8 @@
     "password": {
       "label": "Password",
       "err": "Password được yêu cầu",
-      "placeholder": "password"
+      "placeholder": "password",
+      "invalid": "8 hoặc nhiều hơn ký tự"
     },
     "button": {
       "text": "Tiếp tục"
@@ -73,16 +74,16 @@
       }
     }
   },
-  "verifycode": {
+  "verify-email": {
     "title": "Xác thực tài khoản",
-    "description": "Chúng tôi đã gửi mã vào email của bạn, bạn vui lòng kiểm tra email và quay lại đây để nhập mã xác nhận tài khoản.",
-    "code": {
-      "label": "Nhập mã code",
-      "err": "Mã được yêu cầu",
-      "placeholder": "code"
-    },
+    "description": "Chúng tôi đã gửi vào email của bạn, bạn vui lòng kiểm tra email.",
     "button": {
-      "text": "Hoàn thành"
+      "primary": {
+        "text": "Gủi lại"
+      },
+      "second": {
+        "text":"Đăng nhập"
+      }
     },
     "progressacction": {
       "success": {
