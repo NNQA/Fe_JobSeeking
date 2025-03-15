@@ -24,7 +24,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 
 function FormVerifiCation() {
   const t = useTranslations("verify-email");
@@ -63,11 +63,11 @@ function FormVerifiCation() {
         });
       },
       async (err) => {
-        const a = await toActionErrorsAsync(err);
+        const errAfterActionAs = await toActionErrorsAsync(err);
         toast({
           variant: "destructive",
           title: "Error",
-          description: a.form[0],
+          description: getErrorMessage(errAfterActionAs),
         });
       }
     );
@@ -84,7 +84,7 @@ function FormVerifiCation() {
           type="submit"
           className="w-fit relative text-secondary"
           disabled={isLoading}
-          onClick={() => startTransition(hanleSendMailAgain)}
+          onClick={() => startTransition(() => hanleSendMailAgain())}
         >
           <span
             className={clsx("block transition ease-in-out", {

@@ -79,7 +79,7 @@
     "description": "Chúng tôi đã gửi vào email của bạn, bạn vui lòng kiểm tra email.",
     "button": {
       "primary": {
-        "text": "Gủi lại"
+        "text": "Gửi lại"
       },
       "second": {
         "text":"Đăng nhập"
@@ -88,7 +88,7 @@
     "progressacction": {
       "success": {
         "title": "Thành công",
-        "description": "Chúc mừng bạn hoàn thành xác thực tài khoản."
+        "description": "Gửi email thành công, vui lòng kiểm tra email."
       },
       "failure": {
         "title": "Lỗi"
