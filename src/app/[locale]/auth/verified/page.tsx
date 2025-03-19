@@ -9,6 +9,7 @@ export default async function Page({
   if (!searchParams.token) {
     throw new Error("Cannot find token in url");
   }
+  console.log(searchParams.token);
   const checkToken = await AuthActionFetching.VerifiedToken(searchParams.token);
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
