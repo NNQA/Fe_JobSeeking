@@ -99,6 +99,21 @@
     "title": "Email Verification",
     "description": "Xác thực tài khoản thất bại có thể vì token hết hạn hoặc không đúng, vui lòng gửi lại email."
   },
+  "send-email-again": {
+    "title": "Request email sender",
+    "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn.",
+    "input": {
+      "label":"Email *",
+      "placeholder": "Nhập email",
+      "err": "Email được yêu cầu",
+      "invalid": "Email của bạn không đúng."
+    },
+    "button": {
+      "primary": {
+        "text": "Gửi lại"
+      }
+    }
+  },
   "upgradeAccount": {
     "title": "Chào mừng",
     "subtitle": "Đến với Smart Recruitment Platform",

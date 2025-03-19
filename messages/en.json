@@ -99,6 +99,30 @@
     "title": "Email Verification",
     "description": "  The verification link is invalid or has expired. Please request a new verification email."
   },
+  "send-email-again": {
+    "title": "Request email sender",
+    "description": "Please enter your email in here in other to get verified account.",
+    "input": {
+      "label":"email *",
+      "placeholder": "Enter email",
+      "err": "Email is required",
+      "invalid": "Your email input is not correct."
+    },
+    "button": {
+      "primary": {
+        "text": "Send back"
+      }
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Priority Email sent successfully, please check email."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  },
   "upgradeAccount": {
     "title": "Welcome",
     "subtitle": "Come to Smart Recruitment Platform",
