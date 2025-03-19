@@ -95,6 +95,10 @@
       }
     }
   },
+  "verifiedToken": {
+    "title": "Email Verification",
+    "description": "Xác thực tài khoản thất bại có thể vì token hết hạn hoặc không đúng, vui lòng gửi lại email."
+  },
   "upgradeAccount": {
     "title": "Chào mừng",
     "subtitle": "Đến với Smart Recruitment Platform",

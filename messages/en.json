@@ -95,6 +95,10 @@
       }
     }
   },
+  "verifiedToken": {
+    "title": "Email Verification",
+    "description": "  The verification link is invalid or has expired. Please request a new verification email."
+  },
   "upgradeAccount": {
     "title": "Welcome",
     "subtitle": "Come to Smart Recruitment Platform",
