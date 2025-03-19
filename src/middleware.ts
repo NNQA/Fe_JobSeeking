@@ -26,8 +26,6 @@ export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken");
   const isProtectRoutes = protectRoutes.includes(restructedPathname);
 
-  console.log(protectRoutes);
-  console.log(isProtectRoutes);
   if (isProtectRoutes) {
     if (!accessToken) {
       nextUrl.pathname = `/${locale}/login`;
