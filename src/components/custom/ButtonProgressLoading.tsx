@@ -15,11 +15,11 @@ function ButtonProgressLoading({ type, state, text, className }: ButtonProgressL
     return (
         <Button
             type={type ?? "button"}
-            className={cn("rounded-sm relative bg-primary/90 dark:text-secondary-foreground", className)}
+            className={cn("rounded-sm relative", className)}
             disabled={state}
         >
             <span
-                className={clsx("block transition ease-in-out", {
+                className={clsx("block transition ease-in-out font-bold", {
                     "opacity-0": state,
                     "scale-0": state,
                 })}
