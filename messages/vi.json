@@ -20,9 +20,11 @@
       "invalid": "Email của bạn không đúng."
     },
     "password": {
-      "label": "Password",
-      "err": "Password được yêu cầu",
-      "placeholder": "password"
+     "label":"Mật khẩu *",
+      "placeholder": "Nhập mật khẩu",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
     },
     "button": {
       "text": "Tiếp tục"
@@ -60,14 +62,15 @@
     "email": {
       "label": "Email",
       "err": "Email được yêu cầu",
-      "placeholder": "email",
+      "placeholder": "Nhập email của bạn",
       "invalid": "Email của bạn không đúng."
     },
     "password": {
-      "label": "Password",
-      "err": "Password được yêu cầu",
-      "placeholder": "password",
-      "invalid": "8 hoặc nhiều hơn ký tự"
+      "label":"Mật khẩu",
+      "placeholder": "Nhập mật khẩu",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
     },
     "button": {
       "text": "Tiếp tục"
@@ -145,7 +148,7 @@
       "placeholder": "Nhập mật khẩu",
       "required": "Ô này không được để trống",
       "length": "Mật khẩu ít nhất 8 ký tự.",
-      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệtbiệt."
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
     },
     "confirmPassword": {
       "label":"Xác nhận mật khẩu *",
@@ -159,6 +162,15 @@
       },
       "second": {
         "text": "Trở về trang chủ"
+      }
+    }, 
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Lấy lại mật khẩu thành công."
+      },
+      "failure": {
+        "title": "Error"
       }
     }
   },

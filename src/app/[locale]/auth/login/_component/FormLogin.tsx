@@ -43,7 +43,9 @@ const Schema = (t: (arg: string) => string) => {
     email: z
       .string({ required_error: t("email.err") })
       .email(t("email.invalid")),
-    password: z.string({ required_error: t("password.err") }).min(4)
+    password: z.string()
+      .min(1, { message: t("password.required") })
+      .min(8, { message: t("password.length") })
   });
 };
 
@@ -170,7 +172,7 @@ function FormLogin() {
                   <Link href={`/auth/forgotpassword`} aria-label="link to Page forgot" className="text-sm font-medium">{t("forgotPassword.label")}</Link>
                 </div>
                 <FormControl>
-                  <PasswordInput id="password" placeholder="Nhập mật khẩu của bạn" {...field} />
+                  <PasswordInput id="password" placeholder={t("password.placeholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

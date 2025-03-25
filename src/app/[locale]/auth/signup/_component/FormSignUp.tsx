@@ -35,8 +35,13 @@ const Schema = (t: (arg: string) => string) => {
       .string({ required_error: t("email.err") })
       .email(t("email.invalid")),
     password: z
-      .string({ required_error: t("password.err") })
-      .min(8, t("password.invalid")),
+      .string()
+      .min(1, { message: t("password.required") })
+      .min(8, { message: t("password.length") })
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        { message: t("password.complexity") }
+      ),
   });
 };
 
@@ -90,10 +95,10 @@ function FormSignup() {
     );
   }
   return (
-    <div className="px-12 py-14 rounded-md border flex flex-col gap-6">
+    <div className="md:px-12 md:py-8 px-6 py-4 rounded-md border flex flex-col gap-6 md:max-w-lg max-w-md">
       <div className="space-y-8">
         <div className="space-y-1">
-          <p className="font-medium text-border-hover">Step 1 of 2</p>
+          <p className="font-medium text-border-hover">Step 1 of 2 </p>
           <h1 className="font-semibold">{t("title")}</h1>
         </div>
         <LoginWithSocialMedia />
@@ -117,7 +122,7 @@ function FormSignup() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-5 flex flex-col"
+          className="space-y-5 flex flex-col max-w"
         >
           <FormField
             control={form.control}
@@ -128,7 +133,7 @@ function FormSignup() {
                 <FormControl>
                   <InputCustomIcon
                     {...field}
-                    placeholder="Nhập email của bạn"
+                    placeholder={t("email.placeholder")}
                     icon={<Mail className="h-4 w-4 mt-1 text-primary" />}
                   />
                 </FormControl>
@@ -143,9 +148,9 @@ function FormSignup() {
               <FormItem>
                 <FormLabel>Password *</FormLabel>
                 <FormControl>
-                  <PasswordInput id="password" {...field} />
+                  <PasswordInput id="password" {...field} placeholder={t("password.placeholder")} className="w-full" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="w-full break-words" />
               </FormItem>
             )}
           />

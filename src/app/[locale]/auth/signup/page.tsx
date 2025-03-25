@@ -8,12 +8,10 @@ export const metadata: Metadata = {
 }
 export default function Page() {
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
+    <div className="relative h-screen w-screen overflow-hidden bg-background" >
       <Logo />
-      <div className="h-full  grid place-content-center z-10 pb-20">
-        <div className="order-2 md:order-2">
-          <FormSignup />
-        </div>
+      <div className="h-full w-full grid place-content-center z-10 md:py-10 pt-20">
+        <FormSignup />
       </div>
     </div>
   );

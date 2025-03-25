@@ -20,9 +20,11 @@
       "invalid": "Your email input is not correct."
     },
     "password": {
-      "label": "Password",
-      "err": "Password is required",
-      "placeholder": "password"
+      "label":"Password *",
+      "placeholder": "Enter password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity":"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
     },
     "button": {
       "text": "Sign in"
@@ -57,14 +59,15 @@
     "email": {
       "label": "Email",
       "err": "Email is required",
-      "placeholder": "email",
+      "placeholder": "Enter your email",
       "invalid": "Your email input is not correct."
     },
     "password": {
-      "label": "Password",
-      "err": "Password is required",
-      "placeholder": "password",
-      "invalid": "8 or more characters"
+      "label":"Password *",
+      "placeholder": "Enter password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity":"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
     },
     "button": {
       "text": "Continue"
@@ -177,6 +180,15 @@
       },
       "second": {
         "text": "Back to home"
+      }
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Retrieve password successfully."
+      },
+      "failure": {
+        "title": "Error"
       }
     }
   },
