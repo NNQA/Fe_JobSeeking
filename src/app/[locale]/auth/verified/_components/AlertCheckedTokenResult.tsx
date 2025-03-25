@@ -31,7 +31,7 @@ function AlertCheckedTokenResult({ isOpen }: { isOpen: boolean }) {
             <Link href={"/"}>Cancel</Link>
           </AlertDialogCancel>
           <AlertDialogAction className="text-secondary">
-            <Link href={"/auth/send-mail-again"}>Send again</Link>
+            <Link href={"/auth/send-mail-again"} className="text-secondary hover:no-underline">Send again</Link>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
