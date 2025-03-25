@@ -22,16 +22,16 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 import { getErrorMessage } from "@/lib/utils";
-import { setCookie } from "../actions";
+import { setCookie } from "../../actions";
 import { Mail } from "lucide-react";
 import { Authorities, ERole } from "@/lib/models/User";
 import Designposter from "./Designposter";
 import dynamic from "next/dynamic";
 import { Button, } from "@/components/ui/button";
-import StraightLineOrChosen from "../_component/StraightLineOrChosen";
+import StraightLineOrChosen from "../../_component/StraightLineOrChosen";
 
 const ButtonProgressLoadingDynamic = dynamic(() => import("@/components/custom/ButtonProgressLoading"), { ssr: false });
-const CommonAlertDialog = dynamic(() => import("./_component/CommonAlertDialog"));
+const CommonAlertDialog = dynamic(() => import("./CommonAlertDialog"));
 interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -167,7 +167,7 @@ function FormLogin() {
               <FormItem>
                 <div className="flex justify-between items-center">
                   <FormLabel>Password *</FormLabel>
-                  <Link href={""} aria-label="link to Page forgot" className="text-sm font-medium">{t("forgotPassword.label")}</Link>
+                  <Link href={`/auth/forgotpassword`} aria-label="link to Page forgot" className="text-sm font-medium">{t("forgotPassword.label")}</Link>
                 </div>
                 <FormControl>
                   <PasswordInput id="password" placeholder="Nhập mật khẩu của bạn" {...field} />

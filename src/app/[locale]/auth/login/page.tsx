@@ -1,4 +1,3 @@
-import Image from "next/image";
 import dynamic from "next/dynamic";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 
-const LoginDynamic = dynamic(() => import("./FormLogin"), {
+const LoginDynamic = dynamic(() => import("./_component/FormLogin"), {
   loading: () => (
     <div className="bg-background rounded-md shadow-xl flex flex-col gap-4">
       <div className="grid place-content-center">
