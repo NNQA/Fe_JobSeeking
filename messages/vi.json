@@ -20,12 +20,14 @@
       "invalid": "Email của bạn không đúng."
     },
     "password": {
-      "label": "Password",
-      "err": "Password được yêu cầu",
-      "placeholder": "password"
+     "label":"Mật khẩu *",
+      "placeholder": "Nhập mật khẩu",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
     },
     "button": {
-      "text": "Sign in"
+      "text": "Tiếp tục"
     },
     "suggestionText": "Đăng nhập bằng cách khác",
     "policy": "Bằng việc đăng nhập bằng tài khoản mạng xã hội của mình, tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của JobSeeking",
@@ -40,6 +42,14 @@
         "button": "Xác thực",
         "buttoncancel": "Hủy"
       }
+    },
+    "socialLogin": {
+      "google":"Tiếp tục với google",
+      "linkin":"Tiếp tục với linkin",
+      "github":"Tiếp tục với Github"
+    },
+    "forgotPassword": {
+      "label":"Quên mật khẩu?"
     }
   },
   "signup": {
@@ -52,13 +62,15 @@
     "email": {
       "label": "Email",
       "err": "Email được yêu cầu",
-      "placeholder": "email",
+      "placeholder": "Nhập email của bạn",
       "invalid": "Email của bạn không đúng."
     },
     "password": {
-      "label": "Password",
-      "err": "Password được yêu cầu",
-      "placeholder": "password"
+      "label":"Mật khẩu",
+      "placeholder": "Nhập mật khẩu",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
     },
     "button": {
       "text": "Tiếp tục"
@@ -73,24 +85,92 @@
       }
     }
   },
-  "verifycode": {
+  "verify-email": {
     "title": "Xác thực tài khoản",
-    "description": "Chúng tôi đã gửi mã vào email của bạn, bạn vui lòng kiểm tra email và quay lại đây để nhập mã xác nhận tài khoản.",
-    "code": {
-      "label": "Nhập mã code",
-      "err": "Mã được yêu cầu",
-      "placeholder": "code"
-    },
+    "description": "Chúng tôi đã gửi vào email của bạn, bạn vui lòng kiểm tra email.",
     "button": {
-      "text": "Hoàn thành"
+      "primary": {
+        "text": "Gửi lại"
+      },
+      "second": {
+        "text":"Đăng nhập"
+      }
     },
     "progressacction": {
       "success": {
         "title": "Thành công",
-        "description": "Chúc mừng bạn hoàn thành xác thực tài khoản."
+        "description": "Gửi email thành công, vui lòng kiểm tra email."
       },
       "failure": {
         "title": "Lỗi"
+      }
+    }
+  },
+  "verifiedToken": {
+    "title": "Email Verification",
+    "description": "Xác thực tài khoản thất bại có thể vì token hết hạn hoặc không đúng, vui lòng gửi lại email."
+  },
+  "send-email-again": {
+    "title": "Request email sender",
+    "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn.",
+    "input": {
+      "label":"Email *",
+      "placeholder": "Nhập email",
+      "err": "Email được yêu cầu",
+      "invalid": "Email của bạn không đúng."
+    },
+    "button": {
+      "primary": {
+        "text": "Gửi lại"
+      }
+    }
+  },
+  "forgot-password": {
+    "title": "Request email sender",
+    "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn.",
+    "input": {
+      "label":"Email *",
+      "placeholder": "Nhập email",
+      "err": "Email được yêu cầu",
+      "invalid": "Email của bạn không đúng."
+    },
+    "button": {
+      "primary": {
+        "text": "Gửi lại"
+      }
+    }
+  },
+  "retrieve-password": {
+    "title": "Lấy lại mật khẩu",
+    "description": "Vui lòng nhập mật khẩu mới.",
+    "password": {
+      "label":"Mật khẩu *",
+      "placeholder": "Nhập mật khẩu",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
+    },
+    "confirmPassword": {
+      "label":"Xác nhận mật khẩu *",
+      "placeholder": "Nhập xác nhận mật khẩu",
+      "required": "Ô này không được để trống",
+      "donotmatch":"Mật khẩu không trùng khớp."
+    },
+    "button": {
+      "primary": {
+        "text":"Tiếp tục"
+      },
+      "second": {
+        "text": "Trở về trang chủ"
+      }
+    }, 
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Lấy lại mật khẩu thành công."
+      },
+      "failure": {
+        "title": "Error"
       }
     }
   },

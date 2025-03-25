@@ -1,10 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import { useTranslations } from "next-intl";
+import { CheckCircle, SendIcon } from "lucide-react";
+import { ApiClient } from "@/lib/service/api-client.server";
+import { toActionErrorsAsync } from "@/lib/error.server";
+import { toast } from "@/components/ui/use-toast";
+import clsx from "clsx";
+import { Transition } from "@headlessui/react";
+import ProgressCircle from "@/components/svg/ProgressCircle";
 import {
   Form,
   FormControl,
@@ -13,66 +17,43 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import PasswordInput from "@/components/inputcustom/PasswordInput";
+import { getErrorMessage } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
-import { CheckCircle } from "lucide-react";
-import { ApiClient } from "@/lib/service/api-client.server";
-import { toActionErrorsAsync } from "@/lib/error.server";
-import { toast } from "@/components/ui/use-toast";
-import clsx from "clsx";
-import { Transition } from "@headlessui/react";
-import ProgressCircle from "@/components/svg/ProgressCircle";
-import {
-  notFound,
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-
+import { useRouter } from "next/navigation";
 const Schema = (t: (arg: string) => string) => {
   return z.object({
-    code: z.string().nonempty({ message: t("code.err") }),
+    email: z
+      .string({ required_error: t("input.err") })
+      .email(t("input.invalid")),
   });
 };
-
-function FormVerifiCation() {
-  const t = useTranslations("verifycode");
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [email, setEmail] = useState<String | null>(null);
+function FormSendMailAgain() {
+  const t = useTranslations("send-email-again");
   const router = useRouter();
-  useEffect(() => {
-    const url = searchParams.toString();
-    if (!url || url.length < 1) {
-      notFound();
-    }
-    setEmail(decodeURIComponent(url.split("=")[1]));
-  }, [pathname, searchParams]);
+
   const formSchema = Schema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      code: "",
+      email: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(email);
-    const result = await ApiClient.instance.post("api/auth/verifycode", {
-      body: {
-        code: data.code,
-        email: email,
-      },
-    });
+    const result = await ApiClient.instance.post(
+      "api/auth/request-token-email",
+      {
+        body: {
+          email: data.email,
+        },
+      }
+    );
     result.match(
       (x) => {
         toast({
           variant: "success",
-          // title: "Signup success",
-          // description: "Aasdasdd",
           action: (
             <div className="w-full flex items-center text-primary gap-2">
               <CheckCircle className="h-5 w-5" />
@@ -83,41 +64,44 @@ function FormVerifiCation() {
           ),
         });
         const timer = setTimeout(() => {
-          router.push("login");
+          router.push(`verify-email?email=${encodeURIComponent(data.email)}`);
         }, 1500);
       },
+
       async (err) => {
-        const a = await toActionErrorsAsync(err);
+        const errAfterActionAs = await toActionErrorsAsync(err);
         toast({
           variant: "destructive",
           title: "Error",
-          description: a.form[0],
+          description: getErrorMessage(errAfterActionAs),
         });
       }
     );
   }
   return (
-    <div className="h-[600px] w-[510px] bg-background px-12 py-8 rounded-md shadow-xl flex flex-col gap-10">
-      <div className="flex flex-col gap-1">
-        <p className="font-medium text-border-hover">Step 2 of 2</p>
+    <div className="w-[510px] bg-background dark:bg-background/80 shadow-md px-12 py-8 rounded-md flex flex-col gap-6">
+      <div className="flex items-center gap-4">
+        <SendIcon className="h-6 w-6 text-primary" />
         <h1 className="font-semibold ">{t("title")}</h1>
       </div>
       <div>{t("description")}</div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex justify-start items-center gap-10"
+          className=""
         >
           <FormField
             control={form.control}
-            name="code"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("code.label")}</FormLabel>
+                <FormLabel htmlFor="email">{t("input.label")}</FormLabel>
                 <FormControl>
-                  <PasswordInput
-                    id="code"
-                    placeholder={t("code.placeholder")}
+                  <InputCustomIcon
+                    icon={null}
+                    id="email"
+                    className=""
+                    placeholder={t("input.placeholder")}
                     {...field}
                   />
                 </FormControl>
@@ -128,7 +112,7 @@ function FormVerifiCation() {
           <div className="mt-9 text-end">
             <Button
               type="submit"
-              className="w-fit rounded-full relative"
+              className="rounded-sm relative bg-primary/90 dark:text-secondary-foreground"
               disabled={form.formState.isSubmitting}
             >
               <span
@@ -137,7 +121,7 @@ function FormVerifiCation() {
                   "scale-0": form.formState.isSubmitting,
                 })}
               >
-                {t("button.text")}
+                {t("button.primary.text")}
               </span>
 
               <Transition
@@ -162,4 +146,4 @@ function FormVerifiCation() {
   );
 }
 
-export default FormVerifiCation;
+export default FormSendMailAgain;

@@ -27,7 +27,7 @@ export default async function RootLayout({
   const message = await getMessages();
   return (
     <>
-      <html suppressHydrationWarning>
+      <html suppressHydrationWarning lang={locale}>
         <head />
         <body>
           <ThemeProvider

@@ -33,7 +33,6 @@ export class ApiError extends Error {
   }
 
   public static async from(details: unknown) {
-    console.log(details);
     const data = await problemDetailsSchema.parseAsync(details);
     return new ApiError(data);
   }

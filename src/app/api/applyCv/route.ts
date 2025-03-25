@@ -7,12 +7,6 @@ import { NextRequest } from "next/server";
 import { firebaseConfig } from "@/lib/firebase-setup";
 import { SessionApi } from "@/lib/service/session-api.server";
 import { cookies } from "next/headers";
-import { toActionErrorsAsync } from "@/lib/error.server";
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
   try {

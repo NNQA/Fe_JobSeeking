@@ -17,12 +17,9 @@ import Link from 'next/link'
 
 export function HoverCardDemo() {
   return (
-    <div className='text-primary'>
     <HoverCard >
       <HoverCardTrigger asChild>
-        <Button asChild variant={'link'} className='outline-none p-0'>
-          <Link href="https://github.com/">Github</Link>
-        </Button>
+        <Link href="https://github.com/NNQAs" className='text-primary underline-offset-4 hover:underline'>Github</Link>
       </HoverCardTrigger>
       <HoverCardContent className="w-60">
         <div className="flex justify-between space-x-4">
@@ -45,17 +42,35 @@ export function HoverCardDemo() {
         </div>
       </HoverCardContent>
     </HoverCard>
-    </div>
   )
 }
 
 
 function Footer() {
   return (
-    <div className="w-screen h-[3rem] p-1 m-auto bg-background border-t border flex justify-center items-center">
-      <div className='font-semibold flex items-center gap-1'>Built by <span className='text-xs text-primary'>WuokAnk
-      </span>. The service contained in my website is available on <HoverCardDemo/>.</div>
-    </div>
+    <footer className="w-screen md:h-[3rem] h-5 pb-3 md:pt-1 md:px-20 px-10 bg-background border-t md:flex md:justify-between md:items-center grid grid-flow-row">
+      <div>
+        <div className='font-semibold text-sm flex md:items-center gap-1'>
+          <p>
+            Built by <span className='text-primary'>WuokAnk</span>
+          </p>
+          <p className='space-x-2'>
+            The service contained in my website is available on <HoverCardDemo />
+          </p>
+        </div>
+      </div>
+      <div className="flex gap-6">
+        <Button asChild variant={'link'} className='outline-none p-0'>
+          <Link href="https://github.com/">Privacy Policy</Link>
+        </Button>
+        <Button asChild variant={'link'} className='outline-none p-0'>
+          <Link href="https://github.com/">Terms of Service</Link>
+        </Button>
+        <Button asChild variant={'link'} className='outline-none p-0'>
+          <Link href="https://github.com/">Cookies Settings</Link>
+        </Button>
+      </div>
+    </footer>
   )
 }
 

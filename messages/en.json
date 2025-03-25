@@ -20,9 +20,11 @@
       "invalid": "Your email input is not correct."
     },
     "password": {
-      "label": "Password",
-      "err": "Password is required",
-      "placeholder": "password"
+      "label":"Password *",
+      "placeholder": "Enter password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity":"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
     },
     "button": {
       "text": "Sign in"
@@ -37,6 +39,14 @@
       "failure": {
         "title": "Error"
       }
+    },
+    "socialLogin": {
+      "google":"Continue with google",
+      "linkin":"Continue with linkin",
+      "github":"Continue with Github"
+    },
+    "forgotPassword": {
+      "label":"Forgot password?"
     }
   },
   "signup": {
@@ -49,13 +59,15 @@
     "email": {
       "label": "Email",
       "err": "Email is required",
-      "placeholder": "email",
+      "placeholder": "Enter your email",
       "invalid": "Your email input is not correct."
     },
     "password": {
-      "label": "Password",
-      "err": "Password is required",
-      "placeholder": "password"
+      "label":"Password *",
+      "placeholder": "Enter password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity":"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
     },
     "button": {
       "text": "Continue"
@@ -73,21 +85,107 @@
       }
     }
   },
-  "verifycode": {
-    "title": "Verification Code",
-    "description": "We have sent the code to your email, please check your email and come back here to enter the account confirmation code.",
-    "code": {
-      "label": "Enter your code",
-      "err": "Code is required",
-      "placeholder": "code"
-    },
+  "verify-email": {
+    "title": "Email Verification",
+    "description": "We have sent to your email, please check your email.",
     "button": {
-      "text": "Finish"
+      "primary": {
+        "text": "Gủi lại"
+      },
+      "second": {
+        "text":"Đăng nhập"
+      }
     },
     "progressacction": {
       "success": {
         "title": "Success",
-        "description": "Congratulations on successfully verify account."
+        "description": "Priority Email sent successfully, please check email."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  },
+  "verifiedToken": {
+    "title": "Email Verification",
+    "description": "  The verification link is invalid or has expired. Please request a new verification email."
+  },
+  "send-email-again": {
+    "title": "Request email sender",
+    "description": "Please enter your email in here in other to get verified account.",
+    "input": {
+      "label":"email *",
+      "placeholder": "Enter email",
+      "err": "Email is required",
+      "invalid": "Your email input is not correct."
+    },
+    "button": {
+      "primary": {
+        "text": "Send back"
+      }
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Priority Email sent successfully, please check email."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  },
+  "forgot-password": {
+    "title": "Request email sender",
+    "description": "Please enter your email in here in other to get verified account.",
+    "input": {
+      "label":"email *",
+      "placeholder": "Enter email",
+      "err": "Email is required",
+      "invalid": "Your email input is not correct."
+    },
+    "button": {
+      "primary": {
+        "text": "Send back"
+      }
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Priority Email sent successfully, please check email."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  },
+  "retrieve-password": {
+    "title": "Retrieve your password",
+    "description": "Please enter your new password.",
+    "password": {
+      "label":"Password *",
+      "placeholder": "Enter password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity":"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    },
+    "confirmPassword": {
+      "label":"Confirm password *",
+      "placeholder": "Enter your confirm password",
+      "required": "Confirm password is required",
+      "donotmatch":"Passwords do not match"
+    },
+    "button": {
+      "primary": {
+        "text":"Retrieve"
+      },
+      "second": {
+        "text": "Back to home"
+      }
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Retrieve password successfully."
       },
       "failure": {
         "title": "Error"

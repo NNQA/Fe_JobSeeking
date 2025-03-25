@@ -1,4 +1,5 @@
 import { User } from "@/lib/models/User";
+import { ApiClient } from "@/lib/service/api-client.server";
 import { SessionApi } from "@/lib/service/session-api.server";
 import { cookies } from "next/headers";
 
@@ -23,4 +24,18 @@ export class AuthActionFetching {
     }
     return null;
   }
+
+  static async VerifiedToken(token: string) { 
+    const api = ApiClient.instance;
+    const response = await api.post("/api/auth/verify-email", {
+      body: {
+        token: token,
+      },
+    });
+    console.log(response)
+    if (response.isOk()) {
+      return true;
+    }
+    return false;
+  } 
 }

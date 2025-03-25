@@ -11,7 +11,7 @@ export const problemDetailsSchema = z.object({
     z.array(
       z.object({
         name: z.string(),
-        reason: z.string(),
+        message: z.string(),
         code: z.optional(z.string()),
       })
     )
