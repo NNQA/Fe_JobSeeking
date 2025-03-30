@@ -19,7 +19,7 @@ const BUTTON_TEXT: Record<Role, string> = {
 };
 
 const LINK_BUTTOn: Record<Role, string> = {
-  [ROLES.CANDIDATE]: "/updateuser",
+  [ROLES.CANDIDATE]: "/welcome",
   [ROLES.SUPPLIER]: "/upgradeaccount",
 };
 
@@ -78,15 +78,6 @@ function ChooseRoleUi() {
         >
           {selectedRole && BUTTON_TEXT[selectedRole]}
         </Button>
-
-        <div className="flex items-center">
-          <span className="text-sm text-gray-600">
-            Already have an account?
-          </span>
-          <Button variant="link" asChild>
-            <Link href={`/${locale}/auth/login`}>Log In</Link>
-          </Button>
-        </div>
       </div>
     </section>
   );
