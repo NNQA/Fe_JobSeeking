@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Logo({ className }: { className?: string }) {
     return (
-        <div className="absolute top-8 left-10 z-20 flex items-center gap-2">
+        <div className="z-20 flex items-center gap-2">
             <Image
                 src="/logo.svg"
                 alt="Logo"
