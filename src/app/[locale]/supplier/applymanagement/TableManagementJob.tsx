@@ -48,7 +48,7 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
   );
 
   const filterFns = {
-    expiryStatus: (row, columnId, filterValue) => {
+    expiryStatus: (row: any, columnId: any, filterValue: any) => {
       const currentDate = new Date();
       const expiryDate = parseISO(row.getValue(columnId));
 
@@ -124,8 +124,8 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
                 status === "Active"
                   ? "default"
                   : status === "Upcoming"
-                  ? "secondary"
-                  : "destructive"
+                    ? "secondary"
+                    : "destructive"
               }
             >
               {status}
@@ -182,9 +182,9 @@ function TableManagementJob<TData>({ data }: DataTableProps<Work>) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

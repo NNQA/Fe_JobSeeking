@@ -1,4 +1,5 @@
-import { JobCategories } from '@/lib/models/Categories'
+"use client"
+import { JobCategory } from '@/lib/models/Categories'
 import React, { useState } from 'react'
 
 import {
@@ -9,14 +10,16 @@ import {
 } from "@/components/ui/tabs"
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { useProfileWizard } from '@/lib/context/ProfileWizardProvider';
 
 interface IndustrySpecializationStepProps {
-    data: JobCategories[];
+    data: JobCategory[];
 }
 
 function IndustrySpecializationStep({ data }: IndustrySpecializationStepProps) {
     const defaultValue = data[0].category;
 
+    const { formData } = useProfileWizard();
 
     return (
         <div className='w-full h-full grid grid-rows-[1fr_auto] gap-6'>
@@ -40,7 +43,7 @@ function IndustrySpecializationStep({ data }: IndustrySpecializationStepProps) {
                 {data.map((category) => (
                     <TabsContent key={category.category} value={category.category} className='md:ml-10 ml-5'>
                         <ul className='space-y-4'>
-                            {category.field.map((field) => (
+                            {category.fields.map((field) => (
                                 <li key={field.name} className="flex items-center gap-2">
                                     <Checkbox id={field.name} className='h-5 w-5' />
                                     <Label htmlFor={field.name} className="text-sm text-muted-foreground">

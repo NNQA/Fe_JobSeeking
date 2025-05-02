@@ -86,4 +86,4 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
   }
 }
 
-export const experimental_ppr = true
+// export const experimental_ppr = true  

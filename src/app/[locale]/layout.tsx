@@ -29,7 +29,7 @@ export default async function RootLayout({
     <>
       <html suppressHydrationWarning lang={locale}>
         <head />
-        <body>
+        <body className="antialiased">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

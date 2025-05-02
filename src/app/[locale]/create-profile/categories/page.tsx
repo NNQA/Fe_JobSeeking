@@ -1,9 +1,11 @@
-import { categoriesData } from "@/app/mocks/Categories";
 import IndustrySpecializationStep from "./_component/IndustrySpecializationStep";
+import { CategoriesActionFetching } from "@/lib/action/categories/categories.action";
+import { useProfileWizard } from "@/lib/context/ProfileWizardProvider";
+import { Suspense } from "react";
 
-export default function Page() {
-
-    const data = categoriesData;
+export default async function Page() {
+    const categories = await CategoriesActionFetching.getCategories();
+    console.log(categories)
     return (
         <div className="h-full grid content-center md:px-20 px-2 gap-6 py-10">
             <p>1/10</p>
@@ -14,7 +16,9 @@ export default function Page() {
                 Don't worry, you can change these choices later on.
             </p>
             <hr className="border-foreground/10 h-1" />
-            <IndustrySpecializationStep data={data} />
+            <Suspense fallback={<div className="h-10">Loading...</div>}>
+                <IndustrySpecializationStep data={categories} />
+            </Suspense>
         </div>
     );
 }

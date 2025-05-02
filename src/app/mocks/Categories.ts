@@ -1,6 +1,6 @@
-import { JobCategories } from "@/lib/models/Categories";
+import { JobCategory } from "@/lib/models/Categories";
 
-export const categoriesData: JobCategories[] = [
+export const categoriesData: JobCategory[] = [
   {
     category: "Accounting & Consulting",
     field: [
