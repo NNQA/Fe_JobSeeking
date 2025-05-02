@@ -43,10 +43,10 @@ export interface ProfileFormData {
 
 type StepKey = keyof ProfileFormData;
 
-export interface StepInfo {
-    key: StepKey;
+export interface StepConfig {
+    step: number;
     route: string;
-    label: string;
-    validate: (data: any) => string | null;
- }
-  
+    apiEndpoint: string;
+    validate: (data: ProfileFormData) => string | null;
+    getPayload: (data: ProfileFormData) => Record<string, any>;
+  }

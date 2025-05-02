@@ -11,12 +11,13 @@ interface ButtonProgressLoadingProps {
     text: string,
     className?: string;
 }
-function ButtonProgressLoading({ type, state, text, className }: ButtonProgressLoadingProps) {
+function ButtonProgressLoading({ type, state, text, className, ...props }: ButtonProgressLoadingProps) {
     return (
         <Button
             type={type ?? "button"}
             className={cn("rounded-sm relative", className)}
             disabled={state}
+            {...props}
         >
             <span
                 className={clsx("block transition ease-in-out font-bold", {

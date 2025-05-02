@@ -1,26 +1,22 @@
 "use client"
 import { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { ProfileFormData, StepInfo } from "./context.type/profilecontext.type";
+import { ProfileFormData, StepConfig } from "./context.type/profilecontext.type";
 import { JobCategory } from "../models/Categories";
 
 
 interface ProfileWizardContextValue {
     currentStep: number;
     formData: ProfileFormData;
-    // updateFormData: <K extends keyof ProfileFormData>(
-    //     stepKey: K,
-    //     data: ProfileFormData[K]
-    // ) => void;
-    nextStep: () => void;
-    prevStep: () => void;
-    // gotoStep: (step: number) => void;
-    // saveProgress: () => Promise<void>;
-    // submitStep: () => Promise<void>;
+    updateFormData: <K extends keyof ProfileFormData>(
+        stepKey: K,
+        data: ProfileFormData[K]
+    ) => void;
+    submitStep: () => Promise<void>;
+    goBack: () => void;
     loading: boolean;
     error: string | null;
     totalSteps: number;
-    isStepComplete: (step: number) => boolean;
 }
 
 
@@ -29,38 +25,40 @@ interface ProfileWizardProviderProps {
     initialData?: Partial<ProfileFormData>;
     userId?: string;
 }
-const STEPS: StepInfo[] = [
+const stepsConfig: StepConfig[] = [
     {
-        key: "category",
+        step: 1,
         route: "/create-profile/categories",
-        label: "Categories",
-        validate: (data: JobCategory) => {
-            if (!data.category) return "Please select a category";
-            if (data.fields.length < 1 || data.fields.length > 3)
-                return "Please select 1 to 3 specialties";
+        apiEndpoint: "/api/user-profile/categories",
+        validate: (data) => {
+            const { category, fields } = data.category;
+            if (!category) return "Please select a category";
+            if (fields.length < 1 || fields.length > 3)
+                return "Please select 1 to 3 fields";
             return null;
         },
+        getPayload: (data) => ({
+            category: data.category.category,
+            fields: data.category.fields,
+        }),
     },
     {
-        key: "skills",
+        step: 2,
         route: "/create-profile/skills",
-        label: "Skills",
-        validate: (data: string[]) => {
-            if (data.length === 0) return "At least one skill is required.";
-            if (data.length > 15) return "You can select a maximum of 15 skills.";
+        apiEndpoint: "/api/user-profile/skills",
+        validate: (data) => {
+            const { skills } = data;
+            if (skills.length === 0) return "At least one skill is required.";
+            if (skills.length > 15) return "You can select a maximum of 15 skills.";
             return null;
         },
+        getPayload: (data) => ({
+            userId: 1,
+            skills: data.skills,
+        }),
     },
-    // {
-    //     key: "projects",
-    //     route: "/create-profile/projects",
-    //     label: "Projects",
-    //     validate: (data: ProjectData[]) => {
-    //         if (data.length === 0) return "Please add at least one project";
-    //         return null;
-    //     },
-    // },
 ]
+const STORAGE_KEY = "profile_wizard_draft";
 
 export const ProfileWizardContext = createContext<ProfileWizardContextValue | undefined>(undefined);
 
@@ -83,72 +81,81 @@ export function ProfileWizardProvider({ children, initialData }: ProfileWizardPr
         ...initialData,
     });
 
-    const prevStep = useCallback(() => {
-        const prevStepNumber = currentStep - 1;
-        if (prevStepNumber >= 1) {
-            setCurrentStep(prevStepNumber);
-            router.push(STEPS[prevStepNumber - 1].route);
-        }
-    }, [currentStep, router]);
+    const updateFormData = useCallback(<K extends keyof ProfileFormData>(
+        stepKey: K,
+        data: ProfileFormData[K]
+    ) => {
+        setFormData((prev) => ({
+            ...prev,
+            [stepKey]: data,
+        }));
+    }, []);
 
-    // const submitStep = useCallback(async () => {
-    //     setLoading(true);
-    //     setError(null);
-
-    //     const validationError = stepConfig.validate(formData);
-    //     if (validationError) throw new Error(validationError);
-    //     const payload = stepConfig.getPayload(formData);
-
-    //   // Send POST request to the backend
-    //   const response = await fetch(stepConfig.apiEndpoint, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(payload),
-    //   });
-
-
-    // })    
-
-    const nextStep = useCallback(() => {
-        //     if (!validateCurrentStep()) return;
-
+    const submitStep = useCallback(async () => {
+        setLoading(true);
         setError(null);
 
-        setCompletedSteps(prev => {
-            const newSet = new Set(prev);
-            newSet.add(currentStep);
-            return newSet;
-        });
+        try {
+            const stepConfig = stepsConfig.find((s) => s.step === currentStep);
+            if (!stepConfig) throw new Error("Invalid step");
 
-        const nextStepNumber = currentStep + 1;
-        if (nextStepNumber <= STEPS.length) {
-            setCurrentStep(nextStepNumber);
-            router.push(STEPS[nextStepNumber - 1].route);
+            //   // Validate the form data
+            //   const validationError = stepConfig.validate(formData);
+            //   if (validationError) throw new Error(validationError);
+
+            //   // Prepare the payload
+            //   const payload = stepConfig.getPayload(formData);
+
+            //   // Send POST request to the backend
+            //   const response = await fetch(stepConfig.apiEndpoint, {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify(payload),
+            //   });
+
+            //   if (!response.ok) {
+            //     const errorData = await response.json();
+            //     throw new Error(errorData.message || "Failed to save data");
+            //   }
+
+            // Navigate to the next step
+            const nextStep = currentStep + 1;
+            const nextStepConfig = stepsConfig.find((s) => s.step === nextStep);
+            if (nextStepConfig) {
+                setCurrentStep(nextStep);
+                router.push(nextStepConfig.route);
+            } else {
+                router.push("/profile");
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("An unknown error occurred");
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, [currentStep, formData, router]);
+
+    const goBack = useCallback(() => {
+        const prevStep = currentStep - 1;
+        const prevStepConfig = stepsConfig.find((s) => s.step === prevStep);
+        if (prevStepConfig) {
+            setCurrentStep(prevStep);
+            router.push(prevStepConfig.route);
         }
     }, [currentStep, router]);
-
-
-
-
-    const isStepComplete = useCallback((step: number) => {
-        return completedSteps.has(step);
-    }, [completedSteps]);
-
     return <ProfileWizardContext.Provider
         value={{
             currentStep,
             formData,
-            // updateFormData,
-            nextStep,
-            prevStep,
-            // goToStep,
-            // saveProgress,
-            // submitProfile,
+            goBack,
+            submitStep,
+            updateFormData,
             loading,
             error,
-            totalSteps: STEPS.length,
-            isStepComplete,
-
+            totalSteps: currentStep,
         }}
     >
         {children}
