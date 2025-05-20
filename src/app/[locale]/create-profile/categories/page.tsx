@@ -5,7 +5,6 @@ import { Suspense } from "react";
 
 export default async function Page() {
     const categories = await CategoriesActionFetching.getCategories();
-    console.log(categories)
     return (
         <div className="h-full grid content-center md:px-20 px-2 gap-6 py-10">
             <p>1/10</p>

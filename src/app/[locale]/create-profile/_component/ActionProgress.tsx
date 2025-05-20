@@ -9,11 +9,11 @@ const ButtonProgressLoadingDynamic = dynamic(() => import("@/components/custom/B
 
 export default function ActionProgress() {
 
-    const { currentStep, totalSteps, goBack, submitStep, updateFormData, loading } = useProfileWizard();
+    const { currentStep, totalSteps, goBack, handleSubmit, updateFormData, loading } = useProfileWizard();
     console.log(totalSteps, currentStep);
     const progressValue = totalSteps > 1 ? (currentStep / totalSteps) * 100 : 0;
     const handleSubmitStep = async () => {
-
+        await handleSubmit();
     }
     return (
         <div className='sticky bottom-0 bg-background'>
@@ -23,6 +23,7 @@ export default function ActionProgress() {
                     Back
                 </Button>
                 <ButtonProgressLoadingDynamic
+                    onClick={handleSubmitStep}
                     state={loading}
                     text="Next step" />
             </div>

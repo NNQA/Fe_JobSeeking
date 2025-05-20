@@ -1,8 +1,8 @@
 "use client"
-import { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import { createContext, useContext, useState, ReactNode, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ProfileFormData, StepConfig } from "./context.type/profilecontext.type";
-import { JobCategory } from "../models/Categories";
+import { JobCategory } from "../models/Categories"
 
 
 interface ProfileWizardContextValue {
@@ -12,7 +12,8 @@ interface ProfileWizardContextValue {
         stepKey: K,
         data: ProfileFormData[K]
     ) => void;
-    submitStep: () => Promise<void>;
+    setSubmitStep: (handle: (() => Promise<boolean>) | null) => void;
+    handleSubmit: () => Promise<void>;
     goBack: () => void;
     loading: boolean;
     error: string | null;
@@ -32,7 +33,7 @@ const stepsConfig: StepConfig[] = [
         apiEndpoint: "/api/user-profile/categories",
         validate: (data) => {
             const { category, fields } = data.category;
-            if (!category) return "Please select a category";
+            if (!category) return "You must select at least one service.";
             if (fields.length < 1 || fields.length > 3)
                 return "Please select 1 to 3 fields";
             return null;
@@ -95,13 +96,19 @@ export function ProfileWizardProvider({ children, initialData }: ProfileWizardPr
         setLoading(true);
         setError(null);
 
+        console.log("loading")
+        console.log(loading);
         try {
             const stepConfig = stepsConfig.find((s) => s.step === currentStep);
-            if (!stepConfig) throw new Error("Invalid step");
+            if (!stepConfig) {
+                return;
+            };
 
-            //   // Validate the form data
-            //   const validationError = stepConfig.validate(formData);
-            //   if (validationError) throw new Error(validationError);
+            const validationError = stepConfig.validate(formData);
+            if (validationError) {
+                setError(validationError);
+                return;
+            };
 
             //   // Prepare the payload
             //   const payload = stepConfig.getPayload(formData);
@@ -146,12 +153,30 @@ export function ProfileWizardProvider({ children, initialData }: ProfileWizardPr
             router.push(prevStepConfig.route);
         }
     }, [currentStep, router]);
+
+    const stepSubmitHandlerRef = useRef<(() => Promise<boolean>) | null>(null);
+    const setSubmitStep = useCallback((handle: (() => Promise<boolean>) | null) => {
+        if (stepSubmitHandlerRef.current) {
+            stepSubmitHandlerRef.current = handle;
+        }
+    }, []);
+    const handleSubmit = useCallback(async () => {
+        if (stepSubmitHandlerRef.current) {
+            const isValid = await stepSubmitHandlerRef.current();
+            if (isValid) {
+                await submitStep();
+            }
+        } else {
+            await submitStep();
+        }
+    }, [submitStep]);
     return <ProfileWizardContext.Provider
         value={{
             currentStep,
             formData,
             goBack,
-            submitStep,
+            setSubmitStep,
+            handleSubmit,
             updateFormData,
             loading,
             error,

@@ -4,17 +4,14 @@ import { Transition } from '@headlessui/react'
 import ProgressCircle from '../svg/ProgressCircle'
 import clsx from 'clsx'
 import { cn } from '@/lib/utils'
-
-interface ButtonProgressLoadingProps {
-    type?: "button" | "submit" | "reset",
-    state: boolean,
-    text: string,
+interface ButtonProgressLoadingProps extends React.ComponentPropsWithoutRef<typeof Button> {
+    text?: string;
+    state?: boolean;
     className?: string;
 }
-function ButtonProgressLoading({ type, state, text, className, ...props }: ButtonProgressLoadingProps) {
+function ButtonProgressLoading({ state, text, className, ...props }: ButtonProgressLoadingProps) {
     return (
         <Button
-            type={type ?? "button"}
             className={cn("rounded-sm relative", className)}
             disabled={state}
             {...props}
