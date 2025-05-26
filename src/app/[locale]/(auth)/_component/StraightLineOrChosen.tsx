@@ -2,10 +2,10 @@ import React from 'react'
 
 function StraightLineOrChosen() {
     return (
-        <div className="w-full flex items-center gap-3">
-            <hr className="h-[1px] bg-border-hover w-48 border-none" />
-            Or
-            <hr className="h-[1px] bg-border-hover w-48 border-none" />
+        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                Or continue with
+            </span>
         </div>
     )
 }
