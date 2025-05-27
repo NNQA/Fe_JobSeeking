@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { CheckCircle, SendIcon } from "lucide-react";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
-import { toast } from "@/components/ui/use-toast";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
@@ -22,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 const Schema = (t: (arg: string) => string) => {
   return z.object({
     email: z
@@ -52,29 +52,14 @@ function FormSendMailAgain() {
     );
     result.match(
       (x) => {
-        toast({
-          variant: "success",
-          action: (
-            <div className="w-full flex items-center text-primary gap-2">
-              <CheckCircle className="h-5 w-5" />
-              <span className="first-letter:capitalize">
-                {t("progressacction.success.description")}
-              </span>
-            </div>
-          ),
-        });
+        toast.success(t("progressacction.success.description"));
         const timer = setTimeout(() => {
           router.push(`verify-email?email=${encodeURIComponent(data.email)}`);
         }, 1500);
       },
-
       async (err) => {
         const errAfterActionAs = await toActionErrorsAsync(err);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: getErrorMessage(errAfterActionAs),
-        });
+        toast.error(getErrorMessage(errAfterActionAs));
       }
     );
   }

@@ -7,9 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -20,7 +18,7 @@ function AlertCheckedTokenResult({ isOpen }: { isOpen: boolean }) {
     <AlertDialog open={!isOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="flex gap-3 items-center">
+          <AlertDialogTitle className="flex gap-3 items-center text-destructive">
             <TriangleAlert className="text-destructive" />
             {t("title")}
           </AlertDialogTitle>
@@ -28,10 +26,10 @@ function AlertCheckedTokenResult({ isOpen }: { isOpen: boolean }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
-            <Link href={"/"}>Cancel</Link>
+            <Link href={"/"} className="text-primary hover:no-underline">Cancel</Link>
           </AlertDialogCancel>
           <AlertDialogAction className="text-secondary">
-            <Link href={"/auth/send-mail-again"} className="text-secondary hover:no-underline">Send again</Link>
+            <Link href={"/send-mail-again"} className="text-secondary hover:no-underline">Send again</Link>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

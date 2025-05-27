@@ -18,7 +18,6 @@ import PasswordInput from "@/components/inputcustom/PasswordInput";
 import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
 import { ApiClient, ApiError } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
-import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { cn, getErrorMessage } from "@/lib/utils";
 import { setCookie } from "../../actions";
@@ -30,6 +29,7 @@ import { TypeResponseSuccess } from "@/lib/models/TypeResponseSuccess";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoginSchema } from "./login.zod";
 import LoginWithSocialMedia from "../../_component/LoginWithSocialMedia";
+import { toast } from "sonner";
 
 const ButtonProgressLoadingDynamic = dynamic(() => import("@/components/custom/ButtonProgressLoading"), { ssr: false });
 const CommonAlertDialog = dynamic(() => import("./CommonAlertDialog"));
@@ -108,9 +108,7 @@ function FormLogin(
         if (isUnverifiedEmailError) {
           setShowDialogError(true);
         } else {
-          toast({
-            variant: "destructive",
-            title: t("progressaction.failure.title"),
+          toast.error(t("progressaction.failure.title"), {
             description: getErrorMessage(action),
           });
         }
@@ -121,10 +119,10 @@ function FormLogin(
     <Card className="border-0 shadow-xl">
       <CardHeader className="flex flex-col">
         <CardTitle className="font-medium text-primary/50 text-lg">
-          Đăng nhập
+          {t("title")}
         </CardTitle>
         <CardDescription className="font-semibold text-2xl text-border-hover">
-          {t("title")}
+          {t("des")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -133,7 +131,7 @@ function FormLogin(
             {t("signup.title")}
           </p>
           <Link
-            href={`/${locale}/auth/signup`}
+            href={`/${locale}/signup`}
             className="text-sm font-medium"
           >
             {t("signup.link")}
@@ -141,11 +139,11 @@ function FormLogin(
         </div>
       </CardContent>
 
-      <CardContent className="flex flex-col gap-6">
+      <CardContent className="flex flex-col gap-3 mb-3">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 flex flex-col py-5"
+            className="space-y-5 flex flex-col py-3"
           >
             <FormField
               control={form.control}
@@ -155,7 +153,7 @@ function FormLogin(
                   <FormLabel>Email *</FormLabel>
                   <FormControl>
                     <InputCustomIcon
-                      placeholder="Nhập email của bạn"
+                      placeholder={t("email.placeholder")}
                       {...field}
                       icon={<Mail className="h-4 w-4 mt-1 text-primary" />}
                     />
@@ -171,7 +169,7 @@ function FormLogin(
                 <FormItem>
                   <div className="flex justify-between items-center">
                     <FormLabel>Password *</FormLabel>
-                    <Link href={`/auth/forgotpassword`} aria-label="link to Page forgot" className="text-sm font-medium">{t("forgotPassword.label")}</Link>
+                    <Link href={`/forgotpassword`} aria-label="link to Page forgot" className="text-sm font-medium">{t("forgotPassword.label")}</Link>
                   </div>
                   <FormControl>
                     <PasswordInput id="password" placeholder={t("password.placeholder")} {...field} />
@@ -189,9 +187,9 @@ function FormLogin(
               />
             </div>
           </form>
-          <StraightLineOrChosen />
-          <LoginWithSocialMedia textGithub={t("socialLogin.github")} textLinkin={t("socialLogin.linkin")} textGoogle={t("socialLogin.google")} key={"Designposter"} />
         </Form>
+        <StraightLineOrChosen t={t("socialLogin.or")} />
+        <LoginWithSocialMedia textGithub={t("socialLogin.github")} textLinkin={t("socialLogin.linkin")} textGoogle={t("socialLogin.google")} key={"Designposter"} />
         <CommonAlertDialog
           open={showDialog}
           onOpenChange={setShowDialog}
@@ -210,7 +208,7 @@ function FormLogin(
           titleClassName="text-destructive"
           cancelText={t("progressaction.failure.buttoncancel")}
           actionText={t("progressaction.failure.button")}
-          actionLink="/auth/send-mail-again"
+          actionLink="/send-mail-again"
         />
       </CardContent>
     </Card>

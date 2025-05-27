@@ -6,16 +6,18 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import TooltipIconLogo from "./ToolTipIconLogo";
+import { cn } from "@/lib/utils";
 
 interface LoginposterProps {
     textGoogle: string;
     textLinkin: string;
     textGithub: string;
+    className?: string;
 }
-function LoginWithSocialMedia({ textGithub, textGoogle, textLinkin }: LoginposterProps) {
+function LoginWithSocialMedia({ textGithub, textGoogle, textLinkin, className }: LoginposterProps) {
     const linkGGLogin = `${process.env.NEXT_PUBLIC_API_GG}/${"vi"}${process.env.NEXT_PUBLIC_GOOGLE_CLIENT}`;
     return (
-        <div className="flex gap-5 justify-center">
+        <div className={cn("flex gap-5 justify-center", className)}>
             <TooltipIconLogo icon={
                 <GitHubLogoIcon className="w-5 h-5"></GitHubLogoIcon>
             }

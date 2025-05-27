@@ -10,13 +10,6 @@ const ServerFormSendMailAgain = dynamic(() => import('./_component/FormSendMail'
 
 export default function Page() {
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
-      <Logo />
-      <div className="h-full  grid place-content-center z-10 pb-20">
-        <div className="order-2 md:order-2">
-          <ServerFormSendMailAgain />
-        </div>
-      </div>
-    </div>
+    <ServerFormSendMailAgain />
   );
 }

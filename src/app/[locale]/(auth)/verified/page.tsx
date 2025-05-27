@@ -16,7 +16,7 @@ export default async function Page({
   }
   console.log(searchParams.token);
   const checkToken = await AuthActionFetching.VerifiedToken(searchParams.token);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1500));
 
   if (checkToken) {
     redirect("/auth/login");
