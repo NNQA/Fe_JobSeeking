@@ -131,7 +131,7 @@ function FormLogin(
             {t("signup.title")}
           </p>
           <Link
-            href={`/${locale}/signup`}
+            href={`/${locale}/newUser`}
             className="text-sm font-medium"
           >
             {t("signup.link")}

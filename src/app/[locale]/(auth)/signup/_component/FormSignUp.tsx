@@ -11,11 +11,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import PasswordInput from "@/components/inputcustom/PasswordInput";
 import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
-import { CheckCircle, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
 import clsx from "clsx";
@@ -27,11 +27,16 @@ import dynamic from "next/dynamic";
 import { SignUpSchema } from "./signup.zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { ERole } from "@/lib/models/User";
 
 const ButtonProgressLoadingDynamic = dynamic(() => import("@/components/custom/ButtonProgressLoading"), { ssr: false });
 
 
-function FormSignup() {
+function FormSignup({
+  role
+}: {
+  role: string
+}) {
   const router = useRouter();
   const t = useTranslations("signup");
   const formSchema = SignUpSchema(t);
@@ -44,21 +49,21 @@ function FormSignup() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const loadingToastId = toast.loading(t("progressacction.loading.description") || "Processing...");
     const result = await ApiClient.instance.post("api/auth/signup", {
       body: {
         email: data.email,
         password: data.password,
+        role: role as ERole,
       },
     });
+    toast.dismiss(loadingToastId);
     result.match(
       (x) => {
         toast.success('success', {
           description: t("progressacction.success.description")
         });
-        const timer = setTimeout(() => {
-          router.push(`verify-email?email=${encodeURIComponent(data.email)}`);
-        }, 1500);
-        console.log(x);
+        router.push(`verify-email?email=${encodeURIComponent(data.email)}`);
       },
       async (err) => {
         const resultErr = await toActionErrorsAsync(err);
