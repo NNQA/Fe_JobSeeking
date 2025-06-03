@@ -1,37 +1,32 @@
 "use client";
 import React, {
-  startTransition,
   useEffect,
   useState,
-  useTransition,
 } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 
 import { useTranslations } from "next-intl";
-import { CheckCircle } from "lucide-react";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
-import { toast } from "@/components/ui/use-toast";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
 import {
   notFound,
-  useParams,
   usePathname,
-  useRouter,
   useSearchParams,
 } from "next/navigation";
 import Link from "next/link";
 import { cn, getErrorMessage } from "@/lib/utils";
+import { toast } from "sonner";
 
 function FormVerifiCation() {
   const t = useTranslations("verify-email");
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState<String | null>(null);
-  const [isLoading, setIsLoading] = useTransition();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   useEffect(() => {
     const url = searchParams.toString();
     if (!url || url.length < 1) {
@@ -40,6 +35,7 @@ function FormVerifiCation() {
     setEmail(decodeURIComponent(url.split("=")[1]));
   }, [pathname, searchParams]);
   async function hanleSendMailAgain() {
+    setIsLoading(true);
     const result = await ApiClient.instance.post(
       "api/auth/request-token-email",
       {
@@ -50,27 +46,14 @@ function FormVerifiCation() {
     );
     result.match(
       (x) => {
-        toast({
-          variant: "success",
-          action: (
-            <div className="w-full flex items-center text-primary gap-2">
-              <CheckCircle className="h-5 w-5" />
-              <span className="first-letter:capitalize">
-                {t("progressacction.success.description")}
-              </span>
-            </div>
-          ),
-        });
+        toast.success(t("progressacction.success.description"))
       },
       async (err) => {
         const errAfterActionAs = await toActionErrorsAsync(err);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: getErrorMessage(errAfterActionAs),
-        });
+        toast.error(getErrorMessage(errAfterActionAs));
       }
     );
+    setIsLoading(false)
   }
   return (
     <div className="w-[510px] bg-background px-12 py-8 rounded-md shadow-xl flex flex-col gap-10">
@@ -84,7 +67,7 @@ function FormVerifiCation() {
           type="submit"
           className="w-fit relative text-secondary"
           disabled={isLoading}
-          onClick={() => startTransition(() => hanleSendMailAgain())}
+          onClick={() => hanleSendMailAgain()}
         >
           <span
             className={clsx("block transition ease-in-out", {

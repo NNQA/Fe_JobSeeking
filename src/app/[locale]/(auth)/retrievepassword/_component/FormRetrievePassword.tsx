@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { CheckCircle, SendIcon } from "lucide-react";
 import { ApiClient } from "@/lib/service/api-client.server";
 import { toActionErrorsAsync } from "@/lib/error.server";
-import { toast } from "@/components/ui/use-toast";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
@@ -22,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import PasswordInput from "@/components/inputcustom/PasswordInput";
+import { toast } from "sonner";
 export const Schema = (t: (arg: string) => string) => {
     return z
         .object({
@@ -67,32 +67,18 @@ function FormRetrievePassword({ checkToken }: { checkToken: string }) {
         );
         result.match(
             (x) => {
-                toast({
-                    variant: "success",
-                    action: (
-                        <div className="w-full flex items-center text-primary gap-2">
-                            <CheckCircle className="h-5 w-5" />
-                            <span className="first-letter:capitalize">
-                                {t("progressacction.success.description")}
-                            </span>
-                        </div>
-                    ),
-                });
+                toast.success(t("progressacction.success.description"));
             },
             async (err) => {
                 const errAfterActionAs = await toActionErrorsAsync(err);
-                toast({
-                    variant: "destructive",
-                    title: "Error",
-                    description: getErrorMessage(errAfterActionAs),
-                });
+                toast.error(getErrorMessage(errAfterActionAs));
             }
         );
     }
     return (
         <div className="w-[510px] bg-background dark:bg-background/80 shadow-md px-12 py-8 rounded-md flex flex-col gap-6">
-            <div className="flex items-center gap-4">
-                <SendIcon className="h-6 w-6 text-primary" />
+            <div className="flex items-center gap-4 text-green-500">
+                <SendIcon className="h-6 w-6" />
                 <h1 className="font-semibold ">{t("title")}</h1>
             </div>
             <div>{t("description")}</div>
@@ -137,13 +123,13 @@ function FormRetrievePassword({ checkToken }: { checkToken: string }) {
                     />
                     <div className="mt-9 text-end space-x-4">
                         <Button variant={"outlineVariant"} asChild>
-                            <Link href={"/"} className="hover:no-underline">
+                            <Link href={"/"} className="hover:no-underline text-primary">
                                 {t("button.second.text")}
                             </Link>
                         </Button>
                         <Button
                             type="submit"
-                            className="rounded-sm relative bg-primary/90 dark:text-secondary-foreground"
+                            className="relative"
                             disabled={form.formState.isSubmitting}
                         >
                             <span
