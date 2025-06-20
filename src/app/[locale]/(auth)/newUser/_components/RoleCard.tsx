@@ -24,19 +24,19 @@ export const RoleCard: React.FC<RoleCardProps> = ({
   onSelect,
 }) => (
   <Card
-    className={`p-2 cursor-pointer transition-all relative ${isSelected ? "border-green-600" : "border-gray-200"
+    className={`p-4 cursor-pointer transition-all relative border-2 ${isSelected ? "border-green-600" : "border-border"
       }`}
     onClick={() => onSelect(role)}
   >
     <CardHeader className="items-start">{icon}</CardHeader>
     <CardContent>
-      <h2 className="text-[22px] font-normal leading-tight tracking-[-0.02em]">
+      <h2 className="text-lg font-normal leading-tight tracking-[-0.02em]">
         {title}
       </h2>
     </CardContent>
     <div className="absolute top-8 right-4">
       <div
-        className={`h-4 w-4 rounded-full border-2 ${isSelected ? "bg-green-600 border-green-600" : "border-gray-300"
+        className={`h-4 w-4 rounded-full border-2 ${isSelected ? "bg-green-700 border-green-700" : "border-gray-300"
           }`}
       />
     </div>

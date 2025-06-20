@@ -20,7 +20,6 @@ export default function Page({
   if (!validRole) {
     redirect("/newUser");
   }
-  console.log(validRole)
   return (
     <FormSignup role={validRole} />
   );

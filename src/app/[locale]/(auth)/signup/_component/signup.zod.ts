@@ -1,10 +1,11 @@
 
 import { z } from "zod";
-export                                                                                                                                                   const SignUpSchema = (t: (arg: string) => string) => {
+export const SignUpSchema = (t: (arg: string) => string) => {
   return z.object({
     email: z
-      .string({ required_error: t("email.err") })
-      .email(t("email.invalid")),
+      .string()
+      .email(t("email.invalid"))
+      .min(1, { message: t("email.required") }),
     password: z
       .string()
       .min(1, { message: t("password.required") })
