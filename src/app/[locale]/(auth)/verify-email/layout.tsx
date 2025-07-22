@@ -1,6 +1,6 @@
-export default function Layout({children}: {children: React.ReactNode}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <section>
+        <section className="grid place-items-center">
             {children}
         </section>
     );

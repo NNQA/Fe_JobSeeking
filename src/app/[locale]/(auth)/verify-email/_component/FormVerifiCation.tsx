@@ -1,108 +1,124 @@
 "use client";
 import React, {
-  useEffect,
-  useState,
+  useTransition,
 } from "react";
-
-import { Button, buttonVariants } from "@/components/ui/button";
-
 import { useTranslations } from "next-intl";
-import { ApiClient } from "@/lib/service/api-client.server";
-import { toActionErrorsAsync } from "@/lib/error.server";
 import clsx from "clsx";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "@/components/svg/ProgressCircle";
-import {
-  notFound,
-  usePathname,
-  useSearchParams,
-} from "next/navigation";
 import Link from "next/link";
-import { cn, getErrorMessage } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-
-function FormVerifiCation() {
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, CheckCircle, Mail } from "lucide-react";
+import { sendEmailAgainAction } from "../../actions";
+import { TypeResponseError } from "@/lib/models/TypeResponseSuccess";
+import { Button, buttonVariants } from "@/components/ui/button";
+function FormVerifiCation({ email }: { email: string }) {
   const t = useTranslations("verify-email");
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [email, setEmail] = useState<String | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  useEffect(() => {
-    const url = searchParams.toString();
-    if (!url || url.length < 1) {
-      notFound();
-    }
-    setEmail(decodeURIComponent(url.split("=")[1]));
-  }, [pathname, searchParams]);
-  async function hanleSendMailAgain() {
-    setIsLoading(true);
-    const result = await ApiClient.instance.post(
-      "api/auth/request-token-email",
-      {
-        body: {
-          email: email,
-        },
+  const [isPending, startTransition] = useTransition();
+  const handleSendMailAgain = () => {
+    startTransition(async () => {
+      const result = await sendEmailAgainAction(email);
+      if (!result.success) {
+        const error = result as TypeResponseError
+        toast.error(t("progressacction.failure.title"), {
+          description: error.error
+        });
+        return;
       }
-    );
-    result.match(
-      (x) => {
-        toast.success(t("progressacction.success.description"))
-      },
-      async (err) => {
-        const errAfterActionAs = await toActionErrorsAsync(err);
-        toast.error(getErrorMessage(errAfterActionAs));
-      }
-    );
-    setIsLoading(false)
+      toast.success('success', {
+        description: t("progressacction.success.description")
+      });
+    });
   }
   return (
-    <div className="w-[510px] bg-background px-12 py-8 rounded-md shadow-xl flex flex-col gap-10">
-      <div className="flex flex-col gap-1">
-        <p className="font-medium text-border-hover">Step 2 of 2</p>
-        <h1 className="font-semibold ">{t("title")}</h1>
-      </div>
-      <div>{t("description")}</div>
-      <div className="flex gap-4">
-        <Button
-          type="submit"
-          className="w-fit relative text-secondary"
-          disabled={isLoading}
-          onClick={() => hanleSendMailAgain()}
-        >
-          <span
-            className={clsx("block transition ease-in-out", {
-              "opacity-0": isLoading,
-              "scale-0": isLoading,
-            })}
-          >
-            {t("button.primary.text")}
-          </span>
-
-          <Transition
-            show={isLoading}
-            enter="transition ease-in-out"
-            enterFrom="opacity-0 scale-0"
-            leave="transition ease-in-out duration-300"
-            leaveTo="opacity-0 scale-0"
-          >
-            <div className="w-[50%] h-[50%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <ProgressCircle
-                className="w-full h-full text-primary-500"
-                aria-label="signing in"
-              />
+    <Card className="max-w-md w-full shadow-2xl shadow-primary/5 backdrop-blur-sm">
+      <CardContent className="p-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <CheckCircle className="w-4 h-4 text-primary" />
             </div>
-          </Transition>
-        </Button>
-        <Button variant={"secondary"}>
-          <Link
-            href={`/auth/login`}
-            className={cn(buttonVariants({ variant: "link" }))}
+            <div className="w-8 h-0.5 bg-primary/20"></div>
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground text-sm font-medium">
+                2
+              </span>
+            </div>
+            <span className="text-sm text-muted-foreground ml-2">{t("step")}</span>
+          </div>
+        </div>
+
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Mail className="w-8 h-8 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{t("check_email")}</h1>
+          <p className="text-muted-foreground leading-relaxed">
+            {t("instruction")}
+          </p>
+        </div>
+        <div className="space-y-3">
+          <Button
+            onClick={() => handleSendMailAgain()}
+            disabled={isPending}
+            type="submit"
+            className="w-full relative hover:bg-primary/90 text-primary-foreground font-medium py-3 rounded-lg transition-all hover:shadow-primary/20"
           >
-            {t("button.second.text")}
-          </Link>
-        </Button>
-      </div>
-    </div>
+            <div
+              className={clsx("block transition ease-in-out", {
+                "opacity-0": isPending,
+                "scale-0": isPending,
+              })}
+            >
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                <span>{t("resend_email")}</span>
+              </div>
+            </div>
+
+            <Transition
+              show={isPending}
+              enter="transition ease-in-out"
+              enterFrom="opacity-0 scale-0"
+              leave="transition ease-in-out duration-300"
+              leaveTo="opacity-0 scale-0"
+            >
+              <div className="w-[50%] h-[50%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <ProgressCircle
+                  className="w-full h-full text-primary-500"
+                  aria-label="signing in"
+                />
+              </div>
+            </Transition>
+          </Button>
+          <Button variant={"ghost"} asChild
+            className="w-full text-muted-foreground hover:text-foreground hover:bg-primary/5 py-3 rounded-lg transition-all duration-200"
+          >
+            <Link
+              href={"/login"}
+              className={cn(buttonVariants({ variant: "link" }), "hover:no-underline")}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              {t("back_to_login")}
+            </Link>
+          </Button>
+        </div>
+        <div className="mt-6 pt-6 border-t border-border">
+          <p className="text-center text-sm text-muted-foreground">
+            {t("didnt_receive")}
+            <Button
+              variant={"ghost"}
+              onClick={handleSendMailAgain}
+              className="text-primary hover:text-primary/80 hover:bg-transparent font-medium underline underline-offset-2 transition-colors"
+            >
+              {t("try_again")}
+            </Button>
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
