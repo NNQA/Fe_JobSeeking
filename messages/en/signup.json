@@ -1,0 +1,45 @@
+{
+  "signup": {
+    "title": "Create an account",
+    "subtitle": "Step 1 of 2",
+    "login": {
+      "title": "Sign up with email",
+      "accountexitst": "Already have an account?",
+      "link": "Sign in"
+    },
+    "email": {
+      "label": "Email",
+      "required": "Email is required",
+      "placeholder": "Enter your email",
+      "invalid": "Your email input is not correct."
+    },
+    "password": {
+      "label": "Password *",
+      "placeholder": "Enter password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    },
+    "button": {
+      "text": "Continue"
+    },
+    "progressacction": {
+      "success": {
+        "title": "Signup successfully",
+        "description": "Congratulations on successfully creating an account."
+      },
+      "failure": {
+        "title": "Error",
+        "description": "Did you confirm your account? Please cofirm accoutn.",
+        "button": "Verify",
+        "buttoncancel": "Cancel"
+      }
+    },
+    "socialLogin": {
+      "or": "Or continue with",
+      "google": "Continue with google",
+      "linkin": "Continue with linkin",
+      "github": "Continue with Github"
+    }
+  }
+}

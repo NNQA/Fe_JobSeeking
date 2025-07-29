@@ -1,0 +1,42 @@
+{
+  "signup": {
+    "title": "Tạo tài khoản",
+    "subtitle": "Bước đầu",
+    "login": {
+      "title": "Đăng ký với email",
+      "accountexitst": "Đã có tài khoản?",
+      "link": "Đăng nhập"
+    },
+    "email": {
+      "label": "Email",
+      "required": "Email được yêu cầu",
+      "placeholder": "Nhập email của bạn",
+      "invalid": "Email của bạn không đúng."
+    },
+    "password": {
+      "label": "Mật khẩu",
+      "placeholder": "Nhập mật khẩu",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
+    },
+    "button": {
+      "text": "Tiếp tục"
+    },
+    "progressacction": {
+      "success": {
+        "title": "Đăng ký thành công",
+        "description": "Chúc mừng bạn đã tạo thành công tài khoản"
+      },
+      "failure": {
+        "title": "Lỗi"
+      }
+    },
+    "socialLogin": {
+      "or": "Hoặc tiếp tục với",
+      "google": "Tiếp tục với google",
+      "linkin": "Tiếp tục với linkin",
+      "github": "Tiếp tục với Github"
+    }
+  }
+}

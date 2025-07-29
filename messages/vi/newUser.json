@@ -1,0 +1,17 @@
+{
+  "newUser": {
+    "gettingStarted": "Bắt đầu",
+    "chooseYourPath": "Chọn hướng đi của bạn",
+    "chooseYourPathDescription": "Chọn cách bạn muốn sử dụng nền tảng của chúng tôi để bắt đầu",
+    "lookingForWork": "Tôi đang tìm việc",
+    "lookingForWorkDescription": "Tìm cơ hội và kết nối với nhà tuyển dụng cần kỹ năng của bạn",
+    "hiringTalent": "Tôi đang tuyển người",
+    "hiringTalentDescription": "Đăng dự án và tìm ứng viên phù hợp cho nhu cầu doanh nghiệp của bạn",
+    "selectRole": "Chọn vai trò để tiếp tục",
+    "buttonText": {
+      "select": "Chọn vai trò để tiếp tục",
+      "user": "Đăng ký làm Ứng viên",
+      "supplier": "Tham gia làm Nhà cung cấp"
+    }
+  }
+}

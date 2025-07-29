@@ -1,0 +1,17 @@
+{
+  "newUser": {
+    "gettingStarted": "Getting Started",
+    "chooseYourPath": "Choose your path",
+    "chooseYourPathDescription": "Select how you'd like to use our platform to get started",
+    "lookingForWork": "I'm looking for work",
+    "lookingForWorkDescription": "Find opportunities and connect with employers who need your skills",
+    "hiringTalent": "I'm hiring talent",
+    "hiringTalentDescription": "Post projects and find qualified candidates for your business needs",
+    "selectRole": "Select a role to continue",
+    "buttonText": {
+      "select": "Select a role to continue",
+      "user": "Apply as a Candidate",
+      "supplier": "Join as a Supplier"
+    }
+  }
+}
