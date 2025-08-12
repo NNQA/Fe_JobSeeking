@@ -1,5 +1,9 @@
 {
   "newUser": {
+    "metadata": {
+      "title": "Sign up",
+      "description": "This is the sign up page"
+    },
     "gettingStarted": "Getting Started",
     "chooseYourPath": "Choose your path",
     "chooseYourPathDescription": "Select how you'd like to use our platform to get started",

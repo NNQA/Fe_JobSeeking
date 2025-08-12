@@ -1,8 +1,12 @@
 {
   "newUser": {
+    "metadata": {
+      "title": "Đăng ký",
+      "description": "Đây là trang đăng ký"
+    },
     "gettingStarted": "Bắt đầu",
     "chooseYourPath": "Chọn hướng đi của bạn",
-    "chooseYourPathDescription": "Chọn cách bạn muốn sử dụng nền tảng của chúng tôi để bắt đầu",
+    "chooseYourPathDescription": "Chọn vai trò bạn muốn sử dụng trên nền tảng để bắt đầu",
     "lookingForWork": "Tôi đang tìm việc",
     "lookingForWorkDescription": "Tìm cơ hội và kết nối với nhà tuyển dụng cần kỹ năng của bạn",
     "hiringTalent": "Tôi đang tuyển người",
