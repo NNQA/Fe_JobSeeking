@@ -1,5 +1,9 @@
 {
   "signup": {
+    "metadata": {
+      "title": "Đăng ký",
+      "description": "Dây là trang đăng ký"
+    },
     "title": "Tạo tài khoản",
     "subtitle": "Bước đầu",
     "login": {

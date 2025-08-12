@@ -1,7 +1,24 @@
 import { redirect } from "next/navigation";
 import FormSignup from "./_component/FormSignUp";
 import { ERole } from "@/lib/models/User";
+import { Metadata, ResolvingMetadata } from "next";
+import { getTranslations } from "next-intl/server";
 
+type Props = {
+  params: Promise<{ slug: string, locale: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "signup" });
+  return {
+    title: t("metadata.title"),
+    description: t("metadata.description"),
+  }
+}
 export default function Page({
   searchParams,
 }: {

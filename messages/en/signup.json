@@ -1,5 +1,9 @@
 {
   "signup": {
+    "metadata": {
+      "title": "Sign up",
+      "description": "This is the sign up page"
+    },
     "title": "Create an account",
     "subtitle": "Step 1 of 2",
     "login": {
