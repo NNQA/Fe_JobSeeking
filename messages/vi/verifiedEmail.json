@@ -1,0 +1,24 @@
+{
+  "verify-email": {
+    "metadata": {
+      "title": "Xác minh email",
+      "description": "Trang xác minh email"
+    },
+    "step": "Bước 2 trên 2",
+    "check_email": "Kiểm tra email của bạn",
+    "instruction": "Chúng tôi đã gửi một liên kết xác minh đến địa chỉ email của bạn. Vui lòng kiểm tra hộp thư và nhấp vào liên kết để tiếp tục.",
+    "resend_email": "Gửi lại email",
+    "back_to_login": "Quay lại đăng nhập",
+    "didnt_receive": "Không nhận được email? Kiểm tra thư mục spam hoặc",
+    "try_again": "thử lại",
+    "progressacction": {
+      "success": {
+        "title": "Thành công",
+        "description": "Gửi email thành công, vui lòng kiểm tra email."
+      },
+      "failure": {
+        "title": "Lỗi"
+      }
+    }
+  }
+}

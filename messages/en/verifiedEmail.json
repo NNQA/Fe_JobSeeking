@@ -1,0 +1,24 @@
+{
+  "verify-email": {
+    "metadata": {
+      "title": "Verify Email",
+      "description": "Email verification page"
+    },
+    "step": "Step 2 of 2",
+    "check_email": "Check your email",
+    "instruction": "We've sent a verification link to your email address. Please check your inbox and click the link to continue.",
+    "resend_email": "Resend email",
+    "back_to_login": "Back to login",
+    "didnt_receive": "Didn't receive the email? Check your spam folder or",
+    "try_again": "try again",
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Priority Email sent successfully, please check email."
+      },
+      "failure": {
+        "title": "Error"
+      }
+    }
+  }
+}
