@@ -1,0 +1,56 @@
+{
+  "signin": {
+    "metadata": {
+      "title": "Đăng nhập",
+      "description": "Đăng nhập vào tài khoản của bạn để tiếp tục sử dụng dịch vụ."
+    },
+    "title": "Đăng nhập",
+    "des": "Chào mừng trở lại",
+    "signup": {
+      "title": "Bạn là người dùng mới?",
+      "link": "Đăng ký."
+    },
+    "email": {
+      "label": "Email",
+      "err": "Email được yêu cầu",
+      "placeholder": "Nhập email của bạn",
+      "invalid": "Email của bạn không đúng."
+    },
+    "password": {
+      "label": "Mật khẩu *",
+      "placeholder": "Nhập mật khẩu của bạn",
+      "required": "Ô này không được để trống",
+      "length": "Mật khẩu ít nhất 8 ký tự.",
+      "complexity": "Mật khẩy ít nhất phải bao gồm 1 chữ viết hoa, 1 chữ thường, 1 số, và 1 ký tự đặc biệt."
+    },
+    "button": {
+      "text": "Tiếp tục"
+    },
+    "suggestionText": "Đăng nhập bằng cách khác",
+    "policy": "Bằng việc đăng nhập bằng tài khoản mạng xã hội của mình, tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của JobSeeking",
+    "progressaction": {
+      "success": {
+        "title": "Đăng nhập thành công.",
+        "description": "Chào mừng bạn quay lại với dịch vụ của chúng tôi."
+      },
+      "failure": {
+        "title": "Error",
+        "description": "Bạn chưa xác thực email xin vui lòng xác thực email.",
+        "button": "Xác thực",
+        "buttoncancel": "Hủy"
+      },
+      "error": {
+        "description": "Tài khoản đăng nhập không chính xác."
+      }
+    },
+    "socialLogin": {
+      "or": "Hoặc tiếp tục với",
+      "google": "Tiếp tục với google",
+      "linkin": "Tiếp tục với linkin",
+      "github": "Tiếp tục với Github"
+    },
+    "forgotPassword": {
+      "label": "Quên mật khẩu?"
+    }
+  }
+}

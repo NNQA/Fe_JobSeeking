@@ -1,0 +1,56 @@
+{
+  "signin": {
+    "metadata": {
+      "title": "Log in",
+      "description": "Welcome back to our service. Please log in to continue."
+    },
+    "title": "Log in",
+    "des": "Welcome back",
+    "signup": {
+      "title": "Are you a new user?",
+      "link": "Signup."
+    },
+    "email": {
+      "label": "Email",
+      "err": "Email is required",
+      "placeholder": "Enter your email",
+      "invalid": "Your email input is not correct."
+    },
+    "password": {
+      "label": "Password *",
+      "placeholder": "Enter your password",
+      "required": "Password is required",
+      "length": "Password must be at least 8 characters long",
+      "complexity": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    },
+    "button": {
+      "text": "Sign in"
+    },
+    "suggestionText": "Or login other way",
+    "policy": "By logging in with my social network account, I have read and agreed to TopCV's Terms of Service and Privacy Policy",
+    "progressaction": {
+      "success": {
+        "title": "Login successfully",
+        "description": "Welcome you back with my service."
+      },
+      "failure": {
+        "title": "Error",
+        "description": "You are not verified email, please check email and verify your account.",
+        "button": "Verify",
+        "buttoncancel": "Cancel"
+      },
+      "error": {
+        "description": "Incorrect login account."
+      }
+    },
+    "socialLogin": {
+      "or": "Or continue with",
+      "google": "Continue with google",
+      "linkin": "Continue with linkin",
+      "github": "Continue with Github"
+    },
+    "forgotPassword": {
+      "label": "Forgot password?"
+    }
+  }
+}

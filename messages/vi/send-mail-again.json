@@ -1,0 +1,34 @@
+{
+  "send-email-again": {
+    "metadata": {
+      "title": "Gửi lại email xác thực",
+      "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn."
+    },
+    "title": "Request email sender",
+    "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn.",
+    "input": {
+      "label": "Email *",
+      "placeholder": "Nhập email",
+      "err": "Email được yêu cầu",
+      "invalid": "Email của bạn không đúng."
+    },
+    "button": {
+      "primary": {
+        "text": "Gửi lại"
+      }
+    },
+    "progressacction": {
+      "success": {
+        "title": "Success",
+        "description": "Đã gửi mail trước đó. Vui lòng kiểm tra email."
+      },
+      "failure": {
+        "title": "Error"
+      },
+      "loading": {
+        "title": "Loading",
+        "description": "Đợi một lát chúng tôi đang gửi email cho bạn."
+      }
+    }
+  }
+}

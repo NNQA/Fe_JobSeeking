@@ -1,134 +1,105 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
-import { useTranslations } from "next-intl";
-import { CheckCircle, SendIcon } from "lucide-react";
-import { ApiClient } from "@/lib/service/api-client.server";
-import { toActionErrorsAsync } from "@/lib/error.server";
-import clsx from "clsx";
-import { Transition } from "@headlessui/react";
-import ProgressCircle from "@/components/svg/ProgressCircle";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { getErrorMessage } from "@/lib/utils";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import InputCustomIcon from "@/components/inputcustom/InputCustomIcon";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { z } from "zod"
+import { useTranslations } from "next-intl"
+import { Mail, Loader2 } from "lucide-react"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { sendEmailServerAction } from "../action"
+import type { TypeResponseError } from "@/lib/models/TypeResponseSuccess"
+import ButtonProgressLoading from "@/components/custom/ButtonProgressLoading"
+
 const Schema = (t: (arg: string) => string) => {
   return z.object({
-    email: z
-      .string({ required_error: t("input.err") })
-      .email(t("input.invalid")),
-  });
-};
-function FormSendMailAgain() {
-  const t = useTranslations("send-email-again");
-  const router = useRouter();
+    email: z.string({ required_error: t("input.err") }).email(t("input.invalid")),
+  })
+}
 
-  const formSchema = Schema(t);
+function FormSendMailAgain() {
+  const t = useTranslations("send-email-again")
+  const router = useRouter()
+
+  const formSchema = Schema(t)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
     },
-  });
+  })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const result = await ApiClient.instance.post(
-      "api/auth/request-token-email",
-      {
-        body: {
-          email: data.email,
-        },
+    const loadingToastId = toast.loading(t("progressacction.loading.description"))
+    try {
+      const result = await sendEmailServerAction(data.email)
+      toast.dismiss(loadingToastId)
+      if (result.success) {
+        toast.success(result.message || t("progressacction.success.description"))
+        setTimeout(() => {
+          router.push(`verify-email?email=${encodeURIComponent(data.email)}`)
+        }, 1500)
+      } else {
+        const error = result as TypeResponseError
+        toast.error(error.error)
       }
-    );
-    result.match(
-      (x) => {
-        toast.success(t("progressacction.success.description"));
-        const timer = setTimeout(() => {
-          router.push(`verify-email?email=${encodeURIComponent(data.email)}`);
-        }, 1500);
-      },
-      async (err) => {
-        const errAfterActionAs = await toActionErrorsAsync(err);
-        toast.error(getErrorMessage(errAfterActionAs));
-      }
-    );
+    } catch (error) {
+      toast.dismiss(loadingToastId)
+      toast.error("An unexpected error occurred")
+    }
   }
-  return (
-    <div className="w-[510px] bg-background dark:bg-background/80 shadow-md px-12 py-8 rounded-md flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <SendIcon className="h-6 w-6 text-primary" />
-        <h1 className="font-semibold ">{t("title")}</h1>
-      </div>
-      <div>{t("description")}</div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className=""
-        >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="email">{t("input.label")}</FormLabel>
-                <FormControl>
-                  <InputCustomIcon
-                    icon={null}
-                    id="email"
-                    className=""
-                    placeholder={t("input.placeholder")}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="mt-9 text-end">
-            <Button
-              type="submit"
-              className="rounded-sm relative bg-primary/90 dark:text-secondary-foreground"
-              disabled={form.formState.isSubmitting}
-            >
-              <span
-                className={clsx("block transition ease-in-out", {
-                  "opacity-0": form.formState.isSubmitting,
-                  "scale-0": form.formState.isSubmitting,
-                })}
-              >
-                {t("button.primary.text")}
-              </span>
 
-              <Transition
-                show={form.formState.isSubmitting}
-                enter="transition ease-in-out"
-                enterFrom="opacity-0 scale-0"
-                leave="transition ease-in-out duration-300"
-                leaveTo="opacity-0 scale-0"
-              >
-                <div className="w-[50%] h-[50%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <ProgressCircle
-                    className="w-full h-full text-primary-500"
-                    aria-label="signing in"
-                  />
-                </div>
-              </Transition>
-            </Button>
+  return (
+    <div className="flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-lg">
+              <Mail className="w-6 h-6 text-primary-foreground" />
+            </div>
           </div>
-        </form>
-      </Form>
+          <CardTitle className="text-xl">{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("input.label")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        placeholder={t("input.placeholder")}
+                        disabled={form.formState.isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <ButtonProgressLoading
+                type="submit"
+                className="w-full"
+                state={form.formState.isSubmitting}
+                text={t("button.primary.text")}
+              />
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
-  );
+  )
 }
 
-export default FormSendMailAgain;
+export default FormSendMailAgain
