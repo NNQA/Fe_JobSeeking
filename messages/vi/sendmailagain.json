@@ -4,7 +4,7 @@
       "title": "Gửi lại email xác thực",
       "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn."
     },
-    "title": "Request email sender",
+    "title": "Gửi lại mail xác thực",
     "description": "Vui lòng nhập email để chúng tôi xác thực tài khoản của bạn.",
     "input": {
       "label": "Email *",

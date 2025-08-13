@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +20,7 @@ interface CommonAlertDialogProps {
   cancelText?: string;
   actionText?: string;
   actionLink?: string;
+  isSuccess?: boolean;
 }
 const CommonAlertDialog: React.FC<CommonAlertDialogProps> = ({
   open,
@@ -32,6 +32,7 @@ const CommonAlertDialog: React.FC<CommonAlertDialogProps> = ({
   cancelText,
   actionText,
   actionLink,
+  isSuccess = false,
 }) => {
 
   return (
@@ -44,10 +45,10 @@ const CommonAlertDialog: React.FC<CommonAlertDialogProps> = ({
 
         {variant === "error" && (cancelText || actionText) && (
           <AlertDialogFooter>
-            {cancelText && <AlertDialogCancel>{cancelText}</AlertDialogCancel>}
+            {cancelText && <AlertDialogCancel className='text-foreground'>{cancelText}</AlertDialogCancel>}
             {actionText && actionLink && (
               <AlertDialogAction>
-                <Link href={actionLink} className='no-underline text-secondary'>{actionText}</Link>
+                <Link href={actionLink} className='hover:no-underline text-secondary'>{actionText}</Link>
               </AlertDialogAction>
             )}
           </AlertDialogFooter>
