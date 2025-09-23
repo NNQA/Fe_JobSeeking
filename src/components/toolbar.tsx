@@ -4,7 +4,7 @@ import {
   Toolbar as ToolbarPrimitive,
 } from "@radix-ui/react-toolbar";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 interface ToolbarProps {
   children: React.ReactNode;

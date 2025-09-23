@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { LogOut, Settings } from "lucide-react";
 import { useLocale } from "next-intl";
 import Link from "next/link";

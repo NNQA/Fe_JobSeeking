@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { CircleUser, LogOutIcon } from "lucide-react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { GearIcon } from "@radix-ui/react-icons";
 
 interface NavigationWithLogoProps {

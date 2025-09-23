@@ -1,6 +1,4 @@
 "use client";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 import {
   Pagination,
   PaginationContent,
@@ -9,22 +7,28 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { usePagination } from "@/lib/hook/searchParams";
+import { cn } from "@/lib/utils/utils";
+import { parseAsIndex, useQueryState } from "nuqs";
 
 type Props = {
-  totalCount: number;
+  totalElement: number;
+  className?: string;
+  totalPages: number;
 };
-export default function PaginationBar({ totalCount }: Props) {
-  const router = useRouter();
-  const [{ page, size }, searchParams] = usePagination();
-  const pathname = usePathname();
 
-  const totalPages = Math.max(Math.ceil(totalCount / size), 1);
+export default function PaginationBar({ totalElement, className, totalPages }: Props) {
+  const [page, setPage] = useQueryState("page", parseAsIndex.withDefault(0).withOptions({
+    shallow: false
+  }))
+
   const maxPages = 7;
   const halfMaxPages = Math.floor(maxPages / 2);
-  const canPageBackwards = page > 1;
+
+  const canPageBackwards = page > 0;
   const canPageForwards = page < totalPages;
+
   const pageNumbers = [] as Array<number>;
+
   if (totalPages <= maxPages) {
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(i);
@@ -44,35 +48,33 @@ export default function PaginationBar({ totalCount }: Props) {
       pageNumbers.push(i);
     }
   }
-  const existingParams = Array.from(searchParams.entries()).filter(([key]) => {
-    return key !== "page";
-  });
-
+  console.log(pageNumbers)
+  console.log(page)
   return (
-    <Pagination>
-      {existingParams.map(([key, value]) => {
-        return <input key={key} type="hidden" name={key} value={value} />;
-      })}
-
+    <Pagination className={cn(className)}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
+            className="hover:no-underline"
+            aria-disabled={!canPageBackwards}
             onClick={() => {
-              if (Number(page) > 1) {
-                router.push(`${pathname}?page=${page - 1}&size=${size}`);
+              if (canPageBackwards) {
+                setPage(page - 1)
               }
             }}
           />
         </PaginationItem>
         {pageNumbers.map((pageNumber) => {
-          const isCurrentPage = pageNumber === page;
+          const isCurrentPage = pageNumber === page + 1;
           return (
-            <PaginationItem key={pageNumber} aria-disabled={isCurrentPage}>
+            <PaginationItem key={pageNumber} aria-disabled={isCurrentPage} className="no-underline">
               <PaginationLink
                 onClick={() => {
-                  router.push(`${pathname}?page=${pageNumber}&size=${size}`);
+                  console.log(pageNumber)
+                  setPage(pageNumber - 1)
                 }}
                 isActive={isCurrentPage}
+                className="hover:no-underline"
               >
                 {pageNumber}
               </PaginationLink>
@@ -81,11 +83,14 @@ export default function PaginationBar({ totalCount }: Props) {
         })}
         <PaginationItem>
           <PaginationNext
+            className="hover:no-underline"
             onClick={() => {
-              if (Number(page) < pageNumbers.length) {
-                router.push(`${pathname}?page=${page + 1}&size=${size}`);
+              if (canPageForwards) {
+                setPage(page + 1)
               }
             }}
+
+            aria-disabled={true}
           />
         </PaginationItem>
       </PaginationContent>

@@ -1,11 +1,13 @@
 import React from "react";
-import { Input, InputProps } from "../ui/input";
-import { cn } from "@/lib/utils";
+import { Input } from "../ui/input";
+import { cn } from "@/lib/utils/utils";
 
-export interface InputCustomProps extends InputProps {
+export interface InputCustomProps {
   icon: React.ReactNode;
 }
-const InputCustomIcon = React.forwardRef<HTMLInputElement, InputCustomProps>(
+
+export type InputCustomIconProps = React.ComponentProps<typeof Input> & InputCustomProps;
+const InputCustomIcon = React.forwardRef<HTMLInputElement, InputCustomIconProps>(
   ({ className, icon, ...props }, ref) => {
     return (
       <div className="relative">

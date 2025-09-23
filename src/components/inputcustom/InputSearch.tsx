@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Transition } from "@headlessui/react";
 import ProgressCircle from "../svg/ProgressCircle";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 interface PropsValue {
   text: string;
@@ -13,6 +13,7 @@ interface PropsValue {
 export interface InputSearchProps extends InputCustomProps {
   align?: "center" | "end" | "start";
   side?: "top" | "right" | "bottom" | "left" | undefined;
+  className?: string;
 }
 
 export const InputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
