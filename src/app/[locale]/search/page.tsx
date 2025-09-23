@@ -1,53 +1,29 @@
-import Navigation from "@/components/Navigation";
-import SectionSearch from "./_component/SectionSearch";
-import { AuthActionFetching } from "@/lib/action/auth/auth.action";
-import { ApiServicePromiseFetching } from "@/lib/service/api-allfetching-promise.service";
-import { Suspense } from "react";
-import { fetchSearchResults } from "./action";
-import ShowDataSearch from "./_component/ShowDataSearch";
-import { formateParams } from "@/lib/utils/formatParams";
-
-async function Home({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string };
-}) {
-  const [user, searchingData] = await Promise.all([
-    AuthActionFetching.verifyUserSession(),
-    ApiServicePromiseFetching.fetchingSearchingPage(),
-  ]);
-
-  if (
-    !searchingData?.cate ||
-    !searchingData?.provinceName ||
-    !searchingData?.position
-  ) {
-    throw new Error("Failed to load required search data");
-  }
-
-  const searchStr = formateParams(searchParams);
-
-  const initialData = searchStr ? await fetchSearchResults(searchStr) : [];
-  return (
-    <div>
-      <Navigation user={user ?? undefined}></Navigation>
-      <Suspense fallback={<div>Loading search section......</div>}>
-        <SectionSearch
-          cate={searchingData.cate}
-          provinceName={searchingData.provinceName!}
-          level={searchingData.position}
-        />
-      </Suspense>
-
-      <Suspense fallback={<div>Loading search section......</div>}>
-        <ShowDataSearch
-          initialData={initialData}
-          initialSearch={searchStr}
-          searchParams={searchParams}
-        />{" "}
-      </Suspense>
-    </div>
-  );
+import { Metadata, ResolvingMetadata } from "next";
+import FreelancerMarketplace from "./_component/free-lance-market-place";
+import type { SearchParams } from 'nuqs/server'
+import JobResult from "./_component/job-result";
+import { fetchJobDependencies } from "@/lib/fetchers/jobs/job";
+type Props = {
+    params: Promise<{ slug: string, locale: string }>
+    searchParams: Promise<SearchParams>
 }
-
-export default Home;
+export async function generateMetadata(
+    { params, searchParams }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    return {
+        title: "search page",
+        description: "asss",
+    }
+}
+export default async function SearchPage({ params, searchParams }: Props) {
+    const jobDependencies = await fetchJobDependencies();
+    const { body: categories } = jobDependencies;
+    return (
+        <FreelancerMarketplace jobDependencies={{
+            categories: categories,
+        }}>
+            <JobResult searchParams={searchParams} />
+        </FreelancerMarketplace>
+    )
+}

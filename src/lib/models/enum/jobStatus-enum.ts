@@ -1,0 +1,3 @@
+export enum JobStatus {
+    SUBMITTED, ACCEPTED, REJECTED, WITHDRAW, DELETE
+}
